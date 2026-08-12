@@ -22,14 +22,14 @@ export const adminOAuthAppsListOAuthAppsResponseItemsItemNameMax = 255;
 
 export const adminOAuthAppsListOAuthAppsResponse = zod.object({
   "items": zod.array(zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "clientId": zod.string().min(adminOAuthAppsListOAuthAppsResponseItemsItemClientIdMin).max(adminOAuthAppsListOAuthAppsResponseItemsItemClientIdMax),
   "name": zod.string().min(adminOAuthAppsListOAuthAppsResponseItemsItemNameMin).max(adminOAuthAppsListOAuthAppsResponseItemsItemNameMax),
   "redirectUris": zod.array(zod.string()),
   "scopes": zod.array(zod.string()),
   "grantTypes": zod.array(zod.string()),
   "isFirstParty": zod.boolean(),
-  "createdAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({})
 })),
   "page": zod.number(),
   "pageSize": zod.number(),
@@ -58,14 +58,14 @@ export const adminOAuthAppsCreateOAuthAppResponseNameMax = 255;
 
 
 export const adminOAuthAppsCreateOAuthAppResponse = zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "clientId": zod.string().min(adminOAuthAppsCreateOAuthAppResponseClientIdMin).max(adminOAuthAppsCreateOAuthAppResponseClientIdMax),
   "name": zod.string().min(adminOAuthAppsCreateOAuthAppResponseNameMin).max(adminOAuthAppsCreateOAuthAppResponseNameMax),
   "redirectUris": zod.array(zod.string()),
   "scopes": zod.array(zod.string()),
   "grantTypes": zod.array(zod.string()),
   "isFirstParty": zod.boolean(),
-  "createdAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({})
 })
 
 
@@ -74,12 +74,12 @@ export const adminOAuthAppsAuthorizeBodyRedirectUriMax = 2048;
 
 
 export const adminOAuthAppsAuthorizeBody = zod.object({
-  "clientId": zod.string().uuid(),
+  "clientId": zod.uuid(),
   "redirectUri": zod.string().min(1).max(adminOAuthAppsAuthorizeBodyRedirectUriMax),
   "responseType": zod.enum(['code']),
   "scope": zod.string(),
   "state": zod.string(),
-  "tenantId": zod.string().uuid()
+  "tenantId": zod.uuid()
 })
 
 export const adminOAuthAppsAuthorizeResponse = zod.object({
@@ -92,9 +92,9 @@ export const adminOAuthAppsTokenBody = zod.object({
   "grantType": zod.enum(['authorization_code', 'refresh_token']),
   "code": zod.string().optional(),
   "refreshToken": zod.string().optional(),
-  "clientId": zod.string().uuid(),
+  "clientId": zod.uuid(),
   "clientSecret": zod.string().optional(),
-  "tenantId": zod.string().uuid(),
+  "tenantId": zod.uuid(),
   "redirectUri": zod.string().optional()
 })
 
@@ -120,14 +120,14 @@ export const adminOAuthAppsGetOAuthAppResponseNameMax = 255;
 
 
 export const adminOAuthAppsGetOAuthAppResponse = zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "clientId": zod.string().min(adminOAuthAppsGetOAuthAppResponseClientIdMin).max(adminOAuthAppsGetOAuthAppResponseClientIdMax),
   "name": zod.string().min(adminOAuthAppsGetOAuthAppResponseNameMin).max(adminOAuthAppsGetOAuthAppResponseNameMax),
   "redirectUris": zod.array(zod.string()),
   "scopes": zod.array(zod.string()),
   "grantTypes": zod.array(zod.string()),
   "isFirstParty": zod.boolean(),
-  "createdAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({})
 })
 
 
@@ -151,14 +151,14 @@ export const adminOAuthAppsUpdateOAuthAppResponseNameMax = 255;
 
 
 export const adminOAuthAppsUpdateOAuthAppResponse = zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "clientId": zod.string().min(adminOAuthAppsUpdateOAuthAppResponseClientIdMin).max(adminOAuthAppsUpdateOAuthAppResponseClientIdMax),
   "name": zod.string().min(adminOAuthAppsUpdateOAuthAppResponseNameMin).max(adminOAuthAppsUpdateOAuthAppResponseNameMax),
   "redirectUris": zod.array(zod.string()),
   "scopes": zod.array(zod.string()),
   "grantTypes": zod.array(zod.string()),
   "isFirstParty": zod.boolean(),
-  "createdAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({})
 })
 
 
@@ -182,7 +182,7 @@ export const adminTenantsListTenantsResponseItemsItemNameMax = 255;
 
 export const adminTenantsListTenantsResponse = zod.object({
   "items": zod.array(zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "code": zod.string().min(adminTenantsListTenantsResponseItemsItemCodeMin).max(adminTenantsListTenantsResponseItemsItemCodeMax),
   "name": zod.string().min(adminTenantsListTenantsResponseItemsItemNameMin).max(adminTenantsListTenantsResponseItemsItemNameMax),
   "status": zod.enum(['active', 'suspended', 'archived']),
@@ -191,8 +191,8 @@ export const adminTenantsListTenantsResponse = zod.object({
   "locale": zod.string().optional(),
   "maxUsers": zod.number().optional()
 }).optional(),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })),
   "page": zod.number(),
   "pageSize": zod.number(),
@@ -227,7 +227,7 @@ export const adminTenantsCreateTenantResponseNameMax = 255;
 
 
 export const adminTenantsCreateTenantResponse = zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "code": zod.string().min(adminTenantsCreateTenantResponseCodeMin).max(adminTenantsCreateTenantResponseCodeMax),
   "name": zod.string().min(adminTenantsCreateTenantResponseNameMin).max(adminTenantsCreateTenantResponseNameMax),
   "status": zod.enum(['active', 'suspended', 'archived']),
@@ -236,8 +236,8 @@ export const adminTenantsCreateTenantResponse = zod.object({
   "locale": zod.string().optional(),
   "maxUsers": zod.number().optional()
 }).optional(),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -254,7 +254,7 @@ export const adminTenantsGetTenantResponseNameMax = 255;
 
 
 export const adminTenantsGetTenantResponse = zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "code": zod.string().min(adminTenantsGetTenantResponseCodeMin).max(adminTenantsGetTenantResponseCodeMax),
   "name": zod.string().min(adminTenantsGetTenantResponseNameMin).max(adminTenantsGetTenantResponseNameMax),
   "status": zod.enum(['active', 'suspended', 'archived']),
@@ -263,8 +263,8 @@ export const adminTenantsGetTenantResponse = zod.object({
   "locale": zod.string().optional(),
   "maxUsers": zod.number().optional()
 }).optional(),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -297,7 +297,7 @@ export const adminTenantsUpdateTenantResponseNameMax = 255;
 
 
 export const adminTenantsUpdateTenantResponse = zod.object({
-  "id": zod.string().uuid(),
+  "id": zod.uuid(),
   "code": zod.string().min(adminTenantsUpdateTenantResponseCodeMin).max(adminTenantsUpdateTenantResponseCodeMax),
   "name": zod.string().min(adminTenantsUpdateTenantResponseNameMin).max(adminTenantsUpdateTenantResponseNameMax),
   "status": zod.enum(['active', 'suspended', 'archived']),
@@ -306,8 +306,8 @@ export const adminTenantsUpdateTenantResponse = zod.object({
   "locale": zod.string().optional(),
   "maxUsers": zod.number().optional()
 }).optional(),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -325,7 +325,7 @@ export const authLoginBodyPasswordMax = 128;
 export const authLoginBody = zod.object({
   "username": zod.string().min(1).max(authLoginBodyUsernameMax),
   "password": zod.string().min(1).max(authLoginBodyPasswordMax),
-  "tenantCode": zod.string().uuid().optional()
+  "tenantCode": zod.uuid().optional()
 })
 
 export const authLoginResponse = zod.object({
@@ -333,15 +333,15 @@ export const authLoginResponse = zod.object({
   "refreshToken": zod.string(),
   "tokenType": zod.string(),
   "expiresIn": zod.number(),
-  "userId": zod.string().uuid(),
-  "currentTenantId": zod.string().uuid()
+  "userId": zod.uuid(),
+  "currentTenantId": zod.uuid()
 })
 
 
 export const authOidcCallbackBody = zod.object({
   "code": zod.string(),
   "state": zod.string(),
-  "clientId": zod.string().uuid()
+  "clientId": zod.uuid()
 })
 
 export const authOidcCallbackResponse = zod.object({
@@ -357,9 +357,9 @@ export const authRefreshTokenBody = zod.object({
   "grantType": zod.enum(['authorization_code', 'refresh_token']),
   "code": zod.string().optional(),
   "refreshToken": zod.string().optional(),
-  "clientId": zod.string().uuid(),
+  "clientId": zod.uuid(),
   "clientSecret": zod.string().optional(),
-  "tenantId": zod.string().uuid(),
+  "tenantId": zod.uuid(),
   "redirectUri": zod.string().optional()
 })
 
@@ -373,28 +373,28 @@ export const authRefreshTokenResponse = zod.object({
 
 
 export const meWhoamiResponse = zod.object({
-  "id": zod.string().uuid(),
-  "email": zod.string().email(),
+  "id": zod.uuid(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "memberships": zod.array(zod.object({
-  "id": zod.string().uuid(),
-  "userId": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "userId": zod.uuid(),
+  "tenantId": zod.uuid(),
   "roleIds": zod.array(zod.string()),
   "status": zod.enum(['active', 'invited', 'removed']),
-  "joinedAt": zod.string().datetime({})
+  "joinedAt": zod.iso.datetime({})
 })),
-  "currentTenantId": zod.string().uuid().optional()
+  "currentTenantId": zod.uuid().optional()
 })
 
 
 export const meListMyTenantsResponseItem = zod.object({
-  "id": zod.string().uuid(),
-  "userId": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "userId": zod.uuid(),
+  "tenantId": zod.uuid(),
   "roleIds": zod.array(zod.string()),
   "status": zod.enum(['active', 'invited', 'removed']),
-  "joinedAt": zod.string().datetime({})
+  "joinedAt": zod.iso.datetime({})
 })
 export const meListMyTenantsResponse = zod.array(meListMyTenantsResponseItem)
 
@@ -406,8 +406,8 @@ export const meSwitchTenantParams = zod.object({
 export const meSwitchTenantResponse = zod.object({
   "accessToken": zod.string(),
   "refreshToken": zod.string().optional(),
-  "expiresAt": zod.string().datetime({}),
-  "tenantId": zod.string().uuid()
+  "expiresAt": zod.iso.datetime({}),
+  "tenantId": zod.uuid()
 })
 
 
@@ -430,16 +430,16 @@ export const tenantApiKeysListApiKeysResponseItemsItemPrefixMax = 16;
 
 export const tenantApiKeysListApiKeysResponse = zod.object({
   "items": zod.array(zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "name": zod.string().min(tenantApiKeysListApiKeysResponseItemsItemNameMin).max(tenantApiKeysListApiKeysResponseItemsItemNameMax),
   "prefix": zod.string().min(tenantApiKeysListApiKeysResponseItemsItemPrefixMin).max(tenantApiKeysListApiKeysResponseItemsItemPrefixMax),
   "status": zod.enum(['active', 'revoked', 'expired']),
   "scopes": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "lastUsedAt": zod.string().datetime({}).optional(),
-  "expiresAt": zod.string().datetime({}).optional(),
-  "revokedAt": zod.string().datetime({}).optional()
+  "createdAt": zod.iso.datetime({}),
+  "lastUsedAt": zod.iso.datetime({}).optional(),
+  "expiresAt": zod.iso.datetime({}).optional(),
+  "revokedAt": zod.iso.datetime({}).optional()
 })),
   "page": zod.number(),
   "pageSize": zod.number(),
@@ -459,7 +459,7 @@ export const tenantApiKeysCreateApiKeyBodyNameMax = 128;
 export const tenantApiKeysCreateApiKeyBody = zod.object({
   "name": zod.string().min(tenantApiKeysCreateApiKeyBodyNameMin).max(tenantApiKeysCreateApiKeyBodyNameMax),
   "scopes": zod.array(zod.string()).optional(),
-  "expiresAt": zod.string().datetime({}).optional()
+  "expiresAt": zod.iso.datetime({}).optional()
 })
 
 export const tenantApiKeysCreateApiKeyResponseApiKeyNameMin = 2;
@@ -475,16 +475,16 @@ export const tenantApiKeysCreateApiKeyResponseSecretMax = 256;
 
 export const tenantApiKeysCreateApiKeyResponse = zod.object({
   "apiKey": zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "name": zod.string().min(tenantApiKeysCreateApiKeyResponseApiKeyNameMin).max(tenantApiKeysCreateApiKeyResponseApiKeyNameMax),
   "prefix": zod.string().min(tenantApiKeysCreateApiKeyResponseApiKeyPrefixMin).max(tenantApiKeysCreateApiKeyResponseApiKeyPrefixMax),
   "status": zod.enum(['active', 'revoked', 'expired']),
   "scopes": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "lastUsedAt": zod.string().datetime({}).optional(),
-  "expiresAt": zod.string().datetime({}).optional(),
-  "revokedAt": zod.string().datetime({}).optional()
+  "createdAt": zod.iso.datetime({}),
+  "lastUsedAt": zod.iso.datetime({}).optional(),
+  "expiresAt": zod.iso.datetime({}).optional(),
+  "revokedAt": zod.iso.datetime({}).optional()
 }),
   "secret": zod.string().min(tenantApiKeysCreateApiKeyResponseSecretMin).max(tenantApiKeysCreateApiKeyResponseSecretMax)
 })
@@ -504,16 +504,16 @@ export const tenantApiKeysRevokeApiKeyResponsePrefixMax = 16;
 
 
 export const tenantApiKeysRevokeApiKeyResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "name": zod.string().min(tenantApiKeysRevokeApiKeyResponseNameMin).max(tenantApiKeysRevokeApiKeyResponseNameMax),
   "prefix": zod.string().min(tenantApiKeysRevokeApiKeyResponsePrefixMin).max(tenantApiKeysRevokeApiKeyResponsePrefixMax),
   "status": zod.enum(['active', 'revoked', 'expired']),
   "scopes": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "lastUsedAt": zod.string().datetime({}).optional(),
-  "expiresAt": zod.string().datetime({}).optional(),
-  "revokedAt": zod.string().datetime({}).optional()
+  "createdAt": zod.iso.datetime({}),
+  "lastUsedAt": zod.iso.datetime({}).optional(),
+  "expiresAt": zod.iso.datetime({}).optional(),
+  "revokedAt": zod.iso.datetime({}).optional()
 })
 
 
@@ -535,16 +535,16 @@ export const tenantApiKeysRotateApiKeyResponseSecretMax = 256;
 
 export const tenantApiKeysRotateApiKeyResponse = zod.object({
   "apiKey": zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "name": zod.string().min(tenantApiKeysRotateApiKeyResponseApiKeyNameMin).max(tenantApiKeysRotateApiKeyResponseApiKeyNameMax),
   "prefix": zod.string().min(tenantApiKeysRotateApiKeyResponseApiKeyPrefixMin).max(tenantApiKeysRotateApiKeyResponseApiKeyPrefixMax),
   "status": zod.enum(['active', 'revoked', 'expired']),
   "scopes": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "lastUsedAt": zod.string().datetime({}).optional(),
-  "expiresAt": zod.string().datetime({}).optional(),
-  "revokedAt": zod.string().datetime({}).optional()
+  "createdAt": zod.iso.datetime({}),
+  "lastUsedAt": zod.iso.datetime({}).optional(),
+  "expiresAt": zod.iso.datetime({}).optional(),
+  "revokedAt": zod.iso.datetime({}).optional()
 }),
   "secret": zod.string().min(tenantApiKeysRotateApiKeyResponseSecretMin).max(tenantApiKeysRotateApiKeyResponseSecretMax)
 })
@@ -559,19 +559,19 @@ export const tenantAuditListAuditEventsQueryParams = zod.object({
   "pageSize": zod.number().optional(),
   "actorUserId": zod.string().optional(),
   "action": zod.enum(['user_created', 'user_updated', 'user_deleted', 'role_assigned', 'role_revoked', 'login_success', 'login_failed', 'oauth_token_issued', 'api_key_created', 'api_key_revoked']).optional(),
-  "from": zod.string().datetime({}).optional(),
-  "to": zod.string().datetime({}).optional()
+  "from": zod.iso.datetime({}).optional(),
+  "to": zod.iso.datetime({}).optional()
 })
 
 export const tenantAuditListAuditEventsResponse = zod.object({
   "items": zod.array(zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
-  "actorUserId": zod.string().uuid().optional(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
+  "actorUserId": zod.uuid().optional(),
   "action": zod.enum(['user_created', 'user_updated', 'user_deleted', 'role_assigned', 'role_revoked', 'login_success', 'login_failed', 'oauth_token_issued', 'api_key_created', 'api_key_revoked']),
-  "targetUserId": zod.string().uuid().optional(),
+  "targetUserId": zod.uuid().optional(),
   "metadata": zod.record(zod.string(), zod.unknown()).optional(),
-  "occurredAt": zod.string().datetime({})
+  "occurredAt": zod.iso.datetime({})
 })),
   "page": zod.number(),
   "pageSize": zod.number(),
@@ -591,13 +591,13 @@ export const tenantAuditListAuditEventsByUserQueryParams = zod.object({
 
 export const tenantAuditListAuditEventsByUserResponse = zod.object({
   "items": zod.array(zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
-  "actorUserId": zod.string().uuid().optional(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
+  "actorUserId": zod.uuid().optional(),
   "action": zod.enum(['user_created', 'user_updated', 'user_deleted', 'role_assigned', 'role_revoked', 'login_success', 'login_failed', 'oauth_token_issued', 'api_key_created', 'api_key_revoked']),
-  "targetUserId": zod.string().uuid().optional(),
+  "targetUserId": zod.uuid().optional(),
   "metadata": zod.record(zod.string(), zod.unknown()).optional(),
-  "occurredAt": zod.string().datetime({})
+  "occurredAt": zod.iso.datetime({})
 })),
   "page": zod.number(),
   "pageSize": zod.number(),
@@ -610,8 +610,8 @@ export const tenantAuditExportAuditEventsParams = zod.object({
 })
 
 export const tenantAuditExportAuditEventsBody = zod.object({
-  "from": zod.string().datetime({}),
-  "to": zod.string().datetime({}),
+  "from": zod.iso.datetime({}),
+  "to": zod.iso.datetime({}),
   "format": zod.enum(['csv', 'json'])
 })
 
@@ -659,14 +659,14 @@ export const tenantRolesListRolesResponseItemsItemNameMax = 255;
 
 export const tenantRolesListRolesResponse = zod.object({
   "items": zod.array(zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "code": zod.string().min(1).max(tenantRolesListRolesResponseItemsItemCodeMax),
   "name": zod.string().min(1).max(tenantRolesListRolesResponseItemsItemNameMax),
   "description": zod.string().optional(),
   "permissionIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })),
   "page": zod.number(),
   "pageSize": zod.number(),
@@ -698,14 +698,14 @@ export const tenantRolesCreateRoleResponseNameMax = 255;
 
 
 export const tenantRolesCreateRoleResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "code": zod.string().min(1).max(tenantRolesCreateRoleResponseCodeMax),
   "name": zod.string().min(1).max(tenantRolesCreateRoleResponseNameMax),
   "description": zod.string().optional(),
   "permissionIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -721,14 +721,14 @@ export const tenantRolesGetRoleResponseNameMax = 255;
 
 
 export const tenantRolesGetRoleResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "code": zod.string().min(1).max(tenantRolesGetRoleResponseCodeMax),
   "name": zod.string().min(1).max(tenantRolesGetRoleResponseNameMax),
   "description": zod.string().optional(),
   "permissionIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -750,14 +750,14 @@ export const tenantRolesUpdateRoleResponseNameMax = 255;
 
 
 export const tenantRolesUpdateRoleResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "code": zod.string().min(1).max(tenantRolesUpdateRoleResponseCodeMax),
   "name": zod.string().min(1).max(tenantRolesUpdateRoleResponseNameMax),
   "description": zod.string().optional(),
   "permissionIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -783,14 +783,14 @@ export const tenantRolesSetPermissionsResponseNameMax = 255;
 
 
 export const tenantRolesSetPermissionsResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "code": zod.string().min(1).max(tenantRolesSetPermissionsResponseCodeMax),
   "name": zod.string().min(1).max(tenantRolesSetPermissionsResponseNameMax),
   "description": zod.string().optional(),
   "permissionIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -810,15 +810,15 @@ export const tenantUsersListUsersResponseItemsItemUsernameMax = 64;
 
 export const tenantUsersListUsersResponse = zod.object({
   "items": zod.array(zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "username": zod.string().min(1).max(tenantUsersListUsersResponseItemsItemUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "status": zod.enum(['active', 'invited', 'suspended', 'disabled']),
   "roleIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })),
   "page": zod.number(),
   "pageSize": zod.number(),
@@ -836,7 +836,7 @@ export const tenantUsersCreateUserBodyUsernameMax = 64;
 
 export const tenantUsersCreateUserBody = zod.object({
   "username": zod.string().min(1).max(tenantUsersCreateUserBodyUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "password": zod.string(),
   "roleIds": zod.array(zod.string()).optional()
@@ -847,15 +847,15 @@ export const tenantUsersCreateUserResponseUsernameMax = 64;
 
 
 export const tenantUsersCreateUserResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "username": zod.string().min(1).max(tenantUsersCreateUserResponseUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "status": zod.enum(['active', 'invited', 'suspended', 'disabled']),
   "roleIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -873,15 +873,15 @@ export const tenantUsersInviteUserResponseUsernameMax = 64;
 
 
 export const tenantUsersInviteUserResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "username": zod.string().min(1).max(tenantUsersInviteUserResponseUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "status": zod.enum(['active', 'invited', 'suspended', 'disabled']),
   "roleIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -895,15 +895,15 @@ export const tenantUsersGetUserResponseUsernameMax = 64;
 
 
 export const tenantUsersGetUserResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "username": zod.string().min(1).max(tenantUsersGetUserResponseUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "status": zod.enum(['active', 'invited', 'suspended', 'disabled']),
   "roleIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -924,15 +924,15 @@ export const tenantUsersUpdateUserResponseUsernameMax = 64;
 
 
 export const tenantUsersUpdateUserResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "username": zod.string().min(1).max(tenantUsersUpdateUserResponseUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "status": zod.enum(['active', 'invited', 'suspended', 'disabled']),
   "roleIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -956,15 +956,15 @@ export const tenantUsersAssignRolesResponseUsernameMax = 64;
 
 
 export const tenantUsersAssignRolesResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "username": zod.string().min(1).max(tenantUsersAssignRolesResponseUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "status": zod.enum(['active', 'invited', 'suspended', 'disabled']),
   "roleIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 
@@ -982,15 +982,15 @@ export const tenantUsersChangeUserStatusResponseUsernameMax = 64;
 
 
 export const tenantUsersChangeUserStatusResponse = zod.object({
-  "id": zod.string().uuid(),
-  "tenantId": zod.string().uuid(),
+  "id": zod.uuid(),
+  "tenantId": zod.uuid(),
   "username": zod.string().min(1).max(tenantUsersChangeUserStatusResponseUsernameMax),
-  "email": zod.string().email(),
+  "email": zod.email(),
   "displayName": zod.string().optional(),
   "status": zod.enum(['active', 'invited', 'suspended', 'disabled']),
   "roleIds": zod.array(zod.string()),
-  "createdAt": zod.string().datetime({}),
-  "updatedAt": zod.string().datetime({})
+  "createdAt": zod.iso.datetime({}),
+  "updatedAt": zod.iso.datetime({})
 })
 
 

@@ -23,7 +23,7 @@ import jakarta.annotation.Generated;
  */
 
 @JsonTypeName("TenantUsers_changeUserStatus_request")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-12T12:50:18.473810800+08:00[Asia/Shanghai]", comments = "Generator version: 7.24.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-12T14:26:56.554615600+08:00[Asia/Shanghai]", comments = "Generator version: 7.24.0")
 public class TenantUsersChangeUserStatusRequest {
 
   private UserStatus status;

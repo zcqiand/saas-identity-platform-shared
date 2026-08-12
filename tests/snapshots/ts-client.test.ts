@@ -1,4 +1,5 @@
-// Snapshot test: lock TS api-client + MSW + zod output
+// Snapshot test: lock TS api-client + zod output.
+// MSW handlers are emitted by saas-identity-platform-msw (separate repo), not here.
 import { describe, it, expect } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
@@ -22,14 +23,6 @@ describe("TS client snapshot", () => {
     expect(content).toMatch(/adminOAuthApps/);
     expect(content).toMatch(/authLogin|AuthLogin|authLogout/);
     expect(content).toMatch(/MeWhoami|meWhoami|MeSwitchTenant|meSwitchTenant/);
-  });
-
-  it("emits MSW mock handlers", () => {
-    const path = resolve(ROOT, "api-client/endpoints.msw.ts");
-    expect(existsSync(path)).toBe(true);
-    const content = readFileSync(path, "utf-8");
-    expect(content).toMatch(/faker|Faker/);
-    expect(content).toMatch(/HttpResponse|Response/);
   });
 
   it("emits zod schemas", () => {

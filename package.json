@@ -1,13 +1,12 @@
 {
   "name": "@saas/identity-platform-shared",
   "version": "0.1.0",
-  "description": "SaaS Identity Platform — TypeSpec SSOT. Single source of truth for API contracts; produces OpenAPI 3.1, TS api-client/msw/zod, Java Spring POJO/Controllers, ASP.NET Core DTO/Controllers.",
+  "description": "SaaS Identity Platform — TypeSpec SSOT. Single source of truth for API contracts; produces OpenAPI 3.1, TS api-client/zod, Java Spring POJO/Controllers, ASP.NET Core DTO/Controllers. MSW handlers live in @saas/identity-platform-msw.",
   "type": "module",
   "main": "./generated/ts/index.ts",
   "exports": {
     ".": "./generated/ts/index.ts",
     "./api-client": "./generated/ts/api-client/endpoints.ts",
-    "./msw": "./generated/ts/msw/handlers.ts",
     "./zod-schemas": "./generated/ts/zod-schemas.ts",
     "./openapi": "./generated/openapi/openapi.yaml",
     "./models": "./tsp/models/index.ts"
@@ -21,10 +20,9 @@
     "tspconfig.yaml"
   ],
   "scripts": {
-    "build": "npm run emit:openapi && npm run emit:ts-client && npm run emit:ts-msw && npm run emit:java && npm run emit:dotnet",
+    "build": "npm run emit:openapi && npm run emit:ts-client && npm run emit:java && npm run emit:dotnet",
     "emit:openapi": "tsx scripts/codegen/emit-openapi.ts",
     "emit:ts-client": "tsx scripts/codegen/emit-ts-client.ts",
-    "emit:ts-msw": "tsx scripts/codegen/emit-ts-msw.ts",
     "emit:java": "tsx scripts/codegen/emit-java.ts",
     "emit:dotnet": "tsx scripts/codegen/emit-dotnet.ts",
     "lint": "tsp compile . --no-emit",
@@ -34,7 +32,6 @@
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.13.4",
-    "@orval/msw": "^6.20.0",
     "@types/node": "^22.10.0",
     "@typespec/compiler": "^1.0.0",
     "@typespec/http": "^1.15.0",
