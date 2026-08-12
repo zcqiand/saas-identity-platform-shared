@@ -1,0 +1,3342 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "(title)",
+    "version" : "0.0.0"
+  },
+  "servers" : [ {
+    "description" : "Production",
+    "url" : "https://api.example.com"
+  } ],
+  "tags" : [ {
+    "name" : "auth"
+  }, {
+    "name" : "admin-tenants"
+  }, {
+    "name" : "me"
+  }, {
+    "name" : "tenant-users"
+  }, {
+    "name" : "tenant-roles"
+  }, {
+    "name" : "tenant-api-keys"
+  }, {
+    "name" : "tenant-audit"
+  }, {
+    "name" : "admin-oauth-apps"
+  } ],
+  "paths" : {
+    "/api/v1/admin/oauth-apps" : {
+      "get" : {
+        "operationId" : "AdminOAuthApps_listOAuthApps",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "pageSize",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminOAuthApps_listOAuthApps_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-oauth-apps" ]
+      },
+      "post" : {
+        "operationId" : "AdminOAuthApps_createOAuthApp",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateOAuthAppRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OAuthApp"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-oauth-apps" ]
+      }
+    },
+    "/api/v1/admin/oauth-apps/authorize" : {
+      "post" : {
+        "operationId" : "AdminOAuthApps_authorize",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AuthorizeCodeRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminOAuthApps_authorize_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-oauth-apps" ]
+      }
+    },
+    "/api/v1/admin/oauth-apps/token" : {
+      "post" : {
+        "operationId" : "AdminOAuthApps_token",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TokenRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TokenResponse"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-oauth-apps" ]
+      }
+    },
+    "/api/v1/admin/oauth-apps/{appId}" : {
+      "delete" : {
+        "operationId" : "AdminOAuthApps_deleteOAuthApp",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "appId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "There is no content to send for this request, but the headers may be useful. "
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-oauth-apps" ]
+      },
+      "get" : {
+        "operationId" : "AdminOAuthApps_getOAuthApp",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "appId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OAuthApp"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-oauth-apps" ]
+      },
+      "patch" : {
+        "operationId" : "AdminOAuthApps_updateOAuthApp",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "appId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateOAuthAppRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OAuthApp"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-oauth-apps" ]
+      }
+    },
+    "/api/v1/admin/tenants" : {
+      "get" : {
+        "operationId" : "AdminTenants_listTenants",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "pageSize",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTenants_listTenants_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-tenants" ]
+      },
+      "post" : {
+        "operationId" : "AdminTenants_createTenant",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTenantRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Tenant"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-tenants" ]
+      }
+    },
+    "/api/v1/admin/tenants/{id}" : {
+      "delete" : {
+        "operationId" : "AdminTenants_deleteTenant",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "There is no content to send for this request, but the headers may be useful. "
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-tenants" ]
+      },
+      "get" : {
+        "operationId" : "AdminTenants_getTenant",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Tenant"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-tenants" ]
+      },
+      "patch" : {
+        "operationId" : "AdminTenants_updateTenant",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTenantRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Tenant"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "admin-tenants" ]
+      }
+    },
+    "/api/v1/auth/login" : {
+      "post" : {
+        "operationId" : "Auth_login",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LoginResponse"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "auth" ]
+      }
+    },
+    "/api/v1/auth/logout" : {
+      "post" : {
+        "operationId" : "Auth_logout",
+        "parameters" : [ ],
+        "responses" : {
+          "204" : {
+            "description" : "There is no content to send for this request, but the headers may be useful. "
+          }
+        },
+        "tags" : [ "auth" ]
+      }
+    },
+    "/api/v1/auth/oidc/callback" : {
+      "post" : {
+        "operationId" : "Auth_oidcCallback",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OidcCallbackRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TokenResponse"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "auth" ]
+      }
+    },
+    "/api/v1/auth/refresh" : {
+      "post" : {
+        "operationId" : "Auth_refreshToken",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TokenRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TokenResponse"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "auth" ]
+      }
+    },
+    "/api/v1/me" : {
+      "get" : {
+        "operationId" : "Me_whoami",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CurrentUser"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "me" ]
+      }
+    },
+    "/api/v1/me/tenants" : {
+      "get" : {
+        "operationId" : "Me_listMyTenants",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/TenantMembership"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "me" ]
+      }
+    },
+    "/api/v1/me/tenants/{tenantId}/switch" : {
+      "post" : {
+        "operationId" : "Me_switchTenant",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SwitchTenantResponse"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "me" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/api-keys" : {
+      "get" : {
+        "operationId" : "TenantApiKeys_listApiKeys",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "pageSize",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantApiKeys_listApiKeys_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-api-keys" ]
+      },
+      "post" : {
+        "operationId" : "TenantApiKeys_createApiKey",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateApiKeyRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateApiKeyResponse"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-api-keys" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/api-keys/{keyId}/revoke" : {
+      "post" : {
+        "operationId" : "TenantApiKeys_revokeApiKey",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "keyId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiKey"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-api-keys" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/api-keys/{keyId}/rotate" : {
+      "post" : {
+        "operationId" : "TenantApiKeys_rotateApiKey",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "keyId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateApiKeyResponse"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-api-keys" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/audit-events" : {
+      "get" : {
+        "operationId" : "TenantAudit_listAuditEvents",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "pageSize",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "actorUserId",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "action",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/AuditAction"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "from",
+          "required" : false,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "to",
+          "required" : false,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantAudit_listAuditEvents_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-audit" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/audit-events/by-user/{userId}" : {
+      "get" : {
+        "operationId" : "TenantAudit_listAuditEventsByUser",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "userId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "pageSize",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantAudit_listAuditEvents_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-audit" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/audit-events/export" : {
+      "post" : {
+        "operationId" : "TenantAudit_exportAuditEvents",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TenantAudit_exportAuditEvents_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantAudit_exportAuditEvents_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-audit" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/audit-events/retention" : {
+      "get" : {
+        "operationId" : "TenantAudit_getRetentionPolicy",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantAudit_getRetentionPolicy_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-audit" ]
+      },
+      "put" : {
+        "operationId" : "TenantAudit_setRetentionPolicy",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TenantAudit_getRetentionPolicy_200_response"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantAudit_getRetentionPolicy_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-audit" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/roles" : {
+      "get" : {
+        "operationId" : "TenantRoles_listRoles",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "pageSize",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantRoles_listRoles_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-roles" ]
+      },
+      "post" : {
+        "operationId" : "TenantRoles_createRole",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRoleRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-roles" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/roles/{roleId}" : {
+      "delete" : {
+        "operationId" : "TenantRoles_deleteRole",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "roleId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "There is no content to send for this request, but the headers may be useful. "
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-roles" ]
+      },
+      "get" : {
+        "operationId" : "TenantRoles_getRole",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "roleId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-roles" ]
+      },
+      "patch" : {
+        "operationId" : "TenantRoles_updateRole",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "roleId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateRoleRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-roles" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/roles/{roleId}/permissions" : {
+      "put" : {
+        "operationId" : "TenantRoles_setPermissions",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "roleId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TenantRoles_setPermissions_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-roles" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/users" : {
+      "get" : {
+        "operationId" : "TenantUsers_listUsers",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "pageSize",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "explode" : false,
+          "in" : "query",
+          "name" : "status",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/UserStatus"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TenantUsers_listUsers_200_response"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      },
+      "post" : {
+        "operationId" : "TenantUsers_createUser",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateUserRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/users/invitations" : {
+      "post" : {
+        "operationId" : "TenantUsers_inviteUser",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TenantUsers_inviteUser_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/users/{userId}" : {
+      "delete" : {
+        "operationId" : "TenantUsers_deleteUser",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "userId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "There is no content to send for this request, but the headers may be useful. "
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      },
+      "get" : {
+        "operationId" : "TenantUsers_getUser",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "userId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      },
+      "patch" : {
+        "operationId" : "TenantUsers_updateUser",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "userId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateUserRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/users/{userId}/roles" : {
+      "put" : {
+        "operationId" : "TenantUsers_assignRoles",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "userId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TenantUsers_assignRoles_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      }
+    },
+    "/api/v1/tenants/{tenantId}/users/{userId}/status" : {
+      "patch" : {
+        "operationId" : "TenantUsers_changeUserStatus",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "tenantId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : false,
+          "in" : "path",
+          "name" : "userId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TenantUsers_changeUserStatus_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            },
+            "description" : "The request has succeeded."
+          },
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description" : "An unexpected error response."
+          }
+        },
+        "tags" : [ "tenant-users" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ApiKey" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "name" : "name",
+          "prefix" : "prefix",
+          "status" : "active",
+          "scopes" : [ "scopes", "scopes" ],
+          "createdAt" : "2000-01-23T04:56:07.000+00:00",
+          "lastUsedAt" : "2000-01-23T04:56:07.000+00:00",
+          "expiresAt" : "2000-01-23T04:56:07.000+00:00",
+          "revokedAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 128,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "prefix" : {
+            "maxLength" : 16,
+            "minLength" : 8,
+            "type" : "string"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/ApiKeyStatus"
+          },
+          "scopes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "lastUsedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "revokedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "createdAt", "id", "name", "prefix", "scopes", "status", "tenantId" ],
+        "type" : "object"
+      },
+      "ApiKeyStatus" : {
+        "enum" : [ "active", "revoked", "expired" ],
+        "type" : "string"
+      },
+      "AuditAction" : {
+        "enum" : [ "user_created", "user_updated", "user_deleted", "role_assigned", "role_revoked", "login_success", "login_failed", "oauth_token_issued", "api_key_created", "api_key_revoked" ],
+        "type" : "string"
+      },
+      "AuditEvent" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "actorUserId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "action" : "user_created",
+          "targetUserId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "metadata" : {
+            "key" : ""
+          },
+          "occurredAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "actorUserId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "action" : {
+            "$ref" : "#/components/schemas/AuditAction"
+          },
+          "targetUserId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "metadata" : {
+            "additionalProperties" : { },
+            "type" : "object"
+          },
+          "occurredAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "action", "id", "occurredAt", "tenantId" ],
+        "type" : "object"
+      },
+      "AuthorizeCodeRequest" : {
+        "example" : {
+          "clientId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "redirectUri" : "redirectUri",
+          "responseType" : "code",
+          "scope" : "scope",
+          "state" : "state",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "clientId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "redirectUri" : {
+            "maxLength" : 2048,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "responseType" : {
+            "enum" : [ "code" ],
+            "type" : "string"
+          },
+          "scope" : {
+            "type" : "string"
+          },
+          "state" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "clientId", "redirectUri", "responseType", "scope", "state", "tenantId" ],
+        "type" : "object"
+      },
+      "CreateApiKeyRequest" : {
+        "example" : {
+          "name" : "name",
+          "scopes" : [ "scopes", "scopes" ],
+          "expiresAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "name" : {
+            "maxLength" : 128,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "scopes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "name" ],
+        "type" : "object"
+      },
+      "CreateApiKeyResponse" : {
+        "example" : {
+          "apiKey" : {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "name" : "name",
+            "prefix" : "prefix",
+            "status" : "active",
+            "scopes" : [ "scopes", "scopes" ],
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "lastUsedAt" : "2000-01-23T04:56:07.000+00:00",
+            "expiresAt" : "2000-01-23T04:56:07.000+00:00",
+            "revokedAt" : "2000-01-23T04:56:07.000+00:00"
+          },
+          "secret" : "secret"
+        },
+        "properties" : {
+          "apiKey" : {
+            "$ref" : "#/components/schemas/ApiKey"
+          },
+          "secret" : {
+            "maxLength" : 256,
+            "minLength" : 16,
+            "type" : "string"
+          }
+        },
+        "required" : [ "apiKey", "secret" ],
+        "type" : "object"
+      },
+      "CreateOAuthAppRequest" : {
+        "example" : {
+          "name" : "name",
+          "redirectUris" : [ "redirectUris", "redirectUris" ],
+          "scopes" : [ "scopes", "scopes" ],
+          "grantTypes" : [ "grantTypes", "grantTypes" ]
+        },
+        "properties" : {
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "redirectUris" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "scopes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "grantTypes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "name", "redirectUris" ],
+        "type" : "object"
+      },
+      "CreateRoleRequest" : {
+        "example" : {
+          "code" : "code",
+          "name" : "name",
+          "description" : "description",
+          "permissionIds" : [ "permissionIds", "permissionIds" ]
+        },
+        "properties" : {
+          "code" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "permissionIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "code", "name" ],
+        "type" : "object"
+      },
+      "CreateTenantRequest" : {
+        "example" : {
+          "code" : "code",
+          "name" : "name",
+          "settings" : {
+            "themeColor" : "themeColor",
+            "locale" : "locale",
+            "maxUsers" : 0
+          }
+        },
+        "properties" : {
+          "code" : {
+            "maxLength" : 64,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "settings" : {
+            "$ref" : "#/components/schemas/TenantSettings"
+          }
+        },
+        "required" : [ "code", "name" ],
+        "type" : "object"
+      },
+      "CreateUserRequest" : {
+        "example" : {
+          "username" : "username",
+          "email" : "email",
+          "displayName" : "displayName",
+          "password" : "password",
+          "roleIds" : [ "roleIds", "roleIds" ]
+        },
+        "properties" : {
+          "username" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "email" : {
+            "format" : "email",
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "roleIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "email", "password", "username" ],
+        "type" : "object"
+      },
+      "CurrentUser" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "email" : "email",
+          "displayName" : "displayName",
+          "memberships" : [ {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "userId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "roleIds" : [ "roleIds", "roleIds" ],
+            "status" : "active",
+            "joinedAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "userId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "roleIds" : [ "roleIds", "roleIds" ],
+            "status" : "active",
+            "joinedAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "currentTenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "email" : {
+            "format" : "email",
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "memberships" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TenantMembership"
+            },
+            "type" : "array"
+          },
+          "currentTenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "email", "id", "memberships" ],
+        "type" : "object"
+      },
+      "ErrorResponse" : {
+        "example" : {
+          "code" : "BAD_REQUEST",
+          "message" : "message",
+          "details" : {
+            "key" : ""
+          }
+        },
+        "properties" : {
+          "code" : {
+            "example" : "BAD_REQUEST",
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "details" : {
+            "additionalProperties" : { },
+            "type" : "object"
+          }
+        },
+        "required" : [ "code", "message" ],
+        "type" : "object"
+      },
+      "LoginRequest" : {
+        "example" : {
+          "username" : "username",
+          "password" : "password",
+          "tenantCode" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "username" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "password" : {
+            "maxLength" : 128,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "tenantCode" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "password", "username" ],
+        "type" : "object"
+      },
+      "LoginResponse" : {
+        "example" : {
+          "accessToken" : "accessToken",
+          "refreshToken" : "refreshToken",
+          "tokenType" : "tokenType",
+          "expiresIn" : 0,
+          "userId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "currentTenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "accessToken" : {
+            "type" : "string"
+          },
+          "refreshToken" : {
+            "type" : "string"
+          },
+          "tokenType" : {
+            "type" : "string"
+          },
+          "expiresIn" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "userId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "currentTenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "accessToken", "currentTenantId", "expiresIn", "refreshToken", "tokenType", "userId" ],
+        "type" : "object"
+      },
+      "MembershipStatus" : {
+        "enum" : [ "active", "invited", "removed" ],
+        "type" : "string"
+      },
+      "OAuthApp" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "clientId" : "clientId",
+          "name" : "name",
+          "redirectUris" : [ "redirectUris", "redirectUris" ],
+          "scopes" : [ "scopes", "scopes" ],
+          "grantTypes" : [ "grantTypes", "grantTypes" ],
+          "isFirstParty" : true,
+          "createdAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "clientId" : {
+            "maxLength" : 128,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "redirectUris" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "scopes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "grantTypes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "isFirstParty" : {
+            "type" : "boolean"
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "clientId", "createdAt", "grantTypes", "id", "isFirstParty", "name", "redirectUris", "scopes" ],
+        "type" : "object"
+      },
+      "OidcCallbackRequest" : {
+        "example" : {
+          "code" : "code",
+          "state" : "state",
+          "clientId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "code" : {
+            "type" : "string"
+          },
+          "state" : {
+            "type" : "string"
+          },
+          "clientId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "clientId", "code", "state" ],
+        "type" : "object"
+      },
+      "Role" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "code" : "code",
+          "name" : "name",
+          "description" : "description",
+          "permissionIds" : [ "permissionIds", "permissionIds" ],
+          "createdAt" : "2000-01-23T04:56:07.000+00:00",
+          "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "code" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "permissionIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "updatedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "createdAt", "id", "name", "permissionIds", "tenantId", "updatedAt" ],
+        "type" : "object"
+      },
+      "SwitchTenantResponse" : {
+        "example" : {
+          "accessToken" : "accessToken",
+          "refreshToken" : "refreshToken",
+          "expiresAt" : "2000-01-23T04:56:07.000+00:00",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "accessToken" : {
+            "type" : "string"
+          },
+          "refreshToken" : {
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "accessToken", "expiresAt", "tenantId" ],
+        "type" : "object"
+      },
+      "Tenant" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "code" : "acme",
+          "name" : "name",
+          "status" : "active",
+          "settings" : {
+            "themeColor" : "themeColor",
+            "locale" : "locale",
+            "maxUsers" : 0
+          },
+          "createdAt" : "2000-01-23T04:56:07.000+00:00",
+          "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "code" : {
+            "example" : "acme",
+            "maxLength" : 64,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/TenantStatus"
+          },
+          "settings" : {
+            "$ref" : "#/components/schemas/TenantSettings"
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "updatedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "createdAt", "id", "name", "status", "updatedAt" ],
+        "type" : "object"
+      },
+      "TenantMembership" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "userId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "roleIds" : [ "roleIds", "roleIds" ],
+          "status" : "active",
+          "joinedAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "userId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "roleIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/MembershipStatus"
+          },
+          "joinedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "joinedAt", "roleIds", "status", "tenantId", "userId" ],
+        "type" : "object"
+      },
+      "TenantSettings" : {
+        "example" : {
+          "themeColor" : "themeColor",
+          "locale" : "locale",
+          "maxUsers" : 0
+        },
+        "properties" : {
+          "themeColor" : {
+            "type" : "string"
+          },
+          "locale" : {
+            "type" : "string"
+          },
+          "maxUsers" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "TenantStatus" : {
+        "enum" : [ "active", "suspended", "archived" ],
+        "type" : "string"
+      },
+      "TokenRequest" : {
+        "example" : {
+          "grantType" : "authorization_code",
+          "code" : "code",
+          "refreshToken" : "refreshToken",
+          "clientId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "clientSecret" : "clientSecret",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "redirectUri" : "redirectUri"
+        },
+        "properties" : {
+          "grantType" : {
+            "enum" : [ "authorization_code", "refresh_token" ],
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "string"
+          },
+          "refreshToken" : {
+            "type" : "string"
+          },
+          "clientId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "clientSecret" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "redirectUri" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "clientId", "grantType", "tenantId" ],
+        "type" : "object"
+      },
+      "TokenResponse" : {
+        "example" : {
+          "accessToken" : "accessToken",
+          "refreshToken" : "refreshToken",
+          "tokenType" : "tokenType",
+          "expiresIn" : 0,
+          "scope" : "scope"
+        },
+        "properties" : {
+          "accessToken" : {
+            "type" : "string"
+          },
+          "refreshToken" : {
+            "type" : "string"
+          },
+          "tokenType" : {
+            "type" : "string"
+          },
+          "expiresIn" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "scope" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "accessToken", "expiresIn", "scope", "tokenType" ],
+        "type" : "object"
+      },
+      "UpdateOAuthAppRequest" : {
+        "example" : {
+          "name" : "name",
+          "redirectUris" : [ "redirectUris", "redirectUris" ],
+          "scopes" : [ "scopes", "scopes" ],
+          "grantTypes" : [ "grantTypes", "grantTypes" ]
+        },
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "redirectUris" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "scopes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "grantTypes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateRoleRequest" : {
+        "example" : {
+          "name" : "name",
+          "description" : "description",
+          "permissionIds" : [ "permissionIds", "permissionIds" ]
+        },
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "permissionIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateTenantRequest" : {
+        "example" : {
+          "name" : "name",
+          "code" : "code",
+          "status" : "active",
+          "settings" : {
+            "themeColor" : "themeColor",
+            "locale" : "locale",
+            "maxUsers" : 0
+          }
+        },
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "code" : {
+            "maxLength" : 64,
+            "minLength" : 2,
+            "type" : "string"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/TenantStatus"
+          },
+          "settings" : {
+            "$ref" : "#/components/schemas/TenantSettings"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateUserRequest" : {
+        "example" : {
+          "displayName" : "displayName",
+          "email" : "email",
+          "status" : "active",
+          "roleIds" : [ "roleIds", "roleIds" ]
+        },
+        "properties" : {
+          "displayName" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/UserStatus"
+          },
+          "roleIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "User" : {
+        "example" : {
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "username" : "username",
+          "email" : "email",
+          "displayName" : "displayName",
+          "status" : "active",
+          "roleIds" : [ "roleIds", "roleIds" ],
+          "createdAt" : "2000-01-23T04:56:07.000+00:00",
+          "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "tenantId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "username" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "email" : {
+            "format" : "email",
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/UserStatus"
+          },
+          "roleIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "updatedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "createdAt", "email", "id", "roleIds", "status", "tenantId", "updatedAt", "username" ],
+        "type" : "object"
+      },
+      "UserStatus" : {
+        "enum" : [ "active", "invited", "suspended", "disabled" ],
+        "type" : "string"
+      },
+      "AdminOAuthApps_listOAuthApps_200_response" : {
+        "example" : {
+          "items" : [ {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "clientId" : "clientId",
+            "name" : "name",
+            "redirectUris" : [ "redirectUris", "redirectUris" ],
+            "scopes" : [ "scopes", "scopes" ],
+            "grantTypes" : [ "grantTypes", "grantTypes" ],
+            "isFirstParty" : true,
+            "createdAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "clientId" : "clientId",
+            "name" : "name",
+            "redirectUris" : [ "redirectUris", "redirectUris" ],
+            "scopes" : [ "scopes", "scopes" ],
+            "grantTypes" : [ "grantTypes", "grantTypes" ],
+            "isFirstParty" : true,
+            "createdAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "page" : 0,
+          "pageSize" : 20,
+          "total" : 0
+        },
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/OAuthApp"
+            },
+            "type" : "array"
+          },
+          "page" : {
+            "example" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "example" : 20,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "example" : 0,
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "items", "page", "pageSize", "total" ],
+        "type" : "object"
+      },
+      "AdminOAuthApps_authorize_200_response" : {
+        "example" : {
+          "code" : "code",
+          "state" : "state"
+        },
+        "properties" : {
+          "code" : {
+            "type" : "string"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "state" ],
+        "type" : "object"
+      },
+      "AdminTenants_listTenants_200_response" : {
+        "example" : {
+          "items" : [ {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "code" : "acme",
+            "name" : "name",
+            "status" : "active",
+            "settings" : {
+              "themeColor" : "themeColor",
+              "locale" : "locale",
+              "maxUsers" : 0
+            },
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "code" : "acme",
+            "name" : "name",
+            "status" : "active",
+            "settings" : {
+              "themeColor" : "themeColor",
+              "locale" : "locale",
+              "maxUsers" : 0
+            },
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "page" : 0,
+          "pageSize" : 20,
+          "total" : 0
+        },
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Tenant"
+            },
+            "type" : "array"
+          },
+          "page" : {
+            "example" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "example" : 20,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "example" : 0,
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "items", "page", "pageSize", "total" ],
+        "type" : "object"
+      },
+      "TenantApiKeys_listApiKeys_200_response" : {
+        "example" : {
+          "items" : [ {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "name" : "name",
+            "prefix" : "prefix",
+            "status" : "active",
+            "scopes" : [ "scopes", "scopes" ],
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "lastUsedAt" : "2000-01-23T04:56:07.000+00:00",
+            "expiresAt" : "2000-01-23T04:56:07.000+00:00",
+            "revokedAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "name" : "name",
+            "prefix" : "prefix",
+            "status" : "active",
+            "scopes" : [ "scopes", "scopes" ],
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "lastUsedAt" : "2000-01-23T04:56:07.000+00:00",
+            "expiresAt" : "2000-01-23T04:56:07.000+00:00",
+            "revokedAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "page" : 0,
+          "pageSize" : 20,
+          "total" : 0
+        },
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ApiKey"
+            },
+            "type" : "array"
+          },
+          "page" : {
+            "example" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "example" : 20,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "example" : 0,
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "items", "page", "pageSize", "total" ],
+        "type" : "object"
+      },
+      "TenantAudit_listAuditEvents_200_response" : {
+        "example" : {
+          "items" : [ {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "actorUserId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "action" : "user_created",
+            "targetUserId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "metadata" : {
+              "key" : ""
+            },
+            "occurredAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "actorUserId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "action" : "user_created",
+            "targetUserId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "metadata" : {
+              "key" : ""
+            },
+            "occurredAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "page" : 0,
+          "pageSize" : 20,
+          "total" : 0
+        },
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AuditEvent"
+            },
+            "type" : "array"
+          },
+          "page" : {
+            "example" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "example" : 20,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "example" : 0,
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "items", "page", "pageSize", "total" ],
+        "type" : "object"
+      },
+      "TenantAudit_exportAuditEvents_request" : {
+        "properties" : {
+          "from" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "to" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "format" : {
+            "enum" : [ "csv", "json" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "format", "from", "to" ],
+        "type" : "object"
+      },
+      "TenantAudit_exportAuditEvents_200_response" : {
+        "example" : {
+          "downloadUrl" : "downloadUrl"
+        },
+        "properties" : {
+          "downloadUrl" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "downloadUrl" ],
+        "type" : "object"
+      },
+      "TenantAudit_getRetentionPolicy_200_response" : {
+        "example" : {
+          "retentionDays" : 0
+        },
+        "properties" : {
+          "retentionDays" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "retentionDays" ],
+        "type" : "object"
+      },
+      "TenantRoles_listRoles_200_response" : {
+        "example" : {
+          "items" : [ {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "code" : "code",
+            "name" : "name",
+            "description" : "description",
+            "permissionIds" : [ "permissionIds", "permissionIds" ],
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "code" : "code",
+            "name" : "name",
+            "description" : "description",
+            "permissionIds" : [ "permissionIds", "permissionIds" ],
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "page" : 0,
+          "pageSize" : 20,
+          "total" : 0
+        },
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Role"
+            },
+            "type" : "array"
+          },
+          "page" : {
+            "example" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "example" : 20,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "example" : 0,
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "items", "page", "pageSize", "total" ],
+        "type" : "object"
+      },
+      "TenantRoles_setPermissions_request" : {
+        "properties" : {
+          "permissionIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "permissionIds" ],
+        "type" : "object"
+      },
+      "TenantUsers_listUsers_200_response" : {
+        "example" : {
+          "items" : [ {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "username" : "username",
+            "email" : "email",
+            "displayName" : "displayName",
+            "status" : "active",
+            "roleIds" : [ "roleIds", "roleIds" ],
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "tenantId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "username" : "username",
+            "email" : "email",
+            "displayName" : "displayName",
+            "status" : "active",
+            "roleIds" : [ "roleIds", "roleIds" ],
+            "createdAt" : "2000-01-23T04:56:07.000+00:00",
+            "updatedAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "page" : 0,
+          "pageSize" : 20,
+          "total" : 0
+        },
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/User"
+            },
+            "type" : "array"
+          },
+          "page" : {
+            "example" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "example" : 20,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "example" : 0,
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "items", "page", "pageSize", "total" ],
+        "type" : "object"
+      },
+      "TenantUsers_inviteUser_request" : {
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "roleIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "email" ],
+        "type" : "object"
+      },
+      "TenantUsers_assignRoles_request" : {
+        "properties" : {
+          "roleIds" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "roleIds" ],
+        "type" : "object"
+      },
+      "TenantUsers_changeUserStatus_request" : {
+        "properties" : {
+          "status" : {
+            "$ref" : "#/components/schemas/UserStatus"
+          }
+        },
+        "required" : [ "status" ],
+        "type" : "object"
+      }
+    }
+  }
+}

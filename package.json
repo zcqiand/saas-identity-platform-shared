@@ -1,0 +1,54 @@
+{
+  "name": "@saas/identity-platform-shared",
+  "version": "0.1.0",
+  "description": "SaaS Identity Platform — TypeSpec SSOT. Single source of truth for API contracts; produces OpenAPI 3.1, TS api-client/msw/zod, Java Spring POJO/Controllers, ASP.NET Core DTO/Controllers.",
+  "type": "module",
+  "main": "./generated/ts/index.ts",
+  "exports": {
+    ".": "./generated/ts/index.ts",
+    "./api-client": "./generated/ts/api-client/endpoints.ts",
+    "./msw": "./generated/ts/msw/handlers.ts",
+    "./zod-schemas": "./generated/ts/zod-schemas.ts",
+    "./openapi": "./generated/openapi/openapi.yaml",
+    "./models": "./tsp/models/index.ts"
+  },
+  "files": [
+    "tsp",
+    "scripts",
+    "generated",
+    "tsconfig.json",
+    "orval.config.ts",
+    "tspconfig.yaml"
+  ],
+  "scripts": {
+    "build": "npm run emit:openapi && npm run emit:ts-client && npm run emit:ts-msw && npm run emit:java && npm run emit:dotnet",
+    "emit:openapi": "tsx scripts/codegen/emit-openapi.ts",
+    "emit:ts-client": "tsx scripts/codegen/emit-ts-client.ts",
+    "emit:ts-msw": "tsx scripts/codegen/emit-ts-msw.ts",
+    "emit:java": "tsx scripts/codegen/emit-java.ts",
+    "emit:dotnet": "tsx scripts/codegen/emit-dotnet.ts",
+    "lint": "tsp compile . --no-emit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.4",
+    "@orval/msw": "^6.20.0",
+    "@types/node": "^22.10.0",
+    "@typespec/compiler": "^1.0.0",
+    "@typespec/http": "^1.15.0",
+    "@typespec/openapi3": "^1.0.0",
+    "orval": "^7.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0",
+    "zod": "^4.4.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@typespec/rest": "^0.85.0"
+  }
+}

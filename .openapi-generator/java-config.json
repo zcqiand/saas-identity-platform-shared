@@ -1,0 +1,12 @@
+{
+  "library": "spring-boot",
+  "modelPackage": "saas.identity.shared.dto",
+  "apiPackage": "saas.identity.shared.api",
+  "invokerPackage": "saas.identity.shared",
+  "useTags": true,
+  "interfaceOnly": true,
+  "skipDefaultInterface": true,
+  "useBeanValidation": true,
+  "useSpringBoot3": true,
+  "dateLibrary": "java8"
+}

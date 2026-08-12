@@ -1,0 +1,9 @@
+{
+  "targetFramework": "net8.0",
+  "useSwashbuckle": true,
+  "modelNamespace": "Saas.Identity.Shared.Dto",
+  "apiNamespace": "Saas.Identity.Shared.Api",
+  "generateAliasesAsModels": true,
+  "nullableReferences": true,
+  "operationIsAbstract": true
+}
