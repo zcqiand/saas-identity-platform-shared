@@ -83,13 +83,9 @@ CREATE TABLE menus (
         REFERENCES menus (id) ON DELETE CASCADE,
 
     -- 同 app 内 code 唯一（树形下父子可同名）
-    CONSTRAINT menus_app_code_unique UNIQUE (app_id, code),
-
-    -- 树结构一致性：父菜单必须属于同一个 app
-    CONSTRAINT menus_parent_same_app CHECK (
-        parent_id IS NULL
-        OR (SELECT app_id FROM menus m2 WHERE m2.id = parent_id) = app_id
-    )
+    CONSTRAINT menus_app_code_unique UNIQUE (app_id, code)
+    -- NOTE: 「父菜单同 app」一致性原用 CHECK 子查询，PG 不允许（CHECK 不能含子查询），
+    -- 已移除；该完整性由应用层（Menu Service）保证。需 DB 级强制时可改 BEFORE INSERT/UPDATE 触发器。
 );
 
 CREATE TRIGGER menus_set_updated_at
@@ -108,12 +104,9 @@ CREATE TABLE role_menu_grants (
     CONSTRAINT rmg_role_fk   FOREIGN KEY (role_id)
         REFERENCES roles (id) ON DELETE CASCADE,
     CONSTRAINT rmg_tenant_fk FOREIGN KEY (tenant_id)
-        REFERENCES tenants (id) ON DELETE CASCADE,
-
-    -- 一致性：role 必须属于 tenant_id
-    CONSTRAINT rmg_role_tenant_consistency CHECK (
-        (SELECT tenant_id FROM roles r WHERE r.id = role_id) = tenant_id
-    )
+        REFERENCES tenants (id) ON DELETE CASCADE
+    -- NOTE: 「role 属于 tenant_id」一致性原用 CHECK 子查询，PG 不允许，已移除；
+    -- 应用层 TenantRoleMenuService 已校验 role 存在性。需 DB 级强制时可改触发器。
 );
 
 -- 4. 内联索引
