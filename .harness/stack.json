@@ -3,7 +3,7 @@
   "project": "saas-identity-platform-shared",
   "stack": "shared-typescript",
   "suite_version": "0.5.0",
-  "source_dirs": ["tsp", "scripts", "src"],
+  "source_dirs": ["tsp", "scripts"],
   "test_dirs": ["tests"],
   "gates": {
     "L1": { "name": "格式", "cmd": ["npx", "--no", "tsp", "compile", ".", "--no-emit"], "fix": "修复 tsp/main.tsp 语法" },

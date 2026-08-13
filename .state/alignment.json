@@ -2,8 +2,8 @@
   "schema": 1,
   "project": "saas-identity-platform-shared",
   "functions": {
-    "modules": 7,
-    "features": 14,
+    "modules": 9,
+    "features": 20,
     "items": 0
   },
   "warnings_total": 0,

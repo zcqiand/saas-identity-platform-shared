@@ -17,4 +17,9 @@ namespace Saas.Identity.Shared.Me {
   @post
   @route("/tenants/{tenantId}/switch")
   op switchTenant(@path tenantId: string): SwitchTenantResponse | ErrorResponse;
+
+  // M09.F03.I04 当前用户的有效菜单（按 app 分组，返回 appCode → 树形菜单）
+  @get
+  @route("/menus")
+  op getMyMenus(): Record<EffectiveMenuNode[]> | ErrorResponse;
 }

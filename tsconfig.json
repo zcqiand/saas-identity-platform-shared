@@ -9,15 +9,8 @@
     "noUncheckedIndexedAccess": false,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "outDir": "./generated/ts/dist",
-    "rootDir": "./",
-    "baseUrl": ".",
-    "paths": {
-      "@saas/shared": ["./generated/ts/index.ts"],
-      "@saas/shared/api-client": ["./generated/ts/api-client/endpoints.ts"],
-      "@saas/shared/msw": ["./generated/ts/msw/handlers.ts"],
-      "@saas/shared/zod-schemas": ["./generated/ts/zod-schemas.ts"]
-    }
+    "noEmit": true,
+    "baseUrl": "."
   },
   "include": [
     "scripts/**/*.ts",

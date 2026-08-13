@@ -13,10 +13,10 @@ describe("OpenAPI snapshot", () => {
     expect(content).toContain("/api/v1/auth/login");
     expect(content).toContain("/api/v1/tenants/{tenantId}/users");
     expect(content).toContain("/api/v1/admin/tenants");
-    expect(content).toContain("/api/v1/admin/oauth-apps");
+    expect(content).toContain("/api/v1/admin/apps");
   });
 
-  it("contains all 8 route groups", () => {
+  it("contains all route groups", () => {
     const content = readFileSync(OPENAPI_PATH, "utf-8");
     for (const path of [
       "/api/v1/auth/",
@@ -26,7 +26,11 @@ describe("OpenAPI snapshot", () => {
       "/api/v1/tenants/{tenantId}/roles",
       "/api/v1/tenants/{tenantId}/api-keys",
       "/api/v1/tenants/{tenantId}/audit-events",
-      "/api/v1/admin/oauth-apps",
+      "/api/v1/admin/apps",
+      "/api/v1/admin/apps/{appId}/menus",
+      "/api/v1/tenants/{tenantId}/roles/{roleId}/menus",
+      "/api/v1/oauth/authorize",
+      "/api/v1/oauth/token",
     ]) {
       expect(content).toContain(path);
     }

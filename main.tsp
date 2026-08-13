@@ -6,10 +6,12 @@ import "@typespec/rest";
 import "./tsp/models/tenant.tsp";
 import "./tsp/models/user.tsp";
 import "./tsp/models/role.tsp";
-import "./tsp/models/oauth-app.tsp";
 import "./tsp/models/audit-event.tsp";
 import "./tsp/models/api-key.tsp";
 import "./tsp/models/membership.tsp";
+import "./tsp/models/app.tsp";
+import "./tsp/models/menu.tsp";
+import "./tsp/models/role-menu-grant.tsp";
 
 // Routes
 import "./tsp/routes/auth.tsp";
@@ -19,7 +21,10 @@ import "./tsp/routes/tenant-users.tsp";
 import "./tsp/routes/tenant-roles.tsp";
 import "./tsp/routes/tenant-api-keys.tsp";
 import "./tsp/routes/tenant-audit.tsp";
-import "./tsp/routes/admin-oauth-apps.tsp";
+import "./tsp/routes/admin-apps.tsp";
+import "./tsp/routes/admin-app-menus.tsp";
+import "./tsp/routes/tenant-role-menus.tsp";
+import "./tsp/routes/oauth.tsp";
 
 using TypeSpec.Http;
 
