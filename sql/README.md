@@ -28,12 +28,12 @@
 | `T[]` (string 数组) | `TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]` | 如 `scopes` / `redirect_uris` |
 | password 字段（API 不暴露） | `VARCHAR(255)` 存散列 | bcrypt/argon2 散列；明文只在创建响应里返回一次 |
 
-## 12 张表（V001..V007 落地）
+## 12 张表（V001..V008 落地）
 
 | 表 | V 文件 | TypeSpec model | 备注 |
 |---|---|---|---|
 | `tenants` | V001 | Tenant / TenantStatus / TenantSettings | 多租户根；settings JSONB |
-| `users` | V002 | User / UserStatus | tenant-scoped；一行/(用户,租户) |
+| `users` | V002, V008 | User / UserStatus | tenant-scoped；一行/(用户,租户)；V008 加 `role_ids[]` 列 |
 | `tenant_memberships` | V002 | TenantMembership / MembershipStatus | 跨租户视图；role_ids[] |
 | `roles` | V003 | Role | tenant-scoped |
 | `permissions` | V003 | (推导) | 平台级 permission 字典 |
@@ -41,16 +41,18 @@
 | `api_keys` | V004 | ApiKey / ApiKeyStatus | tenant-scoped；secret_hash 不可逆 |
 | `apps` | V005 | App / AppStatus / OAuthGrantType | 平台级；菜单承载 + OAuth client |
 | `menus` | V005 | Menu / MenuType / MenuStatus | 树形；parent_id 自引用 |
-| `role_menu_grants` | V005 | RoleMenuGrant | tenant-scoped M:N；整批 PUT |
+| `role_menu_grants` | V005 | RoleMenuGrant | tenant-scoped M:N；整批 PUT；V005 强制 tenant_id NOT NULL |
 | `audit_events` | V006 | AuditEvent / AuditAction | insert-only；metadata JSONB |
 | `audit_retention_policies` | V006 | (推导 from M06.F02) | 一租户一行 |
 
-10 个 PG 原生 enum 类型：
+9 个 PG 原生 enum 类型：
 
 ```
-tenant_status / user_status / membership_status / api_key_status
-app_status / oauth_grant_type / menu_type / menu_status
-audit_action
+V001: tenant_status
+V002: user_status / membership_status
+V004: api_key_status
+V005: app_status / oauth_grant_type / menu_type / menu_status
+V006: audit_action
 ```
 
 ## 各后端消费方式
@@ -68,7 +70,7 @@ audit_action
 psql -h <host> -U postgres -d saas_test -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 for f in shared/sql/migrations/V*.sql; do psql -h <host> -U postgres -d saas_test -f "$f"; done
 psql -h <host> -U postgres -d saas_test -c "\dt"      # 应见 12 行
-psql -h <host> -U postgres -d saas_test -c "\dT+"     # 应见 10 个 enum
+psql -h <host> -U postgres -d saas_test -c "\dT+"     # 应见 9 个 enum
 
 # 自动重放（CI）
 npx vitest run tests/sql.replay.test.ts   # L4 门禁
