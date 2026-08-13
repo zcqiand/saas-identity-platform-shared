@@ -8,9 +8,9 @@
 //
 // 两种模式：
 //   默认（全量重建）        库必须为空；按字典序跑全部 V*.sql。防误覆盖。
-//   --incremental           基于 suite_schema_history tracking 表只跑未记录的 V 文件；
+//   --incremental           基于 __schema_migrations tracking 表只跑未记录的 V 文件；
 //                           每个文件包在事务里，成功才记录。适合「加了一个字段」的增量场景。
-//                           tracking 表存 public.schema_migrations（Flyway 风格）。
+//                           tracking 表存 public.__schema_migrations（双下划线前缀，排列表首）。
 //
 // 用法：
 //   node scripts/sync-db.mjs                  # 全量重建（默认 saas_dev @ 100.79.128.25）
@@ -80,8 +80,9 @@ const EXPECTED_ENUMS = [
   "audit_action",
 ];
 
-// tracking 表名（Flyway 风格）
-const TRACKING_TABLE = "schema_migrations";
+// tracking 表名（双下划线前缀：让它在 \dt 列表里排到最前面，标明是元数据表而非业务表；
+// drizzle/prisma 同惯例）
+const TRACKING_TABLE = "__schema_migrations";
 
 // ── 3. 执行 ────────────────────────────────────────────────────────────────
 const client = new pg.Client({
