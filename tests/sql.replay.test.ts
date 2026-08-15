@@ -146,7 +146,7 @@ describe("SQL migrations replay", () => {
       "INSERT INTO tenants (id, code, name) VALUES ('11111111-1111-1111-1111-111111111111', 'test-tenant', 'Test Tenant')",
     );
     await client.query(
-      "INSERT INTO users (id, tenant_id, username, email) VALUES ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'alice', '[email protected]')",
+      "INSERT INTO users (id, tenant_id, username, email) VALUES ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'alice', 'alice@example.com')",
     );
 
     // 删除 tenant；FK ON DELETE CASCADE 应级联清掉 user
