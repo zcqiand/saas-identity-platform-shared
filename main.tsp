@@ -22,6 +22,7 @@ import "./tsp/routes/tenant-roles.tsp";
 import "./tsp/routes/tenant-api-keys.tsp";
 import "./tsp/routes/tenant-audit.tsp";
 import "./tsp/routes/admin-apps.tsp";
+import "./tsp/routes/apps.tsp";
 import "./tsp/routes/admin-app-menus.tsp";
 import "./tsp/routes/tenant-role-menus.tsp";
 import "./tsp/routes/oauth.tsp";

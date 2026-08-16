@@ -62,6 +62,26 @@ model App {
   updatedAt: utcDateTime;
 }
 
+// App 的公开信息子集：/apps/{code} 公共端点返回，
+// 只含展示字段（接入方侧边栏/标题显示用），不含 OAuth 集成字段。
+model AppPublicInfo {
+  @format("uuid") id: string;
+
+  @minLength(2)
+  @maxLength(64)
+  code: string;
+
+  @minLength(2)
+  @maxLength(255)
+  name: string;
+
+  description?: string;
+
+  icon?: string;
+
+  status: AppStatus;
+}
+
 model CreateAppRequest {
   @minLength(2)
   @maxLength(64)

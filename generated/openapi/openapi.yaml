@@ -11,6 +11,7 @@ tags:
   - name: tenant-api-keys
   - name: tenant-audit
   - name: admin-apps
+  - name: apps
   - name: admin-app-menus
   - name: tenant-role-menus
   - name: oauth
@@ -569,6 +570,30 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - admin-tenants
+  /api/v1/apps/{code}:
+    get:
+      operationId: Apps_getApp
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppPublicInfo'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - apps
   /api/v1/auth/login:
     post:
       operationId: Auth_login
@@ -1940,6 +1965,31 @@ components:
         updatedAt:
           type: string
           format: date-time
+    AppPublicInfo:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          minLength: 2
+          maxLength: 64
+        name:
+          type: string
+          minLength: 2
+          maxLength: 255
+        description:
+          type: string
+        icon:
+          type: string
+        status:
+          $ref: '#/components/schemas/AppStatus'
     AppStatus:
       type: string
       enum:
