@@ -28,7 +28,9 @@ import { readdirSync, readFileSync } from "node:fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHARED_ROOT = resolve(__dirname, "..");
-const MIGRATIONS_DIR = resolve(SHARED_ROOT, "sql/migrations");
+// 优先 $MIGRATIONS_DIR env(runtime container)。dev 环境从 sibling 仓目录结构推断。
+const MIGRATIONS_DIR =
+  process.env.MIGRATIONS_DIR ?? resolve(SHARED_ROOT, "sql/migrations");
 
 const INCREMENTAL = process.argv.includes("--incremental");
 
