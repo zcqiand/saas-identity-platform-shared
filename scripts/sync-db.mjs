@@ -32,19 +32,31 @@ const MIGRATIONS_DIR = resolve(SHARED_ROOT, "sql/migrations");
 
 const INCREMENTAL = process.argv.includes("--incremental");
 
-// ── 1. 借 nextjs 的 pg driver ──────────────────────────────────────────────
-const nextjsRoot = resolve(SHARED_ROOT, "../saas-identity-platform-nextjs");
+// ── 1. 借 pg driver ─────────────────────────────────────────────────────────
+// 多场景兜底(同 lab-shared v0.2.7):runtime 容器 /app/node_modules/pg 优先,
+// dev 环境回退到 nextjs sibling 仓。
 let pg;
+let pgLoadStrategy = "";
 try {
-  const requireFromNext = createRequire(resolve(nextjsRoot, "package.json"));
-  pg = requireFromNext("pg");
+  const requireFromRuntime = createRequire(resolve("/app/node_modules", "pg"));
+  pg = requireFromRuntime("pg");
+  pgLoadStrategy = "/app/node_modules/pg (runtime container)";
 } catch {
-  console.error(
-    "[sync-db] FATAL: 借不到 saas-identity-platform-nextjs/node_modules/pg。\n" +
-      "  请先在 nextjs 仓 `npm install`，或在一个装了 pg 的环境运行。",
-  );
-  process.exit(1);
+  try {
+    const nextjsRoot = resolve(SHARED_ROOT, "../saas-identity-platform-nextjs");
+    const requireFromNext = createRequire(resolve(nextjsRoot, "package.json"));
+    pg = requireFromNext("pg");
+    pgLoadStrategy = "../saas-identity-platform-nextjs/node_modules/pg (dev)";
+  } catch {
+    console.error(
+      "[sync-db] FATAL: 借不到 pg driver。\n" +
+        "  运行时镜像应保证 /app/node_modules/pg 存在(Dockerfile COPY 全量 node_modules);\n" +
+        "  dev 环境请在 saas nextjs 仓 `npm install`。",
+    );
+    process.exit(1);
+  }
 }
+console.log(`[sync-db] pg driver 加载自 ${pgLoadStrategy}`);
 
 // ── 2. 连接配置（env，fallback 到 saas_dev）─────────────────────────────────
 // 优先 DATABASE_URL（标准 PG 连接串,ADR-0009）;缺失时回退到 PG_* 单独 env
