@@ -11,6 +11,8 @@
 | M02 | 角色权限 | tenant-scoped 角色、权限矩阵 | 规划 |
 | M03 | SSO 登录 | 密码登录、OIDC 回调、登出 | 规划 |
 | M04 | 应用与 OAuth | 平台级 App（菜单承载 + OAuth client）CRUD、授权码/令牌流程 | 规划 |
+
+> M04 备注：V014 起 seed lab-mgmt OAuth client（id `11111111-1111-1111-1111-111111111111`，client_id `lab-mgmt`，3 个 saas 后端共用同一 app.id）+ oauth_codes 表（Phase 6 真 OAuth，替代 saas-nextjs 进程内 oauth-store）。
 | M05 | API Key 管理 | tenant-scoped Key 生命周期 | 规划 |
 | M06 | 审计日志 | tenant-scoped 审计事件、留存策略 | 规划 |
 | M08 | 菜单 | 应用下树形菜单 CRUD、结构维护 | 规划 |
