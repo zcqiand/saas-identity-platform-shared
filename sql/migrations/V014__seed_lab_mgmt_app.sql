@@ -4,13 +4,20 @@
 -- 同一固定 UUID 让 lab 仓在任一 IdP 拿到的 sub claim 一致。
 --
 -- Phase 6 决策：
+--   * client_id 用固定 UUID '11111111-1111-1111-1111-111111111111'（不是字符串 'lab-mgmt'）。
+--     原因：TypeSpec tsp/routes/oauth.tsp:21,43 给 AuthorizeCodeRequest/TokenRequest 的
+--     clientId 加了 @format("uuid")，NSwag codegen 给 saas-aspnetcore 生成 System.Guid、
+--     给 saas-springboot 生成 UUID，只有 saas-nextjs 走 string。所以为了让 3 个 saas 后端
+--     都能按同一 clientId 查 apps 表，clientId 必须是 UUID 格式。
+--     —— 后续 PR 改 TypeSpec 移除 @format("uuid") 后, 可把 client_id 改回 'lab-mgmt'。
 --   * client_secret 暂存 plaintext 'lab-mgmt-secret'（与 lab-springboot application.yml dev 默认同款）
 --     —— 后续 PR 改 Argon2 hash + 启动时 env 注入；这是技术债 follow-up。
 --   * redirect_uris 覆盖 lab 家族全 prod 域名 + dev localhost 5173/5174/3001 callback。
 --   * scopes: lab.read, lab.write（与 saas-nextjs/src/seeds/apps.json 同款）。
 --   * grant_types: authorization_code + refresh_token（client_credentials 给机器调用，独立 PR）。
 --   * ON CONFLICT (client_id) DO NOTHING：保证已有 seed（saas-nextjs/src/seeds/apps.json
---     首次启动写入）不被覆盖。
+--     首次启动写入）不被覆盖 —— saas-nextjs 那份的 clientId 也应是同一个 UUID
+--     （saas-identity-platform-nextjs/src/seeds/apps.json 同步改 clientId="11111111-..."）。
 --
 -- 同 V014 落地的 oauth_codes 表，供 Phase 6 真 OAuth（不再依赖 saas-nextjs 进程内 oauth-store）。
 
@@ -23,11 +30,11 @@ INSERT INTO apps (
     '11111111-1111-1111-1111-111111111111',
     'lab-management',
     '建筑工程实验室管理系统',
-    'lab-mgmt OAuth client — 3 个 saas 后端共用同一 app.id',
+    'lab-mgmt OAuth client — 3 个 saas 后端共用同一 app.id (= client_id = UUID)',
     'flask',
     100,
     'active',
-    'lab-mgmt',
+    '11111111-1111-1111-1111-111111111111',
     'lab-mgmt-secret',
     ARRAY[
         'https://lab-vue.xiangru.uk/login',
