@@ -54,7 +54,11 @@ INSERT INTO apps (
 -- 2. oauth_codes 表 — Phase 6 真 OAuth 的 code + refresh_token 存储
 -- saas-aspnetcore (AppDbContext) 与 saas-springboot (JPA) 都映射这张表。
 -- 镜像 saas-nextjs/src/lib/oauth-store.ts 的字段，扩展 grant_type 列区分 authorization_code / refresh_token。
-CREATE TABLE oauth_codes (
+-- 幂等（IF NOT EXISTS）：saas-springboot flyway 链已有 V009__init_oauth_codes.sql 建同名表
+-- （DDL 逐字段相同）。本文件经 gen-shared.sh 拷入 springboot migration 目录后会在 V009
+-- 之后执行，不加 IF NOT EXISTS 会撞 "relation already exists" 起崩容器 --
+-- 2026-08-26 lab 仓 V014/V015 撞号事故的同款雷，此为拆雷点。
+CREATE TABLE IF NOT EXISTS oauth_codes (
     id              UUID         PRIMARY KEY DEFAULT uuid_generate_v4(),
     code            VARCHAR(255) NOT NULL,                                  -- auth code 或 refresh token (统一存)
     grant_type      VARCHAR(32)  NOT NULL DEFAULT 'authorization_code'
@@ -73,9 +77,9 @@ CREATE TABLE oauth_codes (
         REFERENCES apps (id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_oauth_codes_app_id     ON oauth_codes (app_id);
-CREATE INDEX idx_oauth_codes_expires_at ON oauth_codes (expires_at);
-CREATE INDEX idx_oauth_codes_user_id    ON oauth_codes (user_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_codes_app_id     ON oauth_codes (app_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_codes_expires_at ON oauth_codes (expires_at);
+CREATE INDEX IF NOT EXISTS idx_oauth_codes_user_id    ON oauth_codes (user_id);
 
 COMMENT ON TABLE  oauth_codes IS               'OAuth 2.0 authorization_code + refresh_token 存储；Phase 6 替代 saas-nextjs 进程内 oauth-store';
 COMMENT ON COLUMN oauth_codes.code IS          'auth code 或 refresh token；前者一次性消费（consumed_at 非 NULL），后者可旋转换发';
