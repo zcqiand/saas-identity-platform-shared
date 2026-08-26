@@ -1,6 +1,28 @@
 {
   "schema": 1,
-  "last_session_at": "2026-08-12",
-  "last_session_summary": "Phase A 初始化",
-  "open_items": []
+  "project": "saas-identity-platform-shared",
+  "current_task": "V014 oauth_codes DDL 幂等化上线(v0.2.13)— 拆 saas-springboot V009 撞表雷",
+  "last_session_at": "2026-08-26",
+  "last_session_summary": "V014 的 CREATE TABLE/INDEX 加 IF NOT EXISTS(saas-springboot migration 目录已有 V009 建同名 oauth_codes 表,裸 CREATE 拷入 flyway 链必炸 already exists,是 2026-08-26 lab V014/V015 撞号事故的同款雷);scratch DB 实测最坏序列 V001-V008 -> V009 -> V014 x2 全 PASS。/handoff 二次门禁 --all exit 0(本仓 29 条目 0 软告警)",
+  "done": [
+    "V014__seed_lab_mgmt_app.sql: CREATE TABLE oauth_codes / 3 个 CREATE INDEX -> IF NOT EXISTS;seed INSERT 本就 ON CONFLICT DO NOTHING,COMMENT ON 天然幂等",
+    "scratch DB saas_scratch_guardcheck 实测:shared V001-V008 -> springboot V009 -> shared V014 连跑两遍全 PASS,终态 11 列 + lab-mgmt app 行正确(改前 V014 第一步必炸)",
+    "saas 各库消费路径核实:saas_dev __schema_migrations 只到 V008(下次 sync-db 会应用新 V014);saas_prod 已记 V014(旧版,filename tracking 无 checksum 概念,跳过);saas-springboot flyway enabled:false(application.yml:45),migration 目录目前是惰性副本",
+    "gate L0/L1/L3/L4/L5 全绿 29 条目 0 软告警;--all 15 项目全绿",
+    "commit c675de8 + tag v0.2.13-20260826 + push origin/master"
+  ],
+  "next": [
+    "无阻塞。历史 session 记录的技术债仍在:client_secret 明文 'lab-mgmt-secret' 待 Argon2 hash + env 注入;TypeSpec clientId @format(uuid) 移除后 client_id 可改回 'lab-mgmt'"
+  ],
+  "open_questions": [
+    "shared 迁移编号 V008 直接跳 V014(V009-V013 空号,springboot 侧自己的 V009 = oauth_codes)-- 编号体系永久错位,是否值得在 sql/migrations/README 里写一页「版本号地图」说明两仓编号对应关系?"
+  ],
+  "dont": [
+    "不要把 V009-V013 补进 shared 编号来「对齐」springboot -- springboot V009 的 flyway checksum 已锁死(虽然目前 flyway 关着),shared 侧新建 V009 会被 gen-shared 拷过去造成两文件同号不同内容",
+    "不要去掉 V014 的 IF NOT EXISTS「保持 DDL 纯净」-- 那是防 V009 撞表的唯一屏障",
+    "不要直接编辑 generated/openapi 产物 -- 必须 npm run build(emit:openapi),改契约走 main.tsp/tsp/"
+  ],
+  "last_gate_passed_at": "2026-08-26T17:30+08:00",
+  "active_branch": "master",
+  "ahead_of_origin": "0"
 }
