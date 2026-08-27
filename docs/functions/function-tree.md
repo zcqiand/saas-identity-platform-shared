@@ -28,12 +28,12 @@
 | M01.F02  | 用户角色分配与状态切换 | 接口 | 规划 |
 | M02.F01  | 角色 CRUD（tenant-scoped） | 接口 | 规划 |
 | M02.F02  | 权限绑定（角色↔权限矩阵） | 接口 | 规划 |
-| M03.F01  | 密码登录与失败锁定 | 接口 | 规划 |
+| M03.F01  | 密码登录与失败锁定 | 接口 | 开发中 |
 | M03.F02  | OIDC 回调与 IDToken 校验 | 接口 | 规划 |
 | M03.F03  | 登出（本地清理 + 全局 SSO） | 接口 | 规划 |
 | M04.F01  | 应用 CRUD（平台 admin） | 接口 | 规划 |
 | M04.F02  | 应用启用/停用 | 接口 | 规划 |
-| M04.F03  | OAuth 授权码签发与令牌交换/刷新 | 接口 | 规划 |
+| M04.F03  | OAuth 授权码签发与令牌交换/刷新 | 接口 | 开发中 |
 | M05.F01  | API Key 生命周期（tenant-scoped） | 接口 | 规划 |
 | M06.F01  | 审计事件查询（tenant-scoped） | 查询 | 规划 |
 | M06.F02  | 审计留存策略 | 接口 | 规划 |
@@ -42,3 +42,15 @@
 | M09.F01  | 角色菜单授权查询 | 查询 | 规划 |
 | M09.F02  | 角色菜单授权设置 | 接口 | 规划 |
 | M09.F03  | 当前用户有效菜单 | 查询 | 规划 |
+
+## 子项级（M0x.F0y.I0z）— ADR-0013 真 OAuth session 改造
+
+| ID | 子项 | 镜像仓（消费方） | 状态 |
+|----|------|------------------|------|
+| M03.F01.I01 | 密码登录 API（username + password → saas session cookie + access token） | saas-aspnetcore (OauthController / AuthController), saas-msw (handlers-extra) | 规划 |
+| M03.F01.I02 | 失败锁定（连续 5 次密码错 → 锁定 15min） | saas-aspnetcore (AuthController) | 规划 |
+| M03.F01.I03 | 密码登录 UI（saas-vue / saas-react LoginPage 提交 username + password） | saas-vue, saas-react | 规划 |
+| M04.F03.I01 | OAuth authorize 检查 saas session（未登录返 401） | saas-aspnetcore (OauthController.Authorize) | 规划 |
+| M04.F03.I02 | OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发） | saas-aspnetcore (OauthController.ExchangeAuthorizationCode) | 规划 |
+| M04.F03.I03 | OAuth refresh token 旋转（同 session 校验） | saas-aspnetcore (OauthController.RotateRefreshToken) | 规划 |
+| M09.F03.I01 | me/menus session 校验（已存在 F03 端点，加 session 校验） | saas-aspnetcore (MeController.Menus), saas-msw (handlers-extra) | 规划 |
