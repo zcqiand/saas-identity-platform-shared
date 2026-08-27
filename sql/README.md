@@ -87,7 +87,7 @@ saas_prod  —生产；只读账号访问
 切换方式（统一通过 `scripts/lib/db-env.sh`）：
 
 ```bash
-SAAS_DB=saas_test source ../../scripts/lib/db-env.sh
+DATABASE_NAME=saas_test source ../../scripts/lib/db-env.sh
 # 输出 JDBC_URL / NPGSQL_CONN_STR / PG_INSTANCE_URL 三种 ORM 格式
 # 各后端仓默认从 env var 读取，本地无 env 时 fallback 到 saas_dev（100.79.128.25）。
 ```
@@ -96,9 +96,9 @@ SAAS_DB=saas_test source ../../scripts/lib/db-env.sh
 
 | 后端 | env var | fallback |
 |---|---|---|
-| springboot | `SPRING_DATASOURCE_URL` / `JDBC_URL` | `jdbc:postgresql://100.79.128.25:5432/saas_dev` |
-| aspnetcore | `ConnectionStrings__Postgres` / `NPGSQL_CONN_STR` | `Host=100.79.128.25;...Database=saas_dev` |
-| nextjs | `DATABASE_URL` / `SAAS_DB` | `postgresql://postgres:...@100.79.128.25:5432/saas_dev` |
+| springboot | `DATABASE_URL` / `JDBC_URL` | `jdbc:postgresql://100.79.128.25:5432/saas_dev` |
+| aspnetcore | `DATABASE_URL` / `NPGSQL_CONN_STR` | `Host=100.79.128.25;...Database=saas_dev` |
+| nextjs | `DATABASE_URL` / `DATABASE_NAME` | `postgresql://postgres:...@100.79.128.25:5432/saas_dev` |
 
 密码 URL 编码（`qiand68+++` → `qiand68%2B%2B%2B`）：postgres-js / Npgsql / JDBC 都吃 raw `+++`；postgres-js 的 URI parser 严格，需 encoded。`db-env.sh` 提供两种版本：`PG_PASSWORD`（raw）+ `PG_PASSWORD_ENCODED`。
 
