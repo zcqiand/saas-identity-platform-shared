@@ -4,10 +4,125 @@
   "functions": {
     "modules": 9,
     "features": 20,
-    "items": 0
+    "items": 10
   },
   "warnings_total": 0,
   "warnings": {},
   "unreachable_shipped": [],
-  "function_map": {}
+  "function_map": {
+    "M03.F01.I01": {
+      "name": "密码登录 API（username + password → saas session cookie + access token）",
+      "status": "规划",
+      "type": null,
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F01.I02": {
+      "name": "失败锁定（连续 5 次密码错 → 锁定 15min）",
+      "status": "规划",
+      "type": null,
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F01.I03": {
+      "name": "密码登录 UI（saas-vue / saas-react LoginPage 提交 username + password）",
+      "status": "规划",
+      "type": null,
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F03.I01": {
+      "name": "OAuth authorize 检查 saas session（未登录返 401）",
+      "status": "规划",
+      "type": null,
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F03.I02": {
+      "name": "OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发）",
+      "status": "规划",
+      "type": null,
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F03.I03": {
+      "name": "OAuth refresh token 旋转（同 session 校验）",
+      "status": "规划",
+      "type": null,
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F03.I01": {
+      "name": "me/menus session 校验（已存在 F03 端点，加 session 校验）",
+      "status": "规划",
+      "type": null,
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F03.I02": {
+      "name": "角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds）",
+      "status": "规划",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F03.I03": {
+      "name": "菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组）",
+      "status": "规划",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F03.I04": {
+      "name": "app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>）",
+      "status": "规划",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    }
+  }
 }

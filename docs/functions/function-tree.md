@@ -54,3 +54,6 @@
 | M04.F03.I02 | OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发） | saas-aspnetcore (OauthController.ExchangeAuthorizationCode) | 规划 |
 | M04.F03.I03 | OAuth refresh token 旋转（同 session 校验） | saas-aspnetcore (OauthController.RotateRefreshToken) | 规划 |
 | M09.F03.I01 | me/menus session 校验（已存在 F03 端点，加 session 校验） | saas-aspnetcore (MeController.Menus), saas-msw (handlers-extra) | 规划 |
+| M09.F03.I02 | 角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService) | 规划 |
+| M09.F03.I03 | 菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组） | saas-springboot (MeService.getMyMenus) | 规划 |
+| M09.F03.I04 | app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService.Menus) | 规划 |
