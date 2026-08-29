@@ -1,26 +1,24 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-shared",
-  "current_task": "V014 oauth_codes DDL 幂等化上线(v0.2.13)— 拆 saas-springboot V009 撞表雷",
-  "last_session_at": "2026-08-26",
-  "last_session_summary": "V014 的 CREATE TABLE/INDEX 加 IF NOT EXISTS(saas-springboot migration 目录已有 V009 建同名 oauth_codes 表,裸 CREATE 拷入 flyway 链必炸 already exists,是 2026-08-26 lab V014/V015 撞号事故的同款雷);scratch DB 实测最坏序列 V001-V008 -> V009 -> V014 x2 全 PASS。/handoff 二次门禁 --all exit 0(本仓 29 条目 0 软告警)",
+  "current_task": "V009 修复迁移:apps/roles 随机 id 归一(修 V015 双 FK 炸)",
+  "last_session_at": "2026-08-29",
+  "last_session_summary": "saas-nextjs 部署 crash loop:V015 的 menus_app_fk + rmg_role_fk 连环外键炸。根因是 apps(lab-management,5b6a189b-...)与 roles(tenant-001 admin,89b609f4-...)两处同构:早期 json 运行时 seed 灌的随机 id,V014/V015 的「ON CONFLICT DO NOTHING + 固定 id」对存量行语义是跳过而非归一。V016 编号无效(字典序晚于 V015,修复晚于爆炸),改占从未用的 V009 空洞。事务 dry-run 对 saas_prod 验证(app/roles 归一+28 menus+alice 挂 admin+grants)后回滚再落盘。部署后线上验证:tracking 11 条全应用,28 新树 menus,alice role_ids=[admin]",
   "done": [
-    "V014__seed_lab_mgmt_app.sql: CREATE TABLE oauth_codes / 3 个 CREATE INDEX -> IF NOT EXISTS;seed INSERT 本就 ON CONFLICT DO NOTHING,COMMENT ON 天然幂等",
-    "scratch DB saas_scratch_guardcheck 实测:shared V001-V008 -> springboot V009 -> shared V014 连跑两遍全 PASS,终态 11 列 + lab-mgmt app 行正确(改前 V014 第一步必炸)",
-    "saas 各库消费路径核实:saas_dev __schema_migrations 只到 V008(下次 sync-db 会应用新 V014);saas_prod 已记 V014(旧版,filename tracking 无 checksum 概念,跳过);saas-springboot flyway enabled:false(application.yml:45),migration 目录目前是惰性副本",
-    "gate L0/L1/L3/L4/L5 全绿 29 条目 0 软告警;--all 15 项目全绿",
-    "commit c675de8 + tag v0.2.13-20260826 + push origin/master"
+    "V009__fix_lab_mgmt_app_id.sql: memberships.role_ids array_replace(无 FK 不级联)→ DELETE 旧 app(CASCADE 清 27 menus+48 oauth_codes)→ DELETE 旧 roles(限 admin/member 码)→ INSERT V014 同款标准行",
+    "事务 dry-run 金标准:BEGIN→V009+V015→SELECT 验证→ROLLBACK,第二处 roles 根因就是 dry-run 抓出来的",
+    "commit 16cd7ed 推送;saas-nextjs v0.7.51 部署 GREEN,线上 saas_prod 数据全部落地"
   ],
   "next": [
-    "无阻塞。历史 session 记录的技术债仍在:client_secret 明文 'lab-mgmt-secret' 待 Argon2 hash + env 注入;TypeSpec clientId @format(uuid) 移除后 client_id 可改回 'lab-mgmt'"
+    "无阻塞。旧技术债仍在:client_secret 明文待 Argon2;TypeSpec @format(uuid) 移除后 client_id 可改回字符串"
   ],
   "open_questions": [
-    "shared 迁移编号 V008 直接跳 V014(V009-V013 空号,springboot 侧自己的 V009 = oauth_codes)-- 编号体系永久错位,是否值得在 sql/migrations/README 里写一页「版本号地图」说明两仓编号对应关系?"
+    "V009-V013 空洞已占 V009;springboot 侧自己有 V009(oauth_codes)——两仓编号错位是否写「版本号地图」README"
   ],
   "dont": [
-    "不要把 V009-V013 补进 shared 编号来「对齐」springboot -- springboot V009 的 flyway checksum 已锁死(虽然目前 flyway 关着),shared 侧新建 V009 会被 gen-shared 拷过去造成两文件同号不同内容",
-    "不要去掉 V014 的 IF NOT EXISTS「保持 DDL 纯净」-- 那是防 V009 撞表的唯一屏障",
-    "不要直接编辑 generated/openapi 产物 -- 必须 npm run build(emit:openapi),改契约走 main.tsp/tsp/"
+    "收敛迁移禁「ON CONFLICT DO NOTHING + 固定 id」指望归一存量随机 id——必须 DELETE 旧行再 INSERT",
+    "修复迁移编号必须排在被修复对象之前(sync-db 字典序执行,V016 修 V015 无效)",
+    "无 FK 的 UUID 数组列(role_ids)DELETE 不级联,必须显式 array_replace"
   ],
   "last_gate_passed_at": "2026-08-26T17:30+08:00",
   "active_branch": "master",
