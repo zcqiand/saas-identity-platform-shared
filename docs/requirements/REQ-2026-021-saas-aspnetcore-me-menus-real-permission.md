@@ -36,7 +36,7 @@ contract-test 已 88/0/8 通过，但 msw fixture-driven oracle 让 4 后端对*
 ## 3. 不做什么
 
 - 不改 OpenAPI 契约（已定 — `Record<appCode, EffectiveMenuNode[]>`）
-- 不动 msw/nextjs（M96 仓 contract-test 是 fixture 兼容即可）
+- 不动 msw/nextjs（contract-test 仓 fixture 兼容即可）
 - 不接 Phase 5 全部 M09 子项（仅 I02/I03/I04 + I01 状态升级）
 - 不写 M09.F01 (角色菜单授权查询) / M09.F02 (角色菜单授权设置) — 后续 PLAN
 
