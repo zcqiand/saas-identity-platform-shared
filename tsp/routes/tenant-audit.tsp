@@ -45,4 +45,9 @@ namespace Saas.Identity.Shared.TenantAudit {
     @path tenantId: string,
     @body body: { retentionDays: int32 },
   ): { retentionDays: int32 } | ErrorResponse;
+
+  // M06.F03.I01 写入助手副作用 —— 写端点 (api-key create/revoke, user create, ...)
+  // 内部调 AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata)。
+  // 不暴露 HTTP：前端从不写 audit_events。契约只列行为契约，HTTP 不挂端点。
+  // 触发列表由实现仓 (aspnetcore/springboot/nextjs/msw) 各维护一份。
 }

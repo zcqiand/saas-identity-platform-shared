@@ -3,11 +3,48 @@
   "project": "saas-identity-platform-shared",
   "functions": {
     "modules": 9,
-    "features": 20,
-    "items": 10
+    "features": 21,
+    "items": 16
   },
-  "warnings_total": 0,
-  "warnings": {},
+  "warnings_total": 30,
+  "warnings": {
+    "已上线但无设计映射": [
+      "M05.F01.I01",
+      "M05.F01.I02",
+      "M05.F01.I03",
+      "M05.F01.I04",
+      "M06.F03.I01",
+      "M06.F03.I02",
+      "M09.F03.I01",
+      "M09.F03.I02",
+      "M09.F03.I03",
+      "M09.F03.I04"
+    ],
+    "已上线但无测试引用": [
+      "M05.F01.I01",
+      "M05.F01.I02",
+      "M05.F01.I03",
+      "M05.F01.I04",
+      "M06.F03.I01",
+      "M06.F03.I02",
+      "M09.F03.I01",
+      "M09.F03.I02",
+      "M09.F03.I03",
+      "M09.F03.I04"
+    ],
+    "已上线但不在任何流程且非孤儿白名单": [
+      "M05.F01.I01",
+      "M05.F01.I02",
+      "M05.F01.I03",
+      "M05.F01.I04",
+      "M06.F03.I01",
+      "M06.F03.I02",
+      "M09.F03.I01",
+      "M09.F03.I02",
+      "M09.F03.I03",
+      "M09.F03.I04"
+    ]
+  },
   "unreachable_shipped": [],
   "function_map": {
     "M03.F01.I01": {
@@ -82,12 +119,73 @@
       "tests": [],
       "entry": []
     },
+    "M05.F01.I01": {
+      "name": "列表分页 GET `/tenants/{t}/api-keys?page&pageSize`",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M05.F01.I02": {
+      "name": "创建 POST `/tenants/{t}/api-keys`（返回一次性 secret）",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M05.F01.I03": {
+      "name": "吊销 POST `/tenants/{t}/api-keys/{k}/revoke`（idempotent）",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M05.F01.I04": {
+      "name": "轮换 POST `/tenants/{t}/api-keys/{k}/rotate`（revoke old + create new）",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F03.I01": {
+      "name": "AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked）",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F03.I02": {
+      "name": "列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称）",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
     "M09.F03.I01": {
       "name": "me/menus session 校验（已存在 F03 端点，加 session 校验）",
-      "status": "规划",
+      "status": "已上线",
       "type": null,
       "requirements": [
-        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md",
+        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
       ],
       "flows": [],
       "designs": [],
@@ -96,9 +194,11 @@
     },
     "M09.F03.I02": {
       "name": "角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds）",
-      "status": "规划",
+      "status": "已上线",
       "type": null,
-      "requirements": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
+      ],
       "flows": [],
       "designs": [],
       "tests": [],
@@ -106,9 +206,11 @@
     },
     "M09.F03.I03": {
       "name": "菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组）",
-      "status": "规划",
+      "status": "已上线",
       "type": null,
-      "requirements": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
+      ],
       "flows": [],
       "designs": [],
       "tests": [],
@@ -116,9 +218,11 @@
     },
     "M09.F03.I04": {
       "name": "app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>）",
-      "status": "规划",
+      "status": "已上线",
       "type": null,
-      "requirements": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
+      ],
       "flows": [],
       "designs": [],
       "tests": [],

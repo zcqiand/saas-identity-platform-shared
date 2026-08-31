@@ -13,8 +13,8 @@
 | M04 | 应用与 OAuth | 平台级 App（菜单承载 + OAuth client）CRUD、授权码/令牌流程 | 规划 |
 
 > M04 备注：V014 起 seed lab-mgmt OAuth client（id `11111111-1111-1111-1111-111111111111`，client_id `lab-mgmt`，3 个 saas 后端共用同一 app.id）+ oauth_codes 表（Phase 6 真 OAuth，替代 saas-nextjs 进程内 oauth-store）。
-| M05 | API Key 管理 | tenant-scoped Key 生命周期 | 规划 |
-| M06 | 审计日志 | tenant-scoped 审计事件、留存策略 | 规划 |
+| M05 | API Key 管理 | tenant-scoped Key 生命周期 | 已上线 |
+| M06 | 审计日志 | tenant-scoped 审计事件、留存策略 | 已上线 |
 | M08 | 菜单 | 应用下树形菜单 CRUD、结构维护 | 规划 |
 | M09 | 菜单授权 | tenant-role ↔ 菜单授权、当前用户有效菜单 | 规划 |
 
@@ -34,9 +34,10 @@
 | M04.F01  | 应用 CRUD（平台 admin） | 接口 | 规划 |
 | M04.F02  | 应用启用/停用 | 接口 | 规划 |
 | M04.F03  | OAuth 授权码签发与令牌交换/刷新 | 接口 | 开发中 |
-| M05.F01  | API Key 生命周期（tenant-scoped） | 接口 | 规划 |
-| M06.F01  | 审计事件查询（tenant-scoped） | 查询 | 规划 |
-| M06.F02  | 审计留存策略 | 接口 | 规划 |
+| M05.F01  | API Key 生命周期（tenant-scoped） | 接口 | 已上线 |
+| M06.F01  | 审计事件查询（tenant-scoped） | 查询 | 已上线 |
+| M06.F02  | 审计留存策略 | 接口 | 已上线 |
+| M06.F03  | 审计写入助手（写端点副作用） | 接口 | 已上线 |
 | M08.F01  | 菜单 CRUD（应用下） | 接口 | 规划 |
 | M08.F02  | 菜单结构维护（排序/父级） | 接口 | 规划 |
 | M09.F01  | 角色菜单授权查询 | 查询 | 规划 |
@@ -57,3 +58,9 @@
 | M09.F03.I02 | 角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService) | 已上线 |
 | M09.F03.I03 | 菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组） | saas-springboot (MeService.getMyMenus) | 已上线 |
 | M09.F03.I04 | app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService.Menus) | 已上线 |
+| M05.F01.I01 | 列表分页 GET `/tenants/{t}/api-keys?page&pageSize` | saas-aspnetcore (TenantApiKeysController), saas-springboot, saas-nextjs, saas-msw (handlers-extra) | 已上线 |
+| M05.F01.I02 | 创建 POST `/tenants/{t}/api-keys`（返回一次性 secret） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M05.F01.I03 | 吊销 POST `/tenants/{t}/api-keys/{k}/revoke`（idempotent） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M05.F01.I04 | 轮换 POST `/tenants/{t}/api-keys/{k}/rotate`（revoke old + create new） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M06.F03.I01 | AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked） | saas-aspnetcore (AuditWriter), saas-springboot, saas-nextjs (lib/audit), saas-msw (handlers-extra) | 已上线 |
+| M06.F03.I02 | 列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw (now) | 已上线 |

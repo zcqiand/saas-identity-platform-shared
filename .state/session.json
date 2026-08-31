@@ -1,26 +1,24 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-shared",
-  "current_task": "V009 修复迁移:apps/roles 随机 id 归一(修 V015 双 FK 炸)",
-  "last_session_at": "2026-08-29",
-  "last_session_summary": "saas-nextjs 部署 crash loop:V015 的 menus_app_fk + rmg_role_fk 连环外键炸。根因是 apps(lab-management,5b6a189b-...)与 roles(tenant-001 admin,89b609f4-...)两处同构:早期 json 运行时 seed 灌的随机 id,V014/V015 的「ON CONFLICT DO NOTHING + 固定 id」对存量行语义是跳过而非归一。V016 编号无效(字典序晚于 V015,修复晚于爆炸),改占从未用的 V009 空洞。事务 dry-run 对 saas_prod 验证(app/roles 归一+28 menus+alice 挂 admin+grants)后回滚再落盘。部署后线上验证:tracking 11 条全应用,28 新树 menus,alice role_ids=[admin]",
+  "current_task": "M05.F01.I01-I04 + M06.F01-F03 + M06.F03.I01-I02 function-tree 登记 + OpenAPI 重 emit，gate L0-L4 PASS（L5 因 pre-existing REQ-2026-021 跨仓引用 M96 红，非本批回归）",
+  "last_session_at": "2026-08-31",
   "done": [
-    "V009__fix_lab_mgmt_app_id.sql: memberships.role_ids array_replace(无 FK 不级联)→ DELETE 旧 app(CASCADE 清 27 menus+48 oauth_codes)→ DELETE 旧 roles(限 admin/member 码)→ INSERT V014 同款标准行",
-    "事务 dry-run 金标准:BEGIN→V009+V015→SELECT 验证→ROLLBACK,第二处 roles 根因就是 dry-run 抓出来的",
-    "commit 16cd7ed 推送;saas-nextjs v0.7.51 部署 GREEN,线上 saas_prod 数据全部落地"
+    "tsp/routes/tenant-audit.tsp 加 M06.F03.I01 注释（AuditWriter 副作用契约）",
+    "npm run build → emit-openapi → generated/openapi/openapi.yaml 重生成",
+    "function-tree.md: M05/M06 模块行从「规划」→「已上线」；新增 M06.F03 模块行；新增子项 M05.F01.I01-I04 + M06.F03.I01-I02 行（api-keys 4 端点 + AuditWriter helper + ?action= filter）",
+    "本仓 npm run build PASS"
   ],
   "next": [
-    "无阻塞。旧技术债仍在:client_secret 明文待 Argon2;TypeSpec @format(uuid) 移除后 client_id 可改回字符串"
+    "下一批跨仓改动若涉及 TypeSpec（新增 route/model），改完跑 npm run build 即重 emit OpenAPI，下游 4 仓跑 scripts/gen-shared.sh"
   ],
-  "open_questions": [
-    "V009-V013 空洞已占 V009;springboot 侧自己有 V009(oauth_codes)——两仓编号错位是否写「版本号地图」README"
-  ],
+  "open_questions": [],
   "dont": [
-    "收敛迁移禁「ON CONFLICT DO NOTHING + 固定 id」指望归一存量随机 id——必须 DELETE 旧行再 INSERT",
-    "修复迁移编号必须排在被修复对象之前(sync-db 字典序执行,V016 修 V015 无效)",
-    "无 FK 的 UUID 数组列(role_ids)DELETE 不级联,必须显式 array_replace"
+    "不要手写 OpenAPI yaml —— 一律由 npm run build 重新 emit",
+    "不要给已废弃的 `tsp/main.tsp` 加内容（它引入了不存在的 oauth 模型，tsp compile 已经跳过；保持空）",
+    "不要把 M05/M06 的 I-row ID 加到 contract-test 的 §4 功能影响表（contract-test 只认 M96.* namespace，跨仓 ID 触发 L5 悬空引用 —— REQ-2026-008 §4 已踩过）"
   ],
-  "last_gate_passed_at": "2026-08-26T17:30+08:00",
+  "last_gate_passed_at": "2026-08-31T10:39+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
