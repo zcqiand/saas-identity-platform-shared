@@ -1,74 +1,41 @@
 {
   "schema": 1,
-  "project": "saas-identity-platform-shared",
-  "proposed_at": "2026-08-27",
-  "summary": "M03/M04/M09 真 OAuth 用户认证子项登记（ADR-0013 路线 A）",
-  "reason": "ADR-0013 — saas-aspnetcore /api/v1/oauth/authorize + /token + /me/menus 当前不查 user 身份（拿 tenantId 直发 token）。本批改造为真 OAuth：saas session cookie 校验，需先在共享 function-tree 登记子项。",
+  "approved": true,
+  "base_sha": "23ba8dd7478897a3",
+  "summary": "M09.F03 4 子项状态 规划 → 已上线 — PLAN-2026-002 实施落地 (saas-aspnetcore fe07654/495d197 + saas-springbot 2026-08-28 ahead-of-plan 实装), 4 后端 contract-test 88/0/8 实跑验证",
   "changes": [
     {
+      "id": "M09.F03",
       "action": "变更",
-      "id": "M03.F01",
-      "new_status": "开发中",
-      "reason": "原状态 '规划'，密码登录 UI 与 API 端点已实装（saas-vue/react），需加子项覆盖 session 管理"
+      "new_status": "已上线",
+      "reason": "模块级 — saas-aspnetcore PLAN-2026-002 T-1 实施 (commit fe07654) 真接 role_menu_grants JOIN; saas-springbot MeService.getMyMenus (2026-08-28 prod 503 修复) 早已实装; msw/nextjs fixture-driven oracle 已对齐; contract-test 88/0/8 实跑绿"
     },
     {
-      "action": "变更",
-      "id": "M04.F03",
-      "new_status": "开发中",
-      "reason": "OAuth 端点已实装（saas-aspnetcore），但跳过 user 身份检查（Phase 5 mock 残留）。本批改造为真 OAuth：authorize + token 端点检查 saas session cookie。"
-    },
-    {
-      "action": "新增",
-      "id": "M03.F01.I01",
-      "name": "密码登录 API（username + password -> saas session cookie + saas access token）",
-      "fn_id_full": "M03.F01.I01",
-      "module": "M03",
-      "function": "F01"
-    },
-    {
-      "action": "新增",
-      "id": "M03.F01.I02",
-      "name": "失败锁定（连续 5 次密码错 -> 锁定 15min）",
-      "fn_id_full": "M03.F01.I02"
-    },
-    {
-      "action": "新增",
-      "id": "M03.F01.I03",
-      "name": "密码登录 UI（saas-vue LoginPage / saas-react LoginPage 提交 username + password）",
-      "fn_id_full": "M03.F01.I03"
-    },
-    {
-      "action": "新增",
-      "id": "M04.F03.I01",
-      "name": "OAuth 授权码签发（检查 saas session cookie；未登录返 401）",
-      "fn_id_full": "M04.F03.I01",
-      "module": "M04",
-      "function": "F03"
-    },
-    {
-      "action": "新增",
-      "id": "M04.F03.I02",
-      "name": "OAuth token 交换（必须由已认证 user 触发 — session 内 user_id 注入；不再 tenantId 直发）",
-      "fn_id_full": "M04.F03.I02"
-    },
-    {
-      "action": "新增",
-      "id": "M04.F03.I03",
-      "name": "OAuth refresh token 旋转（同 M04.F03.I02 session 校验）",
-      "fn_id_full": "M04.F03.I03"
-    },
-    {
-      "action": "新增",
       "id": "M09.F03.I01",
-      "name": "me/menus session 校验（已存在 F03 端点，加 session 校验 I 子项）",
-      "fn_id_full": "M09.F03.I01",
-      "module": "M09",
-      "function": "F03"
+      "action": "变更",
+      "new_status": "已上线",
+      "reason": "saas-aspnetcore MeController.Menus L94-101 (Bearer + saas session fallback) 实质已上线"
+    },
+    {
+      "id": "M09.F03.I02",
+      "action": "变更",
+      "new_status": "已上线",
+      "reason": "saas-aspnetcore PLAN-2026-002 (commit fe07654) EF Core LINQ (Npgsql 原生 uuid[]); saas-springbot MeService.getMyMenus:122-205 已 ahead-of-plan 实施"
+    },
+    {
+      "id": "M09.F03.I03",
+      "action": "变更",
+      "new_status": "已上线",
+      "reason": "saas-aspnetcore MeController.Menus 父链补全 + 按 app.code 分组 (PLAN-2026-002 commit fe07654); saas-springbot MeService.getMyMenus:152-203 已 ahead-of-plan 实施"
+    },
+    {
+      "id": "M09.F03.I04",
+      "action": "变更",
+      "new_status": "已上线",
+      "reason": "saas-aspnetcore 已实装; saas-springbot MeService.getMyMenus:187-204 已 ahead-of-plan 实施"
     }
   ],
   "sync_files": [
     "docs/functions/function-tree.md"
-  ],
-  "approved": true,
-  "base_sha": "2af14eac4fd97366"
+  ]
 }

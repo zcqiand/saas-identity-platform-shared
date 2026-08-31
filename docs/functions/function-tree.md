@@ -41,7 +41,7 @@
 | M08.F02  | 菜单结构维护（排序/父级） | 接口 | 规划 |
 | M09.F01  | 角色菜单授权查询 | 查询 | 规划 |
 | M09.F02  | 角色菜单授权设置 | 接口 | 规划 |
-| M09.F03  | 当前用户有效菜单 | 查询 | 规划 |
+| M09.F03  | 当前用户有效菜单 | 查询 | 已上线 |
 
 ## 子项级（M0x.F0y.I0z）— ADR-0013 真 OAuth session 改造
 
@@ -53,7 +53,7 @@
 | M04.F03.I01 | OAuth authorize 检查 saas session（未登录返 401） | saas-aspnetcore (OauthController.Authorize) | 规划 |
 | M04.F03.I02 | OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发） | saas-aspnetcore (OauthController.ExchangeAuthorizationCode) | 规划 |
 | M04.F03.I03 | OAuth refresh token 旋转（同 session 校验） | saas-aspnetcore (OauthController.RotateRefreshToken) | 规划 |
-| M09.F03.I01 | me/menus session 校验（已存在 F03 端点，加 session 校验） | saas-aspnetcore (MeController.Menus), saas-msw (handlers-extra) | 规划 |
-| M09.F03.I02 | 角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService) | 规划 |
-| M09.F03.I03 | 菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组） | saas-springboot (MeService.getMyMenus) | 规划 |
-| M09.F03.I04 | app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService.Menus) | 规划 |
+| M09.F03.I01 | me/menus session 校验（已存在 F03 端点，加 session 校验） | saas-aspnetcore (MeController.Menus), saas-msw (handlers-extra) | 已上线 |
+| M09.F03.I02 | 角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService) | 已上线 |
+| M09.F03.I03 | 菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组） | saas-springboot (MeService.getMyMenus) | 已上线 |
+| M09.F03.I04 | app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService.Menus) | 已上线 |
