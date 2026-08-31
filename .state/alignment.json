@@ -4,7 +4,7 @@
   "functions": {
     "modules": 9,
     "features": 21,
-    "items": 16
+    "items": 19
   },
   "warnings_total": 30,
   "warnings": {
@@ -47,6 +47,16 @@
   },
   "unreachable_shipped": [],
   "function_map": {
+    "M01.F01.I02": {
+      "name": "创建用户 POST `/tenants/{t}/users`（CreateUserRequest{username,email,password,displayName?,roleIds?} → User；区别于 I03 邀请是发邮件而非直接落地）",
+      "status": "规划",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
     "M03.F01.I01": {
       "name": "密码登录 API（username + password → saas session cookie + access token）",
       "status": "规划",
@@ -159,6 +169,16 @@
       "tests": [],
       "entry": []
     },
+    "M05.F01.I05": {
+      "name": "物理删除 DELETE `/tenants/{t}/api-keys/{k}`（直接删 DB 行，与 I03 revoke 软删并存：revoke 保留审计行，本 op 不留痕；幂等——重复删返 404）",
+      "status": "规划",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
     "M06.F03.I01": {
       "name": "AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked）",
       "status": "已上线",
@@ -172,6 +192,16 @@
     "M06.F03.I02": {
       "name": "列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称）",
       "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F02.I01": {
+      "name": "整批设置角色菜单 PUT `/tenants/{t}/roles/{r}/menus`（SetRoleMenusRequest{menuIds:[]} → RoleMenuGrant{roleId,tenantId,menuIds,updatedAt}；整批替换语义，幂等）",
+      "status": "规划",
       "type": null,
       "requirements": [],
       "flows": [],

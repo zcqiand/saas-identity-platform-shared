@@ -1,38 +1,26 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "23ba8dd7478897a3",
-  "summary": "M09.F03 4 子项状态 规划 → 已上线 — PLAN-2026-002 实施落地 (saas-aspnetcore fe07654/495d197 + saas-springbot 2026-08-28 ahead-of-plan 实装), 4 后端 contract-test 88/0/8 实跑验证",
+  "base_sha": "e580b9c2e730f3b4",
+  "summary": "写端点第二期：M05.F01.I05 (DELETE api-key 物理硬删) 新增 + M09.F02.I01 (PUT role-menus setRoleMenus) 补登 + M01.F01.I02 (POST users createUser) 补登（trace 已用但 function-tree 漏登记）",
   "changes": [
     {
-      "id": "M09.F03",
-      "action": "变更",
-      "new_status": "已上线",
-      "reason": "模块级 — saas-aspnetcore PLAN-2026-002 T-1 实施 (commit fe07654) 真接 role_menu_grants JOIN; saas-springbot MeService.getMyMenus (2026-08-28 prod 503 修复) 早已实装; msw/nextjs fixture-driven oracle 已对齐; contract-test 88/0/8 实跑绿"
+      "id": "M05.F01.I05",
+      "action": "新增",
+      "name": "物理删除 DELETE /tenants/{t}/api-keys/{k}（区别于 I03 revoke 软删：直接从 db 删除记录）",
+      "reason": "写端点第二期：用户已批准为新 op（非 revoke 别名）。与 I03 revoke 并存：revoke=软删（status=revoked+revokedAt），本 op=物理删除（DB 行消失）。contract + 4 后端 + 测试全栈新增。"
     },
     {
-      "id": "M09.F03.I01",
-      "action": "变更",
-      "new_status": "已上线",
-      "reason": "saas-aspnetcore MeController.Menus L94-101 (Bearer + saas session fallback) 实质已上线"
+      "id": "M09.F02.I01",
+      "action": "新增",
+      "name": "整批设置角色菜单 PUT /tenants/{t}/roles/{r}/menus（SetRoleMenusRequest{menuIds:[]} → RoleMenuGrant{roleId,tenantId,menuIds,updatedAt}）",
+      "reason": "写端点第二期：4 后端已实现（aspnetcore TenantRoleMenusController.MenusPut + springboot + nextjs + msw handlers-extra L268）但 trace 全空 = 假绿。补 fn ID 后走 contract-test 四方比对。"
     },
     {
-      "id": "M09.F03.I02",
-      "action": "变更",
-      "new_status": "已上线",
-      "reason": "saas-aspnetcore PLAN-2026-002 (commit fe07654) EF Core LINQ (Npgsql 原生 uuid[]); saas-springbot MeService.getMyMenus:122-205 已 ahead-of-plan 实施"
-    },
-    {
-      "id": "M09.F03.I03",
-      "action": "变更",
-      "new_status": "已上线",
-      "reason": "saas-aspnetcore MeController.Menus 父链补全 + 按 app.code 分组 (PLAN-2026-002 commit fe07654); saas-springbot MeService.getMyMenus:152-203 已 ahead-of-plan 实施"
-    },
-    {
-      "id": "M09.F03.I04",
-      "action": "变更",
-      "new_status": "已上线",
-      "reason": "saas-aspnetcore 已实装; saas-springbot MeService.getMyMenus:187-204 已 ahead-of-plan 实施"
+      "id": "M01.F01.I02",
+      "action": "新增",
+      "name": "创建用户 POST /tenants/{t}/users（CreateUserRequest{username,email,password,displayName?,roleIds?} → User）",
+      "reason": "写端点第二期：4 后端已实现（trace 已用 I02 但 function-tree 漏登记——编号漂移）。补登后 contract-test 四方比对让 I02 从「部分 trace」变「全栈四方比对绿」。"
     }
   ],
   "sync_files": [

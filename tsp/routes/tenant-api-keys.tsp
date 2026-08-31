@@ -31,4 +31,11 @@ namespace Saas.Identity.Shared.TenantApiKeys {
     @path tenantId: string,
     @path keyId: string,
   ): CreateApiKeyResponse | ErrorResponse;
+
+  // M05.F01.I05 物理删除（区别于 I03 revoke 软删：直接删 DB 行，无审计事件）
+  // 与 I03 revoke 并存：revoke 保留行（status=revoked, revokedAt 设值）；本 op 直接 DELETE FROM。
+  // 幂等：重复删除已不存在的 keyId 返 404。
+  @delete
+  @route("/{keyId}")
+  op deleteApiKey(@path tenantId: string, @path keyId: string): void | ErrorResponse;
 }

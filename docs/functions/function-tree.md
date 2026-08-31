@@ -54,6 +54,8 @@
 | M04.F03.I01 | OAuth authorize 检查 saas session（未登录返 401） | saas-aspnetcore (OauthController.Authorize) | 规划 |
 | M04.F03.I02 | OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发） | saas-aspnetcore (OauthController.ExchangeAuthorizationCode) | 规划 |
 | M04.F03.I03 | OAuth refresh token 旋转（同 session 校验） | saas-aspnetcore (OauthController.RotateRefreshToken) | 规划 |
+| M01.F01.I02 | 创建用户 POST `/tenants/{t}/users`（CreateUserRequest{username,email,password,displayName?,roleIds?} → User；区别于 I03 邀请是发邮件而非直接落地） | saas-aspnetcore (TenantUsersController.UsersPost), saas-springboot (TenantUsersController#createUser + TenantUsersService), saas-nextjs (app/api/v1/tenants/[tenantId]/users/route.ts), saas-msw (handlers-extra.usersExtraHandlers) | 规划 |
+| M09.F02.I01 | 整批设置角色菜单 PUT `/tenants/{t}/roles/{r}/menus`（SetRoleMenusRequest{menuIds:[]} → RoleMenuGrant{roleId,tenantId,menuIds,updatedAt}；整批替换语义，幂等） | saas-aspnetcore (TenantRoleMenusController.MenusPut), saas-springboot (TenantRoleMenuController#setRoleMenus + TenantRoleMenuService), saas-nextjs (app/api/v1/tenants/[tenantId]/roles/[roleId]/menus/route.ts), saas-msw (handlers-extra.roleMenuExtraHandlers) | 规划 |
 | M09.F03.I01 | me/menus session 校验（已存在 F03 端点，加 session 校验） | saas-aspnetcore (MeController.Menus), saas-msw (handlers-extra) | 已上线 |
 | M09.F03.I02 | 角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds） | saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService) | 已上线 |
 | M09.F03.I03 | 菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组） | saas-springboot (MeService.getMyMenus) | 已上线 |
@@ -62,5 +64,6 @@
 | M05.F01.I02 | 创建 POST `/tenants/{t}/api-keys`（返回一次性 secret） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
 | M05.F01.I03 | 吊销 POST `/tenants/{t}/api-keys/{k}/revoke`（idempotent） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
 | M05.F01.I04 | 轮换 POST `/tenants/{t}/api-keys/{k}/rotate`（revoke old + create new） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M05.F01.I05 | 物理删除 DELETE `/tenants/{t}/api-keys/{k}`（直接删 DB 行，与 I03 revoke 软删并存：revoke 保留审计行，本 op 不留痕；幂等——重复删返 404） | saas-aspnetcore (TenantApiKeysController.Delete{KeyId}), saas-springboot (TenantApiKeysController#deleteApiKey + TenantApiKeyService), saas-nextjs (app/api/v1/tenants/[tenantId]/api-keys/[keyId]/route.ts), saas-msw (handlers-extra.apiKeysExtraHandlers) | 规划 |
 | M06.F03.I01 | AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked） | saas-aspnetcore (AuditWriter), saas-springboot, saas-nextjs (lib/audit), saas-msw (handlers-extra) | 已上线 |
 | M06.F03.I02 | 列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw (now) | 已上线 |
