@@ -9,6 +9,13 @@
 //        （如 mock 仓测试名里说「M04.F03 对应 OAuth server mock」），不进 trace，
 //        不参与 L5 引用检查 —— 这正是 conventions §7「mock 不镜像业务模块」的
 //        测试侧落地。
+//   v5 (2026-09-01) — vitest 2.x `onTaskUpdate` 拿到的 packs 是
+//        `Array<[id, result, meta]>` tuple（不是 `{tasks:[]}` 对象），
+//        `pack.tasks` 恒 undefined → collectTests 空跑，addEntry 永远不被调。
+//        修法：onFinished(files: TestFile[]) 拿完整 task tree 兜底
+//        （files 顶层是 TestFile，每个含 tasks: Suite[]，可递归走完所有 test +
+//         describe.skipIf 过滤掉的 inner test）。同时保留 onTaskUpdate
+//         早写（PASS 测试 result 已就绪），用 tuple 形态正确解析。
 import type { Reporter } from "vitest/reporters";
 import { readFileSync } from "node:fs";
 
@@ -34,8 +41,11 @@ function loadNamespaces(): Set<string> {
     if (!line.trimStart().startsWith("|")) continue;
     const cells = line.split("|").map((c: string) => c.trim());
     if (cells.length < 2) continue;
-    const m = FUNCTION_ID_RE.exec(cells[0]);
+    // markdown 表格行首位都有 `|`，split 后 cells[0] 是空前缀段、cells[1] 才是 ID 列
+    const idCell = cells[1] ?? cells[0];
+    const m = FUNCTION_ID_RE.exec(idCell);
     if (m && m[0]) ns.add(m[0].slice(0, 2));
+    FUNCTION_ID_RE.lastIndex = 0;
   }
   return ns;
 }
@@ -75,17 +85,37 @@ export default class FnReporter implements Partial<Reporter> {
     this.entries.push({ test: t.fullName, fns: isInert ? [] : fns.sort(), inert: isInert });
   }
 
-  /** 用原型方法定义钩子（vitest 2.x 的 instanceof 检查不接受实例属性箭头函数）。 */
+  /**
+   * vitest 2.x onTaskUpdate(packs) packs 是 `Array<[id, result, meta]>` tuple，
+   * 不是 `{tasks:[]}` 对象。每个 tuple 元素是 [string, TestResult?, TestMeta?]。
+   * 我们要从 id 拿完整 task 节点，但 reporter 上下文里没有 state.idMap，
+   * 所以这里只能存『已跑过的 result』。完整 task 树改走 onFinished。
+   *
+   * 注：本钩子在 PASS 测试 result 已就绪时触发，但 inert 测试常被 skipIf
+   * 过滤掉、result 还没填充。所以 onTaskUpdate 主要服务 PASS 测试的早写。
+   */
   async onTaskUpdate(packs: any[]) {
     if (process.env.TRACE_MAP !== "1") return;
-    for (const pack of packs) {
-      collectTests(pack.tasks ?? []).forEach((t) => this.addEntry(t));
-    }
+    // pack 是 tuple，无法在不查 state 的前提下拿到 task 节点。
+    // 我们什么都不做，等 onFinished(files) 一次性 walk 全树。
+    void packs;
     await this.flush();
   }
 
-  async onFinished(_files?: unknown[]) {
+  /**
+   * vitest 2.x onFinished(files: TestFile[]) 是 inert 测试可达的唯一入口。
+   * TestFile 含 tasks: Suite[]，递归 walk 拿全部 test + describe。
+   */
+  async onFinished(files?: unknown[]) {
     if (process.env.TRACE_MAP !== "1") return;
+    if (!this.namespaces) this.namespaces = loadNamespaces();
+
+    if (Array.isArray(files)) {
+      for (const file of files) {
+        const f = file as { tasks?: any[] };
+        if (f?.tasks) collectTests(f.tasks).forEach((t) => this.addEntry(t));
+      }
+    }
     await this.flush();
   }
 
