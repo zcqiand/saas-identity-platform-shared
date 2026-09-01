@@ -1,26 +1,38 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "e580b9c2e730f3b4",
-  "summary": "写端点第二期：M05.F01.I05 (DELETE api-key 物理硬删) 新增 + M09.F02.I01 (PUT role-menus setRoleMenus) 补登 + M01.F01.I02 (POST users createUser) 补登（trace 已用但 function-tree 漏登记）",
+  "base_sha": "ad3cc3a915151c7b",
+  "summary": "contract-test 补齐：子项表补登 5 个已上线 I-ID（M09.F03.I01 已登记，无需重提）。tsp/routes 早定义端点 + tests/snapshots/openapi.test.ts 已用 I-ID 断言锁定。原「写端点第二期」提案 base_sha 不匹配当前 tree，本提案覆盖重提。",
   "changes": [
     {
-      "id": "M05.F01.I05",
+      "id": "M06.F01.I01",
       "action": "新增",
-      "name": "物理删除 DELETE /tenants/{t}/api-keys/{k}（区别于 I03 revoke 软删：直接从 db 删除记录）",
-      "reason": "写端点第二期：用户已批准为新 op（非 revoke 别名）。与 I03 revoke 并存：revoke=软删（status=revoked+revokedAt），本 op=物理删除（DB 行消失）。contract + 4 后端 + 测试全栈新增。"
+      "name": "列表审计事件 GET /tenants/{t}/audit-events?page&pageSize&action&actorUserId&from&to",
+      "reason": "tsp/routes/tenant-audit.tsp listAuditEvents 已定义；openapi.yaml:998 TenantAudit_listAuditEvents；tests/snapshots/openapi.test.ts M06.F01.I01 断言锁定；M06.F01 模块级行已标已上线"
     },
     {
-      "id": "M09.F02.I01",
+      "id": "M06.F01.I02",
       "action": "新增",
-      "name": "整批设置角色菜单 PUT /tenants/{t}/roles/{r}/menus（SetRoleMenusRequest{menuIds:[]} → RoleMenuGrant{roleId,tenantId,menuIds,updatedAt}）",
-      "reason": "写端点第二期：4 后端已实现（aspnetcore TenantRoleMenusController.MenusPut + springboot + nextjs + msw handlers-extra L268）但 trace 全空 = 假绿。补 fn ID 后走 contract-test 四方比对。"
+      "name": "按用户查审计事件 GET /tenants/{t}/audit-events/by-user/{userId}",
+      "reason": "tsp/routes/tenant-audit.tsp listAuditEventsByUser 已定义；openapi.yaml:1086 TenantAudit_listAuditEventsByUser；tests/snapshots/openapi.test.ts M06.F01.I02 断言锁定"
     },
     {
-      "id": "M01.F01.I02",
+      "id": "M06.F01.I03",
       "action": "新增",
-      "name": "创建用户 POST /tenants/{t}/users（CreateUserRequest{username,email,password,displayName?,roleIds?} → User）",
-      "reason": "写端点第二期：4 后端已实现（trace 已用 I02 但 function-tree 漏登记——编号漂移）。补登后 contract-test 四方比对让 I02 从「部分 trace」变「全栈四方比对绿」。"
+      "name": "导出审计事件 POST /tenants/{t}/audit-events/export (csv/json)",
+      "reason": "tsp/routes/tenant-audit.tsp exportAuditEvents 已定义；openapi.yaml:1151 TenantAudit_exportAuditEvents；tests/snapshots/openapi.test.ts M06.F01.I03 断言锁定"
+    },
+    {
+      "id": "M06.F02.I01",
+      "action": "新增",
+      "name": "读取审计留存策略 GET /tenants/{t}/audit-events/retention",
+      "reason": "tsp/routes/tenant-audit.tsp getRetentionPolicy 已定义；openapi.yaml:1202 TenantAudit_getRetentionPolicy；tests/snapshots/openapi.test.ts M06.F02.I01 断言锁定；M06.F02 模块级行已标已上线"
+    },
+    {
+      "id": "M06.F02.I02",
+      "action": "新增",
+      "name": "设置审计留存策略 PUT /tenants/{t}/audit-events/retention",
+      "reason": "tsp/routes/tenant-audit.tsp setRetentionPolicy 已定义；openapi.yaml:1231 TenantAudit_setRetentionPolicy；tests/snapshots/openapi.test.ts M06.F02.I02 断言锁定"
     }
   ],
   "sync_files": [

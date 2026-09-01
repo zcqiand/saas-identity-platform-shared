@@ -65,5 +65,10 @@
 | M05.F01.I03 | 吊销 POST `/tenants/{t}/api-keys/{k}/revoke`（idempotent） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
 | M05.F01.I04 | 轮换 POST `/tenants/{t}/api-keys/{k}/rotate`（revoke old + create new） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
 | M05.F01.I05 | 物理删除 DELETE `/tenants/{t}/api-keys/{k}`（直接删 DB 行，与 I03 revoke 软删并存：revoke 保留审计行，本 op 不留痕；幂等——重复删返 404） | saas-aspnetcore (TenantApiKeysController.Delete{KeyId}), saas-springboot (TenantApiKeysController#deleteApiKey + TenantApiKeyService), saas-nextjs (app/api/v1/tenants/[tenantId]/api-keys/[keyId]/route.ts), saas-msw (handlers-extra.apiKeysExtraHandlers) | 规划 |
+| M06.F01.I01 | 列表审计事件 GET `/tenants/{t}/audit-events?page&pageSize&action&actorUserId&from&to` | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M06.F01.I02 | 按用户查审计事件 GET `/tenants/{t}/audit-events/by-user/{userId}` | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M06.F01.I03 | 导出审计事件 POST `/tenants/{t}/audit-events/export`（format: csv \| json → downloadUrl） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M06.F02.I01 | 读取审计留存策略 GET `/tenants/{t}/audit-events/retention` | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
+| M06.F02.I02 | 设置审计留存策略 PUT `/tenants/{t}/audit-events/retention`（{retentionDays} → {retentionDays}） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 已上线 |
 | M06.F03.I01 | AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked） | saas-aspnetcore (AuditWriter), saas-springboot, saas-nextjs (lib/audit), saas-msw (handlers-extra) | 已上线 |
 | M06.F03.I02 | 列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称） | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw (now) | 已上线 |

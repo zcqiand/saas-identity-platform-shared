@@ -1,29 +1,29 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-shared",
-  "current_task": "contract-test 补齐：tests/snapshots/openapi.test.ts 加 11 个 I-ID 化断言（M05.F01/M06.F01/M06.F02/M06.F03/M09.F03）+ fnReporter v5 修两处 pre-existing bug（loadNamespaces cells[0] 恒空、onTaskUpdate 收到 tuple 不是 {tasks:[]}）。TRACE_MAP=1 vitest run 全绿 18 tests，trace.json 现在有 11 条 entry。gate L0/L0.5/L1/L3/L4 PASS，L5 因 6 个 ID（M06.F01.I01-I03、M06.F02.I01-I02、M09.F03.I01）未在 function-tree.md 子项表登记红（本批新发现）",
+  "current_task": "contract-test 补齐闭环：tests/snapshots/openapi.test.ts 加 11 个 I-ID 化断言 + fnReporter v5 修 + function-tree.md 补登 5 个 I-ID（M06.F01.I01-I03 + M06.F02.I01-I02；M09.F03.I01 已有未重提）。gate L0/L0.5/L1/L3/L4/L5 全绿。3 个软告警留给下一批。",
   "last_session_at": "2026-09-01",
   "done": [
     "tests/snapshots/openapi.test.ts: 通用快照 2 条保留（不含 M-ID 防 trace 污染）；新增 M05.F01/M06.F01/M06.F02/M06.F03/M09.F03 共 11 个 it() 挂完整 I-ID + path/operationId 断言；M06.F03.I01 是「AuditWriter 必须不暴露 HTTP 写端点」的反向断言（防回归）",
     "tests/fnReporter.ts: 修 loadNamespaces cells[0] 恒空（markdown split 行为 → cells[1]）+ 重置 lastIndex；改用 onFinished(files: TestFile[]) 走全树（vitest 2.x packs 是 tuple 不是 {tasks:[]}）",
     "trace.json 写入 11 条 entry，覆盖 M05.F01.I01-I04 + M06.F01.I01-I03 + M06.F02.I01-I02 + M06.F03.I01 + M09.F03.I01",
     "vitest run 全绿 18 tests（13 新 + 5 SQL replay）",
-    "commit 52831f1"
+    "tree-change.json 重写（覆盖孤儿「写端点第二期」提案，base_sha 漂移那次）—— human --approve 批准",
+    "function-tree.md 子项表补登 5 行：M06.F01.I01-I03 + M06.F02.I01-I02（M09.F03.I01 已在表里不重提）",
+    "gate 全绿：L0/L0.5/L1/L3/L4/L5",
+    "commits: 52831f1 (test) + 7ff73f2 (chore) + 后续补登 commit"
   ],
   "next": [
-    "tree-change 推进：补 function-tree.md 子项表 6 个 I-ID（M06.F01.I01-I03、M06.F02.I01-I02、M09.F03.I01）。当前 .state/tree-change.json 是孤儿提案（approved=true 但 base_sha=e580b9... ≠ 当前 ad3cc3...，hook 拦；human 选 B「不动提案，记待办」，本轮未推）",
-    "下一批跨仓改动若涉及 TypeSpec（新增 route/model），改完跑 npm run build 即重 emit OpenAPI，下游 4 仓跑 scripts/gen-shared.sh"
+    "下一批跨仓改动若涉及 TypeSpec（新增 route/model），改完跑 npm run build 即重 emit OpenAPI，下游 4 仓跑 scripts/gen-shared.sh",
+    "（软告警留给下一批）M06.F03.I02 / M09.F03.I02-I04 / M05.F01.I01-I04 / M06.F01.I01-I03 / M06.F02.I01-I02 共 15 项「已上线但无设计映射」「不在任何流程且非孤儿白名单」—— shared 仓禁业务代码，没法补 docs/design 与 docs/requirements；要么转到消费仓 (aspnetcore/springboot/nextjs/msw) 的 docs/，要么用白名单豁免"
   ],
-  "open_questions": [
-    "tree-change 孤儿提案（写端点第二期 M05.F01.I05/M09.F02.I01/M01.F01.I02）base_sha 不匹配——中间被人手改了 function-tree 还是脚本消费了一半？这 3 个 I-ID 实际在子项表里都登记了，等于「提案以为没登记、实际已登记」，提案永远失效。要不要清掉这份孤儿提案？"
-  ],
+  "open_questions": [],
   "dont": [
     "不要手写 OpenAPI yaml —— 一律由 npm run build 重新 emit",
     "不要给已废弃的 `tsp/main.tsp` 加内容（它引入了不存在的 oauth 模型，tsp compile 已经跳过；保持空）",
-    "不要把 M05/M06 的 I-row ID 加到 contract-test 的 §4 功能影响表（contract-test 只认 M96.* namespace，跨仓 ID 触发 L5 悬空引用 —— REQ-2026-008 §4 已踩过）",
-    "不要覆盖 .state/tree-change.json —— 当前选 B，等人决策孤儿提案怎么处理"
+    "不要把 M05/M06 的 I-row ID 加到 contract-test 的 §4 功能影响表（contract-test 只认 M96.* namespace，跨仓 ID 触发 L5 悬空引用 —— REQ-2026-008 §4 已踩过）"
   ],
-  "last_gate_passed_at": "2026-09-01T08:38+08:00 (L0/L0.5/L1/L3/L4 PASS；L5 红：6 个 I-ID 待 function-tree 登记)",
+  "last_gate_passed_at": "2026-09-01T08:42+08:00 (L0/L0.5/L1/L3/L4/L5 全绿)",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }

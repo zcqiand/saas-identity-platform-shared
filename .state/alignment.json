@@ -4,15 +4,20 @@
   "functions": {
     "modules": 9,
     "features": 21,
-    "items": 19
+    "items": 24
   },
-  "warnings_total": 30,
+  "warnings_total": 34,
   "warnings": {
     "已上线但无设计映射": [
       "M05.F01.I01",
       "M05.F01.I02",
       "M05.F01.I03",
       "M05.F01.I04",
+      "M06.F01.I01",
+      "M06.F01.I02",
+      "M06.F01.I03",
+      "M06.F02.I01",
+      "M06.F02.I02",
       "M06.F03.I01",
       "M06.F03.I02",
       "M09.F03.I01",
@@ -21,13 +26,7 @@
       "M09.F03.I04"
     ],
     "已上线但无测试引用": [
-      "M05.F01.I01",
-      "M05.F01.I02",
-      "M05.F01.I03",
-      "M05.F01.I04",
-      "M06.F03.I01",
       "M06.F03.I02",
-      "M09.F03.I01",
       "M09.F03.I02",
       "M09.F03.I03",
       "M09.F03.I04"
@@ -37,6 +36,11 @@
       "M05.F01.I02",
       "M05.F01.I03",
       "M05.F01.I04",
+      "M06.F01.I01",
+      "M06.F01.I02",
+      "M06.F01.I03",
+      "M06.F02.I01",
+      "M06.F02.I02",
       "M06.F03.I01",
       "M06.F03.I02",
       "M09.F03.I01",
@@ -136,7 +140,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "M05 API Key 生命周期 > M05.F01.I01 list API keys exposes GET /tenants/{tenantId}/api-keys"
+      ],
       "entry": []
     },
     "M05.F01.I02": {
@@ -146,7 +152,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "M05 API Key 生命周期 > M05.F01.I02 create API key exposes POST /tenants/{tenantId}/api-keys"
+      ],
       "entry": []
     },
     "M05.F01.I03": {
@@ -156,7 +164,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "M05 API Key 生命周期 > M05.F01.I03 revoke API key exposes POST /tenants/{tenantId}/api-keys/{keyId}/revoke"
+      ],
       "entry": []
     },
     "M05.F01.I04": {
@@ -166,7 +176,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "M05 API Key 生命周期 > M05.F01.I04 rotate API key exposes POST /tenants/{tenantId}/api-keys/{keyId}/rotate"
+      ],
       "entry": []
     },
     "M05.F01.I05": {
@@ -179,6 +191,66 @@
       "tests": [],
       "entry": []
     },
+    "M06.F01.I01": {
+      "name": "列表审计事件 GET `/tenants/{t}/audit-events?page&pageSize&action&actorUserId&from&to`",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M06.F01 审计事件查询 > M06.F01.I01 list audit events exposes GET /tenants/{tenantId}/audit-events"
+      ],
+      "entry": []
+    },
+    "M06.F01.I02": {
+      "name": "按用户查审计事件 GET `/tenants/{t}/audit-events/by-user/{userId}`",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M06.F01 审计事件查询 > M06.F01.I02 list audit events by user exposes GET /tenants/{tenantId}/audit-events/by-user/{userId}"
+      ],
+      "entry": []
+    },
+    "M06.F01.I03": {
+      "name": "导出审计事件 POST `/tenants/{t}/audit-events/export`（format: csv \\",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M06.F01 审计事件查询 > M06.F01.I03 export audit events exposes POST /tenants/{tenantId}/audit-events/export"
+      ],
+      "entry": []
+    },
+    "M06.F02.I01": {
+      "name": "读取审计留存策略 GET `/tenants/{t}/audit-events/retention`",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M06.F02 审计留存策略 > M06.F02.I01 get retention policy exposes GET /tenants/{tenantId}/audit-events/retention"
+      ],
+      "entry": []
+    },
+    "M06.F02.I02": {
+      "name": "设置审计留存策略 PUT `/tenants/{t}/audit-events/retention`（{retentionDays} → {retentionDays}）",
+      "status": "已上线",
+      "type": null,
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M06.F02 审计留存策略 > M06.F02.I02 set retention policy exposes PUT /tenants/{tenantId}/audit-events/retention"
+      ],
+      "entry": []
+    },
     "M06.F03.I01": {
       "name": "AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked）",
       "status": "已上线",
@@ -186,7 +258,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "M06.F03 AuditWriter 副作用契约 > M06.F03.I01 AuditWriter must not expose any HTTP write endpoint"
+      ],
       "entry": []
     },
     "M06.F03.I02": {
@@ -219,7 +293,9 @@
       ],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "M09.F03 当前用户有效菜单 > M09.F03.I01 me/menus session-checked endpoint exists (GET /api/v1/me/menus)"
+      ],
       "entry": []
     },
     "M09.F03.I02": {
