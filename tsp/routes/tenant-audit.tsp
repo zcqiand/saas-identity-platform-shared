@@ -34,11 +34,12 @@ namespace Saas.Identity.Shared.TenantAudit {
     @body body: { from: utcDateTime; to: utcDateTime; format: "csv" | "json" },
   ): { downloadUrl: string } | ErrorResponse;
 
-  // M06.F02.I01 留存策略
+  // M06.F02.I01 留存策略读取
   @get
   @route("/retention")
   op getRetentionPolicy(@path tenantId: string): { retentionDays: int32 } | ErrorResponse;
 
+  // M06.F02.I02 留存策略设置
   @put
   @route("/retention")
   op setRetentionPolicy(
