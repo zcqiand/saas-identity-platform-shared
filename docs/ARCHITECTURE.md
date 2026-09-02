@@ -683,7 +683,7 @@ msw 仓的 fixture 是 in-memory JSON / TS（`src/seeds/*.json`），不直接�
 - [CLAUDE.md](../CLAUDE.md) —— 入口：禁业务代码 / 禁语言产物 / 仅 devDep
 - [README.md](../README.md) —— 技术栈 + Deepwiki MCP 说明
 - [sql/README.md](../sql/README.md) —— DB 持久层 SSOT 命名约定 + 类型映射
-- [docs/functions/function-tree.md](../functions/function-tree.md) —— BASE tree（M0x..F0y 22 条）
+- [docs/functions/function-tree.md](functions/function-tree.md) —— BASE tree（M0x..F0y 22 条）
 - [父仓 docs/ARCHITECTURE.md](../../../docs/ARCHITECTURE.md) —— suite 全景
 - [父仓 docs/adr/0007-shared-sql-ssot.md](../../../docs/adr/0007-shared-sql-ssot.md) —— 本仓核心决策
 - [.harness/stack.json](../.harness/stack.json) —— suite 门禁读取的项目自描述

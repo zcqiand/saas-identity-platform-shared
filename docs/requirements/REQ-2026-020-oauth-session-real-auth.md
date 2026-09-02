@@ -6,7 +6,7 @@
 | 提出日期 | 2026-08-27 |
 | 优先级 | P0 |
 | 状态 | 已评审（路线 A 批准） |
-| 关联 ADR | [0013-saas-oauth-skip-user-auth.md](../adr/0013-saas-oauth-skip-user-auth.md) |
+| 关联 ADR | [0013-saas-oauth-skip-user-auth.md](../../../saas-identity-platform-aspnetcore/docs/adr/0013-saas-oauth-skip-user-auth.md) |
 
 ## 1. 需求描述
 

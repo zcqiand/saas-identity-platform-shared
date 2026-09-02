@@ -1,10 +1,10 @@
 # PLAN-2026-001 — saas OAuth 真用户认证 4 仓改造
 
 > **状态：✅ 已完成（2026-08-27）** - T-1 ~ T-12 全部落地，收口见
-> [ADR-0014](../../saas-identity-platform-aspnetcore/docs/adr/0014-saas-oauth-session-completed.md)
+> [ADR-0014](../../../saas-identity-platform-aspnetcore/docs/adr/0014-saas-oauth-session-completed.md)
 >
 > **REQ**: [REQ-2026-020-oauth-session-real-auth.md](../requirements/REQ-2026-020-oauth-session-real-auth.md)
-> **ADR**: [0013-saas-oauth-skip-user-auth.md](../../saas-identity-platform-aspnetcore/docs/adr/0013-saas-oauth-skip-user-auth.md)
+> **ADR**: [0013-saas-oauth-skip-user-auth.md](../../../saas-identity-platform-aspnetcore/docs/adr/0013-saas-oauth-skip-user-auth.md)
 > **路线**: A（完整修 OAuth，4 仓改造）
 > **策略**: red-first（每任务测试先红→最小实现转绿）→ 仓内 gate L0-L5 → commit + push + 推进父仓指针
 
