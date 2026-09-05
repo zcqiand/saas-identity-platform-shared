@@ -1,6 +1,32 @@
-# saas-identity-platform-shared 功能树
+# 功能清单（Function Tree）— saas-identity-platform-shared
 
-> 多租户 SaaS 身份管理。Phase B 起由 `tsp/main.tsp` 派生；本表为占位骨架。
+> **全体系唯一锚点。** 需求、流程、设计、测试都引用这里的 ID。
+> 不在这里的 ID 是悬空引用，L5 门会拦。**改功能，先改这份表。**
+
+## 编号规则
+
+| 层级 | 名称 | 格式 | 含义 |
+|---|---|---|---|
+| 一级 | 功能模块 | `M0x` | 业务域边界，通常对应一级菜单（实际命名见各仓模块总览） |
+| 二级 | 功能 | `M0x.F0y` | 一个完整业务步骤 / 独立闭环流程 / 数据管理页面 |
+| 三级 | 功能子项 | `M0x.F0y.I0z` | 技术交付单元 / 权限挂载点。对应一个 API 接口、页面组件、图表区块或权限控制点 |
+
+**硬规则**
+
+1. 编号单调递增，永不复用。废弃改状态，不删行。
+2. 子项编号必须以父级为前缀。
+3. 一个子项 = 一个权限点。权限码即 ID，不另起一套编码。
+4. 拆不出子项的功能 → 它其实是子项，往上并。子项超 20 个 → 它其实是模块，往下拆。
+
+**状态**：`规划` | `开发中` | `已上线` | `已废弃`
+**子项类型**：`页面` | `标签页` | `查询` | `按钮` | `报表` | `接口`
+
+## 本仓角色
+
+**契约 BASE 仓**（spec §3）。F+I 级：I 级为全家族定标源；消费仓 ⊆ BASE。
+范围：M00 租户 / M01 用户 / M02 角色 / M03 SSO / M04 OAuth / M05 API Key / M06 审计 / M08 菜单 / M09 菜单授权。
+多租户：tenant 跨切是平台默认语义；tenant 真相源在本仓。
+M97/M98/M99/M96（infra/契约专属段）不进 BASE，由各消费仓自管。
 
 ## 模块总览
 
@@ -38,7 +64,7 @@
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M01.F01.I02 | 创建用户 POST `/tenants/ | 接口 | 前端+后端 | 创建用户 POST `/tenants/{t}/users`（CreateUserRequest{username,email,password,displayName?,roleIds?} → User；区别于 I03 邀请是发邮件而非直接落地）（镜像仓：saas-aspnetcore (TenantUsersController.UsersPost), saas-springboot (TenantUsersController#createUser + TenantUsersService), saas-nextjs (app/api/v1/tenants/[tenantId]/users/route.ts), saas-msw (handlers-extra.usersExtraHandlers)） | 已上线 |
+| M01.F01.I02 | 创建用户 | 接口 | 前端+后端 | 创建用户 POST `/tenants/{t}/users`（CreateUserRequest{username,email,password,displayName?,roleIds?} → User；区别于 I03 邀请是发邮件而非直接落地） | 已上线 |
 
 ---
 
@@ -63,9 +89,9 @@
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M03.F01.I01 | 密码登录 API | 接口 | 前端+后端 | 密码登录 API（username + password → saas session cookie + access token）（镜像仓：saas-aspnetcore (OauthController / AuthController), saas-msw (handlers-extra)） | 开发中 |
-| M03.F01.I02 | 失败锁定 | 接口 | 前端+后端 | 失败锁定（连续 5 次密码错 → 锁定 15min）（镜像仓：saas-aspnetcore (AuthController)） | 开发中 |
-| M03.F01.I03 | 密码登录 UI | 接口 | 前端+后端 | 密码登录 UI（saas-vue / saas-react LoginPage 提交 username + password）（镜像仓：saas-vue, saas-react） | 规划 |
+| M03.F01.I01 | 密码登录 API | 接口 | 前端+后端 | 密码登录 API（username + password → saas session cookie + access token） | 开发中 |
+| M03.F01.I02 | 失败锁定 | 接口 | 前端+后端 | 失败锁定（连续 5 次密码错 → 锁定 15min） | 开发中 |
+| M03.F01.I03 | 密码登录 UI | 接口 | 前端+后端 | 密码登录 UI（saas-vue / saas-react LoginPage 提交 username + password） | 规划 |
 
 ---
 
@@ -81,9 +107,9 @@
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M04.F03.I01 | OAuth authorize 检查 s | 接口 | 前端+后端 | OAuth authorize 检查 saas session（未登录返 401）（镜像仓：saas-aspnetcore (OauthController.Authorize)） | 规划 |
-| M04.F03.I02 | OAuth token 交换 — ses | 接口 | 前端+后端 | OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发）（镜像仓：saas-aspnetcore (OauthController.ExchangeAuthorizationCode)） | 规划 |
-| M04.F03.I03 | OAuth refresh token | 接口 | 前端+后端 | OAuth refresh token 旋转（同 session 校验）（镜像仓：saas-aspnetcore (OauthController.RotateRefreshToken)） | 规划 |
+| M04.F03.I01 | OAuth authorize 检查 s | 接口 | 前端+后端 | OAuth authorize 检查 saas session（未登录返 401） | 规划 |
+| M04.F03.I02 | OAuth token 交换 — ses | 接口 | 前端+后端 | OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发） | 规划 |
+| M04.F03.I03 | OAuth refresh token | 接口 | 前端+后端 | OAuth refresh token 旋转（同 session 校验） | 规划 |
 
 ---
 
@@ -97,11 +123,11 @@
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M05.F01.I01 | 列表分页 GET `/tenants/{ | 接口 | 前端+后端 | 列表分页 GET `/tenants/{t}/api-keys?page&pageSize`（镜像仓：saas-aspnetcore (TenantApiKeysController), saas-springboot, saas-nextjs, saas-msw (handlers-extra)） | 规划 |
-| M05.F01.I02 | 创建 POST `/tenants/{t | 接口 | 仅前端 | 创建 POST `/tenants/{t}/api-keys`（返回一次性 secret）（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw） | 规划 |
-| M05.F01.I03 | 吊销 POST `/tenants/{t | 接口 | 前端+后端 | 吊销 POST `/tenants/{t}/api-keys/{k}/revoke`（idempotent）（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw） | 规划 |
-| M05.F01.I04 | 轮换 POST `/tenants/{t | 接口 | 前端+后端 | 轮换 POST `/tenants/{t}/api-keys/{k}/rotate`（revoke old + create new）（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw） | 规划 |
-| M05.F01.I05 | 物理删除 DELETE `/tenant | 接口 | 前端+后端 | 物理删除 DELETE `/tenants/{t}/api-keys/{k}`（直接删 DB 行，与 I03 revoke 软删并存：revoke 保留审计行，本 op 不留痕；幂等——重复删返 404）（镜像仓：saas-aspnetcore (TenantApiKeysController.Delete{KeyId}), saas-springboot (TenantApiKeysController#deleteApiKey + TenantApiKeyService), saas-nextjs (app/api/v1/tenants/[tenantId]/api-keys/[keyId]/route.ts), saas-msw (handlers-extra.apiKeysExtraHandlers)） | 已上线 |
+| M05.F01.I01 | 列表分页 | 接口 | 前端+后端 | 列表分页 GET `/tenants/{t}/api-keys?page&pageSize` | 规划 |
+| M05.F01.I02 | 创建 | 接口 | 仅前端 | 创建 POST `/tenants/{t}/api-keys`（返回一次性 secret） | 规划 |
+| M05.F01.I03 | 吊销 | 接口 | 前端+后端 | 吊销 POST `/tenants/{t}/api-keys/{k}/revoke`（idempotent） | 规划 |
+| M05.F01.I04 | 轮换 | 接口 | 前端+后端 | 轮换 POST `/tenants/{t}/api-keys/{k}/rotate`（revoke old + create new） | 规划 |
+| M05.F01.I05 | 物理删除 | 接口 | 前端+后端 | 物理删除 DELETE `/tenants/{t}/api-keys/{k}`（直接删 DB 行，与 I03 revoke 软删并存：revoke 保留审计行，本 op 不留痕；幂等——重复删返 404） | 已上线 |
 
 ---
 
@@ -117,23 +143,23 @@
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M06.F01.I01 | 列表审计事件 GET `/tenants | 接口 | 前端+后端 | 列表审计事件 GET `/tenants/{t}/audit-events?page&pageSize&action&actorUserId&from&to`（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw） | 规划 |
-| M06.F01.I02 | 按用户查审计事件 GET `/tenan | 接口 | 前端+后端 | 按用户查审计事件 GET `/tenants/{t}/audit-events/by-user/{userId}`（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw） | 规划 |
-| M06.F01.I03 | 导出审计事件 POST `/tenants/{t}/audit-events/export`（format: csv \ | json → downloadUrl） | 前端+后端 | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 规划 |
+| M06.F01.I01 | 列表审计事件 | 接口 | 前端+后端 | 列表审计事件 GET `/tenants/{t}/audit-events?page&pageSize&action&actorUserId&from&to` | 规划 |
+| M06.F01.I02 | 按用户查审计事件 | 接口 | 前端+后端 | 按用户查审计事件 GET `/tenants/{t}/audit-events/by-user/{userId}` | 规划 |
+| M06.F01.I03 | 导出审计事件 | json → downloadUrl） | 前端+后端 | saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw | 规划 |
 
 ### M06.F02 审计留存策略
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M06.F02.I01 | 读取审计留存策略 GET `/tenan | 接口 | 前端+后端 | 读取审计留存策略 GET `/tenants/{t}/audit-events/retention`（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw） | 规划 |
-| M06.F02.I02 | 设置审计留存策略 PUT `/tenan | 接口 | 前端+后端 | 设置审计留存策略 PUT `/tenants/{t}/audit-events/retention`（{retentionDays} → {retentionDays}）（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw） | 规划 |
+| M06.F02.I01 | 读取审计留存策略 | 接口 | 前端+后端 | 读取审计留存策略 GET `/tenants/{t}/audit-events/retention` | 规划 |
+| M06.F02.I02 | 设置审计留存策略 | 接口 | 前端+后端 | 设置审计留存策略 PUT `/tenants/{t}/audit-events/retention`（{retentionDays} → {retentionDays}） | 规划 |
 
 ### M06.F03 审计写入助手（写端点副作用）
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M06.F03.I01 | AuditWriter.WriteAsy | 接口 | 前端+后端 | AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked）（镜像仓：saas-aspnetcore (AuditWriter), saas-springboot, saas-nextjs (lib/audit), saas-msw (handlers-extra)） | 规划 |
-| M06.F03.I02 | 列表 `?action=` 过滤 | 接口 | 前端+后端 | 列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称）（镜像仓：saas-aspnetcore, saas-springboot, saas-nextjs, saas-msw (now)） | 规划 |
+| M06.F03.I01 | AuditWriter.WriteAsy | 接口 | 前端+后端 | AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked） | 规划 |
+| M06.F03.I02 | 列表 `?action=` 过滤 | 接口 | 前端+后端 | 列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称） | 规划 |
 
 ---
 
@@ -158,13 +184,13 @@
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M09.F02.I01 | 整批设置角色菜单 PUT `/tenan | 接口 | 前端+后端 | 整批设置角色菜单 PUT `/tenants/{t}/roles/{r}/menus`（SetRoleMenusRequest{menuIds:[]} → RoleMenuGrant{roleId,tenantId,menuIds,updatedAt}；整批替换语义，幂等）（镜像仓：saas-aspnetcore (TenantRoleMenusController.MenusPut), saas-springboot (TenantRoleMenuController#setRoleMenus + TenantRoleMenuService), saas-nextjs (app/api/v1/tenants/[tenantId]/roles/[roleId]/menus/route.ts), saas-msw (handlers-extra.roleMenuExtraHandlers)） | 规划 |
+| M09.F02.I01 | 整批设置角色菜单 | 接口 | 前端+后端 | 整批设置角色菜单 PUT `/tenants/{t}/roles/{r}/menus`（SetRoleMenusRequest{menuIds:[]} → RoleMenuGrant{roleId,tenantId,menuIds,updatedAt}；整批替换语义，幂等） | 规划 |
 
 ### M09.F03 当前用户有效菜单
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M09.F03.I01 | me/menus session 校验 | 接口 | 前端+后端 | me/menus session 校验（已存在 F03 端点，加 session 校验）（镜像仓：saas-aspnetcore (MeController.Menus), saas-msw (handlers-extra)） | 规划 |
-| M09.F03.I02 | 角色授权菜单 ID 查询 | 接口 | 前端+后端 | 角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds）（镜像仓：saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService)） | 开发中 |
-| M09.F03.I03 | 菜单树装配 | 接口 | 前端+后端 | 菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组）（镜像仓：saas-springboot (MeService.getMyMenus)） | 开发中 |
-| M09.F03.I04 | app 分组映射 | 接口 | 前端+后端 | app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>）（镜像仓：saas-springboot (MeService.getMyMenus), saas-aspnetcore (MeService.Menus)） | 已上线 |
+| M09.F03.I01 | me/menus session 校验 | 接口 | 前端+后端 | me/menus session 校验（已存在 F03 端点，加 session 校验） | 规划 |
+| M09.F03.I02 | 角色授权菜单 ID 查询 | 接口 | 前端+后端 | 角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds） | 开发中 |
+| M09.F03.I03 | 菜单树装配 | 接口 | 前端+后端 | 菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组） | 开发中 |
+| M09.F03.I04 | app 分组映射 | 接口 | 前端+后端 | app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>） | 已上线 |
