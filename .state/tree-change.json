@@ -1,38 +1,284 @@
 {
   "schema": 1,
-  "approved": true,
-  "base_sha": "ad3cc3a915151c7b",
-  "summary": "contract-test 补齐：子项表补登 5 个已上线 I-ID（M09.F03.I01 已登记，无需重提）。tsp/routes 早定义端点 + tests/snapshots/openapi.test.ts 已用 I-ID 断言锁定。原「写端点第二期」提案 base_sha 不匹配当前 tree，本提案覆盖重提。",
+  "approved": false,
+  "base_sha": "afc5e59d750a4834",
+  "summary": "saas-shared BASE 补 I + F 级定标（spec §3，0 F + 46 I）",
   "changes": [
     {
-      "id": "M06.F01.I01",
+      "id": "M00.F01.I01",
       "action": "新增",
-      "name": "列表审计事件 GET /tenants/{t}/audit-events?page&pageSize&action&actorUserId&from&to",
-      "reason": "tsp/routes/tenant-audit.tsp listAuditEvents 已定义；openapi.yaml:998 TenantAudit_listAuditEvents；tests/snapshots/openapi.test.ts M06.F01.I01 断言锁定；M06.F01 模块级行已标已上线"
+      "name": "租户列表（平台）",
+      "reason": "saas-shared BASE 补 I"
     },
     {
-      "id": "M06.F01.I02",
+      "id": "M00.F01.I02",
       "action": "新增",
-      "name": "按用户查审计事件 GET /tenants/{t}/audit-events/by-user/{userId}",
-      "reason": "tsp/routes/tenant-audit.tsp listAuditEventsByUser 已定义；openapi.yaml:1086 TenantAudit_listAuditEventsByUser；tests/snapshots/openapi.test.ts M06.F01.I02 断言锁定"
+      "name": "创建租户",
+      "reason": "saas-shared BASE 补 I"
     },
     {
-      "id": "M06.F01.I03",
+      "id": "M00.F01.I03",
       "action": "新增",
-      "name": "导出审计事件 POST /tenants/{t}/audit-events/export (csv/json)",
-      "reason": "tsp/routes/tenant-audit.tsp exportAuditEvents 已定义；openapi.yaml:1151 TenantAudit_exportAuditEvents；tests/snapshots/openapi.test.ts M06.F01.I03 断言锁定"
+      "name": "租户详情 / TenantGuard 校验",
+      "reason": "saas-shared BASE 补 I"
     },
     {
-      "id": "M06.F02.I01",
+      "id": "M00.F01.I04",
       "action": "新增",
-      "name": "读取审计留存策略 GET /tenants/{t}/audit-events/retention",
-      "reason": "tsp/routes/tenant-audit.tsp getRetentionPolicy 已定义；openapi.yaml:1202 TenantAudit_getRetentionPolicy；tests/snapshots/openapi.test.ts M06.F02.I01 断言锁定；M06.F02 模块级行已标已上线"
+      "name": "更新租户",
+      "reason": "saas-shared BASE 补 I"
     },
     {
-      "id": "M06.F02.I02",
+      "id": "M00.F01.I05",
       "action": "新增",
-      "name": "设置审计留存策略 PUT /tenants/{t}/audit-events/retention",
-      "reason": "tsp/routes/tenant-audit.tsp setRetentionPolicy 已定义；openapi.yaml:1231 TenantAudit_setRetentionPolicy；tests/snapshots/openapi.test.ts M06.F02.I02 断言锁定"
+      "name": "删除租户",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M00.F02.I01",
+      "action": "新增",
+      "name": "当前用户 whoami",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M00.F02.I02",
+      "action": "新增",
+      "name": "列出我的租户成员关系",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M00.F02.I03",
+      "action": "新增",
+      "name": "切换当前租户",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F01.I01",
+      "action": "新增",
+      "name": "用户列表（tenant-scoped）",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F01.I03",
+      "action": "新增",
+      "name": "用户详情",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F01.I04",
+      "action": "新增",
+      "name": "更新用户",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F01.I05",
+      "action": "新增",
+      "name": "删除用户",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F01.I06",
+      "action": "新增",
+      "name": "分配角色（用户列表入口）",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F02.I01",
+      "action": "新增",
+      "name": "分配角色",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F02.I02",
+      "action": "新增",
+      "name": "邀请用户",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M01.F02.I03",
+      "action": "新增",
+      "name": "状态切换",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M02.F01.I01",
+      "action": "新增",
+      "name": "角色列表（tenant-scoped）",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M02.F01.I02",
+      "action": "新增",
+      "name": "创建角色",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M02.F01.I03",
+      "action": "新增",
+      "name": "角色详情",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M02.F01.I04",
+      "action": "新增",
+      "name": "更新角色",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M02.F01.I05",
+      "action": "新增",
+      "name": "删除角色",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M02.F02.I01",
+      "action": "新增",
+      "name": "权限矩阵",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M03.F02.I03",
+      "action": "新增",
+      "name": "OIDC Code 换取",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M03.F02.I04",
+      "action": "新增",
+      "name": "refresh token",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M03.F03.I05",
+      "action": "新增",
+      "name": "登出（本地清理）",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M03.F03.I06",
+      "action": "新增",
+      "name": "登出（全局 SSO）",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F01.I01",
+      "action": "新增",
+      "name": "OAuth 应用列表",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F01.I02",
+      "action": "新增",
+      "name": "创建 OAuth 应用",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F01.I03",
+      "action": "新增",
+      "name": "OAuth 应用详情",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F01.I04",
+      "action": "新增",
+      "name": "更新 OAuth 应用",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F01.I05",
+      "action": "新增",
+      "name": "删除 OAuth 应用",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F02.I06",
+      "action": "新增",
+      "name": "启用/停用应用",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F03.I07",
+      "action": "新增",
+      "name": "授权码签发",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F03.I08",
+      "action": "新增",
+      "name": "令牌交换",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M04.F03.I09",
+      "action": "新增",
+      "name": "令牌刷新",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M06.F02.I04",
+      "action": "新增",
+      "name": "留存策略设置",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M08.F01.I01",
+      "action": "新增",
+      "name": "菜单树",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M08.F01.I02",
+      "action": "新增",
+      "name": "创建菜单",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M08.F01.I03",
+      "action": "新增",
+      "name": "菜单详情",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M08.F01.I04",
+      "action": "新增",
+      "name": "更新菜单",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M08.F01.I05",
+      "action": "新增",
+      "name": "删除菜单",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M08.F02.I06",
+      "action": "新增",
+      "name": "同级排序",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M08.F02.I07",
+      "action": "新增",
+      "name": "切换父级",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M09.F01.I01",
+      "action": "新增",
+      "name": "角色已授权菜单",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M09.F02.I02",
+      "action": "新增",
+      "name": "设置角色菜单",
+      "reason": "saas-shared BASE 补 I"
+    },
+    {
+      "id": "M09.F02.I03",
+      "action": "新增",
+      "name": "清空角色菜单",
+      "reason": "saas-shared BASE 补 I"
     }
   ],
   "sync_files": [

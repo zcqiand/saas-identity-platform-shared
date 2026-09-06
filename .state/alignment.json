@@ -4,57 +4,269 @@
   "functions": {
     "modules": 9,
     "features": 21,
-    "items": 24
+    "items": 70
   },
-  "warnings_total": 34,
+  "warnings_total": 24,
   "warnings": {
     "已上线但无设计映射": [
-      "M05.F01.I01",
-      "M05.F01.I02",
-      "M05.F01.I03",
-      "M05.F01.I04",
-      "M06.F01.I01",
-      "M06.F01.I02",
-      "M06.F01.I03",
-      "M06.F02.I01",
-      "M06.F02.I02",
-      "M06.F03.I01",
-      "M06.F03.I02",
-      "M09.F03.I01",
-      "M09.F03.I02",
-      "M09.F03.I03",
+      "M01.F01.I02",
+      "M04.F03.I07",
+      "M04.F03.I08",
+      "M04.F03.I09",
+      "M05.F01.I05",
+      "M09.F02.I02",
       "M09.F03.I04"
     ],
     "已上线但无测试引用": [
-      "M06.F03.I02",
-      "M09.F03.I02",
-      "M09.F03.I03",
+      "M01.F01.I02",
+      "M04.F03.I07",
+      "M04.F03.I08",
+      "M04.F03.I09",
+      "M05.F01.I05",
+      "M09.F02.I02",
       "M09.F03.I04"
     ],
     "已上线但不在任何流程且非孤儿白名单": [
-      "M05.F01.I01",
-      "M05.F01.I02",
-      "M05.F01.I03",
-      "M05.F01.I04",
-      "M06.F01.I01",
-      "M06.F01.I02",
-      "M06.F01.I03",
-      "M06.F02.I01",
-      "M06.F02.I02",
-      "M06.F03.I01",
-      "M06.F03.I02",
-      "M09.F03.I01",
-      "M09.F03.I02",
-      "M09.F03.I03",
+      "M01.F01.I02",
+      "M04.F03.I07",
+      "M04.F03.I08",
+      "M04.F03.I09",
+      "M05.F01.I05",
+      "M09.F02.I02",
       "M09.F03.I04"
+    ],
+    "开发中但无需求文档引用": [
+      "M03.F02.I04",
+      "M03.F03.I05",
+      "M04.F02.I06"
     ]
   },
   "unreachable_shipped": [],
   "function_map": {
-    "M01.F01.I02": {
-      "name": "创建用户 POST `/tenants/{t}/users`（CreateUserRequest{username,email,password,displayName?,roleIds?} → User；区别于 I03 邀请是发邮件而非直接落地）",
+    "M00.F01.I01": {
+      "name": "租户列表（平台）",
       "status": "规划",
-      "type": null,
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M00.F01.I02": {
+      "name": "创建租户",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M00.F01.I03": {
+      "name": "租户详情 / TenantGuard 校验",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M00.F01.I04": {
+      "name": "更新租户",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M00.F01.I05": {
+      "name": "删除租户",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M00.F02.I01": {
+      "name": "当前用户 whoami",
+      "status": "规划",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M00.F02.I02": {
+      "name": "列出我的租户成员关系",
+      "status": "规划",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M00.F02.I03": {
+      "name": "切换当前租户",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F01.I01": {
+      "name": "用户列表（tenant-scoped）",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F01.I02": {
+      "name": "创建用户",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F01.I03": {
+      "name": "用户详情",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F01.I04": {
+      "name": "更新用户",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F01.I05": {
+      "name": "删除用户",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F01.I06": {
+      "name": "分配角色（用户列表入口）",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F02.I01": {
+      "name": "分配角色",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F02.I02": {
+      "name": "邀请用户",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F02.I03": {
+      "name": "状态切换",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F01.I01": {
+      "name": "角色列表（tenant-scoped）",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F01.I02": {
+      "name": "创建角色",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F01.I03": {
+      "name": "角色详情",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F01.I04": {
+      "name": "更新角色",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F01.I05": {
+      "name": "删除角色",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F02.I01": {
+      "name": "权限矩阵",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -62,9 +274,9 @@
       "entry": []
     },
     "M03.F01.I01": {
-      "name": "密码登录 API（username + password → saas session cookie + access token）",
-      "status": "规划",
-      "type": null,
+      "name": "密码登录 API",
+      "status": "开发中",
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
@@ -74,9 +286,9 @@
       "entry": []
     },
     "M03.F01.I02": {
-      "name": "失败锁定（连续 5 次密码错 → 锁定 15min）",
-      "status": "规划",
-      "type": null,
+      "name": "失败锁定",
+      "status": "开发中",
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
@@ -86,9 +298,9 @@
       "entry": []
     },
     "M03.F01.I03": {
-      "name": "密码登录 UI（saas-vue / saas-react LoginPage 提交 username + password）",
+      "name": "密码登录 UI",
       "status": "规划",
-      "type": null,
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
@@ -97,10 +309,110 @@
       "tests": [],
       "entry": []
     },
-    "M04.F03.I01": {
-      "name": "OAuth authorize 检查 saas session（未登录返 401）",
+    "M03.F02.I03": {
+      "name": "OIDC Code 换取",
       "status": "规划",
-      "type": null,
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F02.I04": {
+      "name": "refresh token",
+      "status": "开发中",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F03.I05": {
+      "name": "登出（本地清理）",
+      "status": "开发中",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F03.I06": {
+      "name": "登出（全局 SSO）",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F01.I01": {
+      "name": "OAuth 应用列表",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F01.I02": {
+      "name": "创建 OAuth 应用",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F01.I03": {
+      "name": "OAuth 应用详情",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F01.I04": {
+      "name": "更新 OAuth 应用",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F01.I05": {
+      "name": "删除 OAuth 应用",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F02.I06": {
+      "name": "启用/停用应用",
+      "status": "开发中",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F03.I01": {
+      "name": "OAuth authorize 检查 s",
+      "status": "规划",
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
@@ -110,9 +422,9 @@
       "entry": []
     },
     "M04.F03.I02": {
-      "name": "OAuth token 交换 — session 内 user_id 注入（不再 tenantId 直发）",
+      "name": "OAuth token 交换 — ses",
       "status": "规划",
-      "type": null,
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
@@ -122,9 +434,9 @@
       "entry": []
     },
     "M04.F03.I03": {
-      "name": "OAuth refresh token 旋转（同 session 校验）",
+      "name": "OAuth refresh token",
       "status": "规划",
-      "type": null,
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
@@ -133,10 +445,40 @@
       "tests": [],
       "entry": []
     },
-    "M05.F01.I01": {
-      "name": "列表分页 GET `/tenants/{t}/api-keys?page&pageSize`",
+    "M04.F03.I07": {
+      "name": "授权码签发",
       "status": "已上线",
-      "type": null,
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F03.I08": {
+      "name": "令牌交换",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F03.I09": {
+      "name": "令牌刷新",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M05.F01.I01": {
+      "name": "列表分页",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -146,9 +488,9 @@
       "entry": []
     },
     "M05.F01.I02": {
-      "name": "创建 POST `/tenants/{t}/api-keys`（返回一次性 secret）",
-      "status": "已上线",
-      "type": null,
+      "name": "创建",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -158,9 +500,9 @@
       "entry": []
     },
     "M05.F01.I03": {
-      "name": "吊销 POST `/tenants/{t}/api-keys/{k}/revoke`（idempotent）",
-      "status": "已上线",
-      "type": null,
+      "name": "吊销",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -170,9 +512,9 @@
       "entry": []
     },
     "M05.F01.I04": {
-      "name": "轮换 POST `/tenants/{t}/api-keys/{k}/rotate`（revoke old + create new）",
-      "status": "已上线",
-      "type": null,
+      "name": "轮换",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -182,9 +524,9 @@
       "entry": []
     },
     "M05.F01.I05": {
-      "name": "物理删除 DELETE `/tenants/{t}/api-keys/{k}`（直接删 DB 行，与 I03 revoke 软删并存：revoke 保留审计行，本 op 不留痕；幂等——重复删返 404）",
-      "status": "规划",
-      "type": null,
+      "name": "物理删除",
+      "status": "已上线",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -192,9 +534,9 @@
       "entry": []
     },
     "M06.F01.I01": {
-      "name": "列表审计事件 GET `/tenants/{t}/audit-events?page&pageSize&action&actorUserId&from&to`",
-      "status": "已上线",
-      "type": null,
+      "name": "列表审计事件",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -204,9 +546,9 @@
       "entry": []
     },
     "M06.F01.I02": {
-      "name": "按用户查审计事件 GET `/tenants/{t}/audit-events/by-user/{userId}`",
-      "status": "已上线",
-      "type": null,
+      "name": "按用户查审计事件",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -216,8 +558,8 @@
       "entry": []
     },
     "M06.F01.I03": {
-      "name": "导出审计事件 POST `/tenants/{t}/audit-events/export`（format: csv \\",
-      "status": "已上线",
+      "name": "导出审计事件",
+      "status": "规划",
       "type": null,
       "requirements": [],
       "flows": [],
@@ -228,9 +570,9 @@
       "entry": []
     },
     "M06.F02.I01": {
-      "name": "读取审计留存策略 GET `/tenants/{t}/audit-events/retention`",
-      "status": "已上线",
-      "type": null,
+      "name": "读取审计留存策略",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -240,9 +582,9 @@
       "entry": []
     },
     "M06.F02.I02": {
-      "name": "设置审计留存策略 PUT `/tenants/{t}/audit-events/retention`（{retentionDays} → {retentionDays}）",
-      "status": "已上线",
-      "type": null,
+      "name": "设置审计留存策略",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -251,10 +593,20 @@
       ],
       "entry": []
     },
+    "M06.F02.I04": {
+      "name": "留存策略设置",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
     "M06.F03.I01": {
-      "name": "AuditWriter.WriteAsync(tenantId, actorUserId, action, metadata) — api-key 写端点副作用（api_key_created / api_key_revoked）",
-      "status": "已上线",
-      "type": null,
+      "name": "AuditWriter.WriteAsy",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -264,9 +616,89 @@
       "entry": []
     },
     "M06.F03.I02": {
-      "name": "列表 `?action=` 过滤（msw 之前缺，导致 4 后端不对称）",
-      "status": "已上线",
-      "type": null,
+      "name": "列表 `?action=` 过滤",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M08.F01.I01": {
+      "name": "菜单树",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M08.F01.I02": {
+      "name": "创建菜单",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M08.F01.I03": {
+      "name": "菜单详情",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M08.F01.I04": {
+      "name": "更新菜单",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M08.F01.I05": {
+      "name": "删除菜单",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M08.F02.I06": {
+      "name": "同级排序",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M08.F02.I07": {
+      "name": "切换父级",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F01.I01": {
+      "name": "角色已授权菜单",
+      "status": "规划",
+      "type": "查询",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -274,9 +706,29 @@
       "entry": []
     },
     "M09.F02.I01": {
-      "name": "整批设置角色菜单 PUT `/tenants/{t}/roles/{r}/menus`（SetRoleMenusRequest{menuIds:[]} → RoleMenuGrant{roleId,tenantId,menuIds,updatedAt}；整批替换语义，幂等）",
+      "name": "整批设置角色菜单",
       "status": "规划",
-      "type": null,
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F02.I02": {
+      "name": "设置角色菜单",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M09.F02.I03": {
+      "name": "清空角色菜单",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
@@ -284,9 +736,9 @@
       "entry": []
     },
     "M09.F03.I01": {
-      "name": "me/menus session 校验（已存在 F03 端点，加 session 校验）",
-      "status": "已上线",
-      "type": null,
+      "name": "me/menus session 校验",
+      "status": "规划",
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md",
         "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
@@ -299,9 +751,9 @@
       "entry": []
     },
     "M09.F03.I02": {
-      "name": "角色授权菜单 ID 查询（membership.roleIds → role_menu_grants.menuIds）",
-      "status": "已上线",
-      "type": null,
+      "name": "角色授权菜单 ID 查询",
+      "status": "开发中",
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
       ],
@@ -311,9 +763,9 @@
       "entry": []
     },
     "M09.F03.I03": {
-      "name": "菜单树装配（menuIds → menus 表 + 父链补全 + 按 app 分组）",
-      "status": "已上线",
-      "type": null,
+      "name": "菜单树装配",
+      "status": "开发中",
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
       ],
@@ -323,9 +775,9 @@
       "entry": []
     },
     "M09.F03.I04": {
-      "name": "app 分组映射（按 app.code 取代 appId 输出 Map<appCode, List<EffectiveMenuNode>>）",
+      "name": "app 分组映射",
       "status": "已上线",
-      "type": null,
+      "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
       ],
