@@ -8,17 +8,233 @@ tags:
   - name: me
   - name: tenant-users
   - name: tenant-roles
-  - name: tenant-api-keys
-  - name: tenant-audit
-  - name: admin-apps
-  - name: apps
-  - name: admin-app-menus
+  - name: admin-oauth-clients
+  - name: oauth-clients
+  - name: admin-client-menus
   - name: tenant-role-menus
   - name: oauth
+  - name: tenant-applications
 paths:
-  /api/v1/admin/apps:
+  /api/v1/admin/clients/{clientId}/menus:
     get:
-      operationId: AdminApps_listApps
+      operationId: AdminClientMenus_listSysMenus
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-client-menus
+    post:
+      operationId: AdminClientMenus_createSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSysMenuRequest'
+  /api/v1/admin/clients/{clientId}/menus/{menuId}:
+    get:
+      operationId: AdminClientMenus_getSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-client-menus
+    patch:
+      operationId: AdminClientMenus_updateSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSysMenuRequest'
+    delete:
+      operationId: AdminClientMenus_deleteSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-client-menus
+  /api/v1/admin/clients/{clientId}/menus/{menuId}/parent:
+    patch:
+      operationId: AdminClientMenus_moveSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentId:
+                  type: string
+  /api/v1/admin/clients/{clientId}/menus/{menuId}/reorder:
+    put:
+      operationId: AdminClientMenus_reorderSysMenus
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderSysMenuRequest'
+  /api/v1/admin/oauth-clients:
+    get:
+      operationId: AdminOAuthClients_listClients
       parameters:
         - name: page
           in: query
@@ -50,7 +266,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/App'
+                      $ref: '#/components/schemas/OAuthClient'
                   page:
                     type: integer
                     format: int32
@@ -70,9 +286,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-apps
+        - admin-oauth-clients
     post:
-      operationId: AdminApps_createApp
+      operationId: AdminOAuthClients_createClient
       parameters: []
       responses:
         '200':
@@ -80,7 +296,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/App'
+                $ref: '#/components/schemas/OAuthClient'
         default:
           description: An unexpected error response.
           content:
@@ -88,18 +304,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-apps
+        - admin-oauth-clients
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAppRequest'
-  /api/v1/admin/apps/{appId}:
+              $ref: '#/components/schemas/CreateOAuthClientRequest'
+  /api/v1/admin/oauth-clients/{clientId}:
     get:
-      operationId: AdminApps_getApp
+      operationId: AdminOAuthClients_getClient
       parameters:
-        - name: appId
+        - name: clientId
           in: path
           required: true
           schema:
@@ -110,7 +326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/App'
+                $ref: '#/components/schemas/OAuthClient'
         default:
           description: An unexpected error response.
           content:
@@ -118,11 +334,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-apps
+        - admin-oauth-clients
     patch:
-      operationId: AdminApps_updateApp
+      operationId: AdminOAuthClients_updateClient
       parameters:
-        - name: appId
+        - name: clientId
           in: path
           required: true
           schema:
@@ -133,7 +349,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/App'
+                $ref: '#/components/schemas/OAuthClient'
         default:
           description: An unexpected error response.
           content:
@@ -141,17 +357,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-apps
+        - admin-oauth-clients
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateAppRequest'
+              $ref: '#/components/schemas/UpdateOAuthClientRequest'
     delete:
-      operationId: AdminApps_deleteApp
+      operationId: AdminOAuthClients_deleteClient
       parameters:
-        - name: appId
+        - name: clientId
           in: path
           required: true
           schema:
@@ -166,100 +382,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-apps
-  /api/v1/admin/apps/{appId}/menus:
-    get:
-      operationId: AdminAppMenus_listMenus
-      parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Menu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-app-menus
-    post:
-      operationId: AdminAppMenus_createMenu
-      parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Menu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-app-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateMenuRequest'
-  /api/v1/admin/apps/{appId}/menus/{menuId}:
-    get:
-      operationId: AdminAppMenus_getMenu
-      parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Menu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-app-menus
+        - admin-oauth-clients
+  /api/v1/admin/oauth-clients/{clientId}/status:
     patch:
-      operationId: AdminAppMenus_updateMenu
+      operationId: AdminOAuthClients_setClientStatus
       parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
+        - name: clientId
           in: path
           required: true
           schema:
@@ -270,7 +398,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Menu'
+                $ref: '#/components/schemas/OAuthClient'
         default:
           description: An unexpected error response.
           content:
@@ -278,136 +406,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-app-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateMenuRequest'
-    delete:
-      operationId: AdminAppMenus_deleteMenu
-      parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-app-menus
-  /api/v1/admin/apps/{appId}/menus/{menuId}/parent:
-    patch:
-      operationId: AdminAppMenus_moveMenu
-      parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Menu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-app-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                parentId:
-                  type: string
-  /api/v1/admin/apps/{appId}/menus/{menuId}/reorder:
-    put:
-      operationId: AdminAppMenus_reorderMenus
-      parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Menu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-app-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReorderMenuRequest'
-  /api/v1/admin/apps/{appId}/status:
-    patch:
-      operationId: AdminApps_setAppStatus
-      parameters:
-        - name: appId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/App'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-apps
+        - admin-oauth-clients
       requestBody:
         required: true
         content:
@@ -416,7 +415,8 @@ paths:
               type: object
               properties:
                 status:
-                  $ref: '#/components/schemas/AppStatus'
+                  type: integer
+                  format: int32
               required:
                 - status
   /api/v1/admin/tenants:
@@ -570,30 +570,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - admin-tenants
-  /api/v1/apps/{code}:
-    get:
-      operationId: Apps_getApp
-      parameters:
-        - name: code
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppPublicInfo'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - apps
   /api/v1/auth/login:
     post:
       operationId: Auth_login
@@ -700,7 +676,13 @@ paths:
   /api/v1/me/menus:
     get:
       operationId: Me_getMyMenus
-      parameters: []
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
@@ -723,7 +705,13 @@ paths:
   /api/v1/me/tenants:
     get:
       operationId: Me_listMyTenants
-      parameters: []
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
@@ -732,7 +720,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TenantMembership'
+                  $ref: '#/components/schemas/TenantMember'
         default:
           description: An unexpected error response.
           content:
@@ -750,6 +738,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
@@ -765,6 +759,30 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - me
+  /api/v1/oauth-clients/{clientId}:
+    get:
+      operationId: OAuthClients_getOAuthClient
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthClientPublicInfo'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - oauth-clients
   /api/v1/oauth/authorize:
     post:
       operationId: OAuth_authorize
@@ -823,460 +841,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TokenRequest'
-  /api/v1/tenants/{tenantId}/api-keys:
-    get:
-      operationId: TenantApiKeys_listApiKeys
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-        - name: pageSize
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - items
-                  - page
-                  - pageSize
-                  - total
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ApiKey'
-                  page:
-                    type: integer
-                    format: int32
-                    example: 0
-                  pageSize:
-                    type: integer
-                    format: int32
-                    example: 20
-                  total:
-                    type: integer
-                    format: int64
-                    example: 0
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-api-keys
-    post:
-      operationId: TenantApiKeys_createApiKey
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateApiKeyResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-api-keys
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateApiKeyRequest'
-  /api/v1/tenants/{tenantId}/api-keys/{keyId}:
-    delete:
-      operationId: TenantApiKeys_deleteApiKey
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: keyId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-api-keys
-  /api/v1/tenants/{tenantId}/api-keys/{keyId}/revoke:
-    post:
-      operationId: TenantApiKeys_revokeApiKey
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: keyId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiKey'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-api-keys
-  /api/v1/tenants/{tenantId}/api-keys/{keyId}/rotate:
-    post:
-      operationId: TenantApiKeys_rotateApiKey
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: keyId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateApiKeyResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-api-keys
-  /api/v1/tenants/{tenantId}/audit-events:
-    get:
-      operationId: TenantAudit_listAuditEvents
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-        - name: pageSize
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-        - name: actorUserId
-          in: query
-          required: false
-          schema:
-            type: string
-          explode: false
-        - name: action
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/AuditAction'
-          explode: false
-        - name: from
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date-time
-          explode: false
-        - name: to
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date-time
-          explode: false
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - items
-                  - page
-                  - pageSize
-                  - total
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/AuditEvent'
-                  page:
-                    type: integer
-                    format: int32
-                    example: 0
-                  pageSize:
-                    type: integer
-                    format: int32
-                    example: 20
-                  total:
-                    type: integer
-                    format: int64
-                    example: 0
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-audit
-  /api/v1/tenants/{tenantId}/audit-events/by-user/{userId}:
-    get:
-      operationId: TenantAudit_listAuditEventsByUser
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-        - name: pageSize
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - items
-                  - page
-                  - pageSize
-                  - total
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/AuditEvent'
-                  page:
-                    type: integer
-                    format: int32
-                    example: 0
-                  pageSize:
-                    type: integer
-                    format: int32
-                    example: 20
-                  total:
-                    type: integer
-                    format: int64
-                    example: 0
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-audit
-  /api/v1/tenants/{tenantId}/audit-events/export:
-    post:
-      operationId: TenantAudit_exportAuditEvents
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  downloadUrl:
-                    type: string
-                required:
-                  - downloadUrl
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-audit
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                from:
-                  type: string
-                  format: date-time
-                to:
-                  type: string
-                  format: date-time
-                format:
-                  type: string
-                  enum:
-                    - csv
-                    - json
-              required:
-                - from
-                - to
-                - format
-  /api/v1/tenants/{tenantId}/audit-events/retention:
-    get:
-      operationId: TenantAudit_getRetentionPolicy
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  retentionDays:
-                    type: integer
-                    format: int32
-                required:
-                  - retentionDays
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-audit
-    put:
-      operationId: TenantAudit_setRetentionPolicy
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  retentionDays:
-                    type: integer
-                    format: int32
-                required:
-                  - retentionDays
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-audit
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                retentionDays:
-                  type: integer
-                  format: int32
-              required:
-                - retentionDays
   /api/v1/tenants/{tenantId}/roles:
     get:
-      operationId: TenantRoles_listRoles
+      operationId: TenantRoles_listSysRoles
       parameters:
         - name: tenantId
           in: path
           required: true
           schema:
             type: string
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
         - name: page
           in: query
           required: false
@@ -1307,7 +886,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Role'
+                      $ref: '#/components/schemas/SysRole'
                   page:
                     type: integer
                     format: int32
@@ -1329,7 +908,7 @@ paths:
       tags:
         - tenant-roles
     post:
-      operationId: TenantRoles_createRole
+      operationId: TenantRoles_createSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1342,7 +921,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Role'
+                $ref: '#/components/schemas/SysRole'
         default:
           description: An unexpected error response.
           content:
@@ -1356,10 +935,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRoleRequest'
+              $ref: '#/components/schemas/CreateSysRoleRequest'
   /api/v1/tenants/{tenantId}/roles/{roleId}:
     get:
-      operationId: TenantRoles_getRole
+      operationId: TenantRoles_getSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1377,7 +956,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Role'
+                $ref: '#/components/schemas/SysRole'
         default:
           description: An unexpected error response.
           content:
@@ -1387,7 +966,7 @@ paths:
       tags:
         - tenant-roles
     patch:
-      operationId: TenantRoles_updateRole
+      operationId: TenantRoles_updateSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1405,7 +984,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Role'
+                $ref: '#/components/schemas/SysRole'
         default:
           description: An unexpected error response.
           content:
@@ -1419,9 +998,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateRoleRequest'
+              $ref: '#/components/schemas/UpdateSysRoleRequest'
     delete:
-      operationId: TenantRoles_deleteRole
+      operationId: TenantRoles_deleteSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1446,7 +1025,7 @@ paths:
         - tenant-roles
   /api/v1/tenants/{tenantId}/roles/{roleId}/menus:
     get:
-      operationId: TenantRoleMenus_listRoleMenus
+      operationId: TenantRoleMenus_listSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1458,13 +1037,21 @@ paths:
           required: true
           schema:
             type: string
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RoleMenuGrant'
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysRoleMenu'
         default:
           description: An unexpected error response.
           content:
@@ -1474,7 +1061,7 @@ paths:
       tags:
         - tenant-role-menus
     put:
-      operationId: TenantRoleMenus_setRoleMenus
+      operationId: TenantRoleMenus_setSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1486,13 +1073,21 @@ paths:
           required: true
           schema:
             type: string
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RoleMenuGrant'
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysRoleMenu'
         default:
           description: An unexpected error response.
           content:
@@ -1506,9 +1101,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SetRoleMenusRequest'
+              $ref: '#/components/schemas/SetSysRoleMenusRequest'
     delete:
-      operationId: TenantRoleMenus_clearRoleMenus
+      operationId: TenantRoleMenus_clearSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1516,6 +1111,160 @@ paths:
           schema:
             type: string
         - name: roleId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-role-menus
+  /api/v1/tenants/{tenantId}/tenant-applications:
+    get:
+      operationId: TenantApplications_listTenantApplications
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                  - page
+                  - pageSize
+                  - total
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TenantApplication'
+                  page:
+                    type: integer
+                    format: int32
+                    example: 0
+                  pageSize:
+                    type: integer
+                    format: int32
+                    example: 20
+                  total:
+                    type: integer
+                    format: int64
+                    example: 0
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-applications
+    post:
+      operationId: TenantApplications_subscribeTenantApplication
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantApplication'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-applications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscribeTenantApplicationRequest'
+  /api/v1/tenants/{tenantId}/tenant-applications/{clientId}:
+    patch:
+      operationId: TenantApplications_updateTenantApplication
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantApplication'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-applications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTenantApplicationRequest'
+    delete:
+      operationId: TenantApplications_removeTenantApplication
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: clientId
           in: path
           required: true
           schema:
@@ -1530,52 +1279,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-role-menus
-  /api/v1/tenants/{tenantId}/roles/{roleId}/permissions:
-    put:
-      operationId: TenantRoles_setPermissions
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: roleId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Role'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-roles
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                permissionIds:
-                  type: array
-                  items:
-                    type: string
-              required:
-                - permissionIds
+        - tenant-applications
   /api/v1/tenants/{tenantId}/users:
     get:
-      operationId: TenantUsers_listUsers
+      operationId: TenantUsers_listTenantUsers
       parameters:
         - name: tenantId
           in: path
@@ -1600,7 +1307,7 @@ paths:
           in: query
           required: false
           schema:
-            $ref: '#/components/schemas/UserStatus'
+            $ref: '#/components/schemas/TenantMemberStatus'
           explode: false
       responses:
         '200':
@@ -1618,7 +1325,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: '#/components/schemas/TenantMemberView'
                   page:
                     type: integer
                     format: int32
@@ -1640,7 +1347,7 @@ paths:
       tags:
         - tenant-users
     post:
-      operationId: TenantUsers_createUser
+      operationId: TenantUsers_createTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1653,7 +1360,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/TenantMemberView'
         default:
           description: An unexpected error response.
           content:
@@ -1667,10 +1374,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: '#/components/schemas/CreateSysUserRequest'
   /api/v1/tenants/{tenantId}/users/invitations:
     post:
-      operationId: TenantUsers_inviteUser
+      operationId: TenantUsers_inviteTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1683,7 +1390,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/TenantMemberView'
         default:
           description: An unexpected error response.
           content:
@@ -1701,15 +1408,11 @@ paths:
               properties:
                 email:
                   type: string
-                roleIds:
-                  type: array
-                  items:
-                    type: string
-              required:
-                - email
+                mobile:
+                  type: string
   /api/v1/tenants/{tenantId}/users/{userId}:
     get:
-      operationId: TenantUsers_getUser
+      operationId: TenantUsers_getTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1727,7 +1430,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/TenantMemberView'
         default:
           description: An unexpected error response.
           content:
@@ -1737,7 +1440,7 @@ paths:
       tags:
         - tenant-users
     patch:
-      operationId: TenantUsers_updateUser
+      operationId: TenantUsers_updateTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1755,7 +1458,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/TenantMemberView'
         default:
           description: An unexpected error response.
           content:
@@ -1769,9 +1472,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserRequest'
+              $ref: '#/components/schemas/UpdateSysUserRequest'
     delete:
-      operationId: TenantUsers_deleteUser
+      operationId: TenantUsers_deleteTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1796,7 +1499,7 @@ paths:
         - tenant-users
   /api/v1/tenants/{tenantId}/users/{userId}/roles:
     put:
-      operationId: TenantUsers_assignRoles
+      operationId: TenantUsers_assignTenantMemberRoles
       parameters:
         - name: tenantId
           in: path
@@ -1814,7 +1517,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/TenantMemberView'
         default:
           description: An unexpected error response.
           content:
@@ -1828,17 +1531,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                roleIds:
-                  type: array
-                  items:
-                    type: string
-              required:
-                - roleIds
+              $ref: '#/components/schemas/SetTenantMemberRolesRequest'
   /api/v1/tenants/{tenantId}/users/{userId}/status:
     patch:
-      operationId: TenantUsers_changeUserStatus
+      operationId: TenantUsers_changeTenantUserStatus
       parameters:
         - name: tenantId
           in: path
@@ -1856,7 +1552,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/TenantMemberView'
         default:
           description: An unexpected error response.
           content:
@@ -1873,211 +1569,25 @@ paths:
               type: object
               properties:
                 status:
-                  $ref: '#/components/schemas/UserStatus'
+                  $ref: '#/components/schemas/TenantMemberStatus'
               required:
                 - status
 components:
   schemas:
-    ApiKey:
-      type: object
-      required:
-        - id
-        - tenantId
-        - name
-        - prefix
-        - status
-        - scopes
-        - createdAt
-      properties:
-        id:
-          type: string
-          format: uuid
-        tenantId:
-          type: string
-          format: uuid
-        name:
-          type: string
-          minLength: 2
-          maxLength: 128
-        prefix:
-          type: string
-          minLength: 8
-          maxLength: 16
-        status:
-          $ref: '#/components/schemas/ApiKeyStatus'
-        scopes:
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          format: date-time
-        lastUsedAt:
-          type: string
-          format: date-time
-        expiresAt:
-          type: string
-          format: date-time
-        revokedAt:
-          type: string
-          format: date-time
-    ApiKeyStatus:
-      type: string
-      enum:
-        - active
-        - revoked
-        - expired
-    App:
-      type: object
-      required:
-        - id
-        - code
-        - name
-        - sortOrder
-        - status
-        - clientId
-        - redirectUris
-        - scopes
-        - grantTypes
-        - isFirstParty
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: string
-          format: uuid
-        code:
-          type: string
-          minLength: 2
-          maxLength: 64
-        name:
-          type: string
-          minLength: 2
-          maxLength: 255
-        description:
-          type: string
-        icon:
-          type: string
-        sortOrder:
-          type: integer
-          format: int32
-          example: 0
-        status:
-          $ref: '#/components/schemas/AppStatus'
-        clientId:
-          type: string
-          minLength: 2
-          maxLength: 128
-        clientSecret:
-          type: string
-        redirectUris:
-          type: array
-          items:
-            type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        grantTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OAuthGrantType'
-        isFirstParty:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    AppPublicInfo:
-      type: object
-      required:
-        - id
-        - code
-        - name
-        - status
-      properties:
-        id:
-          type: string
-          format: uuid
-        code:
-          type: string
-          minLength: 2
-          maxLength: 64
-        name:
-          type: string
-          minLength: 2
-          maxLength: 255
-        description:
-          type: string
-        icon:
-          type: string
-        status:
-          $ref: '#/components/schemas/AppStatus'
-    AppStatus:
-      type: string
-      enum:
-        - active
-        - disabled
-    AuditAction:
-      type: string
-      enum:
-        - user_created
-        - user_updated
-        - user_deleted
-        - role_assigned
-        - role_revoked
-        - login_success
-        - login_failed
-        - oauth_token_issued
-        - api_key_created
-        - api_key_revoked
-    AuditEvent:
-      type: object
-      required:
-        - id
-        - tenantId
-        - action
-        - occurredAt
-      properties:
-        id:
-          type: string
-          format: uuid
-        tenantId:
-          type: string
-          format: uuid
-        actorUserId:
-          type: string
-          format: uuid
-        action:
-          $ref: '#/components/schemas/AuditAction'
-        targetUserId:
-          type: string
-          format: uuid
-        metadata:
-          type: object
-          additionalProperties: {}
-        occurredAt:
-          type: string
-          format: date-time
     AuthorizeCodeRequest:
       type: object
       required:
         - clientId
         - redirectUri
         - responseType
-        - scope
         - state
-        - tenantId
       properties:
         clientId:
           type: string
-          format: uuid
         redirectUri:
           type: string
           minLength: 1
-          maxLength: 2048
+          maxLength: 500
         responseType:
           type: string
           enum:
@@ -2086,197 +1596,135 @@ components:
           type: string
         state:
           type: string
-        tenantId:
-          type: string
-          format: uuid
-    CreateApiKeyRequest:
+    CreateOAuthClientRequest:
       type: object
       required:
-        - name
-      properties:
-        name:
-          type: string
-          minLength: 2
-          maxLength: 128
-        scopes:
-          type: array
-          items:
-            type: string
-        expiresAt:
-          type: string
-          format: date-time
-    CreateApiKeyResponse:
-      type: object
-      required:
-        - apiKey
-        - secret
-      properties:
-        apiKey:
-          $ref: '#/components/schemas/ApiKey'
-        secret:
-          type: string
-          minLength: 16
-          maxLength: 256
-    CreateAppRequest:
-      type: object
-      required:
-        - code
-        - name
         - clientId
+        - clientName
+        - clientSecret
+        - grantTypes
         - redirectUris
       properties:
-        code:
-          type: string
-          minLength: 2
-          maxLength: 64
-        name:
-          type: string
-          minLength: 2
-          maxLength: 255
-        description:
-          type: string
-        icon:
-          type: string
-        sortOrder:
-          type: integer
-          format: int32
-        status:
-          $ref: '#/components/schemas/AppStatus'
         clientId:
           type: string
-          minLength: 2
-          maxLength: 128
+        clientName:
+          type: string
         clientSecret:
           type: string
-        redirectUris:
-          type: array
-          items:
-            type: string
-        scopes:
-          type: array
-          items:
-            type: string
         grantTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OAuthGrantType'
-        isFirstParty:
+          type: string
+        redirectUris:
+          type: string
+        scopes:
+          type: string
+        accessTokenValidity:
+          type: integer
+          format: int32
+        refreshTokenValidity:
+          type: integer
+          format: int32
+        autoApprove:
           type: boolean
-    CreateMenuRequest:
+    CreateSysMenuRequest:
       type: object
       required:
-        - code
-        - name
+        - title
+        - type
       properties:
         parentId:
           type: string
           format: uuid
-        code:
+        title:
           type: string
-          minLength: 2
-          maxLength: 64
-        name:
-          type: string
-          minLength: 2
-          maxLength: 255
+        type:
+          $ref: '#/components/schemas/SysMenuType'
         path:
+          type: string
+        component:
+          type: string
+        perms:
           type: string
         icon:
           type: string
-        type:
-          $ref: '#/components/schemas/MenuType'
         sortOrder:
           type: integer
           format: int32
-        status:
-          $ref: '#/components/schemas/MenuStatus'
-    CreateRoleRequest:
+    CreateSysRoleRequest:
       type: object
       required:
-        - code
-        - name
+        - clientId
+        - roleCode
+        - roleName
       properties:
-        code:
+        clientId:
+          type: string
+        roleCode:
           type: string
           minLength: 1
           maxLength: 64
-        name:
+        roleName:
           type: string
           minLength: 1
-          maxLength: 255
+          maxLength: 64
         description:
           type: string
-        permissionIds:
-          type: array
-          items:
-            type: string
-    CreateTenantRequest:
-      type: object
-      required:
-        - code
-        - name
-      properties:
-        code:
-          type: string
-          minLength: 2
-          maxLength: 64
-        name:
-          type: string
-          minLength: 2
-          maxLength: 255
-        settings:
-          $ref: '#/components/schemas/TenantSettings'
-    CreateUserRequest:
+        isPreset:
+          type: boolean
+    CreateSysUserRequest:
       type: object
       required:
         - username
-        - email
         - password
       properties:
         username:
           type: string
           minLength: 1
           maxLength: 64
+        password:
+          type: string
         email:
           type: string
           format: email
-        displayName:
+        mobile:
           type: string
-        password:
+    CreateTenantRequest:
+      type: object
+      required:
+        - tenantKey
+        - name
+      properties:
+        tenantKey:
           type: string
-        roleIds:
-          type: array
-          items:
-            type: string
+          minLength: 2
+          maxLength: 64
+        name:
+          type: string
+          minLength: 2
+          maxLength: 128
     CurrentUser:
       type: object
       required:
-        - id
-        - email
+        - user
         - memberships
       properties:
-        id:
-          type: string
-          format: uuid
-        email:
-          type: string
-          format: email
-        displayName:
-          type: string
+        user:
+          $ref: '#/components/schemas/SysUser'
         memberships:
           type: array
           items:
-            $ref: '#/components/schemas/TenantMembership'
+            $ref: '#/components/schemas/TenantMember'
         currentTenantId:
           type: string
           format: uuid
+        clientId:
+          type: string
     EffectiveMenuNode:
       type: object
       required:
         - id
-        - appId
-        - code
-        - name
+        - clientId
+        - parentId
+        - title
         - type
         - sortOrder
         - children
@@ -2284,22 +1732,23 @@ components:
         id:
           type: string
           format: uuid
-        appId:
+        clientId:
           type: string
-          format: uuid
         parentId:
           type: string
           format: uuid
-        code:
+        title:
           type: string
-        name:
-          type: string
+        type:
+          $ref: '#/components/schemas/SysMenuType'
         path:
+          type: string
+        component:
+          type: string
+        perms:
           type: string
         icon:
           type: string
-        type:
-          $ref: '#/components/schemas/MenuType'
         sortOrder:
           type: integer
           format: int32
@@ -2326,6 +1775,7 @@ components:
       required:
         - username
         - password
+        - clientId
       properties:
         username:
           type: string
@@ -2335,19 +1785,21 @@ components:
           type: string
           minLength: 1
           maxLength: 128
-        tenantCode:
+        clientId:
           type: string
-          format: uuid
     LoginResponse:
       type: object
       required:
-        - accessToken
-        - refreshToken
-        - tokenType
-        - expiresIn
-        - userId
-        - currentTenantId
+        - user
+        - availableTenants
+        - clientId
       properties:
+        user:
+          $ref: '#/components/schemas/SysUser'
+        availableTenants:
+          type: array
+          items:
+            $ref: '#/components/schemas/TenantMember'
         accessToken:
           type: string
         refreshToken:
@@ -2357,27 +1809,19 @@ components:
         expiresIn:
           type: integer
           format: int32
-        userId:
+        clientId:
           type: string
-          format: uuid
-        currentTenantId:
-          type: string
-          format: uuid
-    MembershipStatus:
-      type: string
-      enum:
-        - active
-        - invited
-        - removed
-    Menu:
+    OAuthClient:
       type: object
       required:
         - id
-        - appId
-        - code
-        - name
-        - type
-        - sortOrder
+        - clientId
+        - clientName
+        - grantTypes
+        - redirectUris
+        - accessTokenValidity
+        - refreshTokenValidity
+        - autoApprove
         - status
         - createdAt
         - updatedAt
@@ -2385,56 +1829,47 @@ components:
         id:
           type: string
           format: uuid
-        appId:
+        clientId:
           type: string
-          format: uuid
-        parentId:
+        clientName:
           type: string
-          format: uuid
-        code:
+        grantTypes:
           type: string
-          minLength: 2
-          maxLength: 64
-        name:
+        redirectUris:
           type: string
-          minLength: 2
-          maxLength: 255
-        path:
+        scopes:
           type: string
-        icon:
-          type: string
-        type:
-          $ref: '#/components/schemas/MenuType'
-        sortOrder:
+        accessTokenValidity:
           type: integer
           format: int32
-          example: 0
+        refreshTokenValidity:
+          type: integer
+          format: int32
+        autoApprove:
+          type: boolean
         status:
-          $ref: '#/components/schemas/MenuStatus'
+          type: integer
+          format: int32
         createdAt:
           type: string
           format: date-time
         updatedAt:
           type: string
           format: date-time
-    MenuStatus:
-      type: string
-      enum:
-        - active
-        - disabled
-    MenuType:
-      type: string
-      enum:
-        - group
-        - page
-        - action
-    OAuthGrantType:
-      type: string
-      enum:
-        - authorization_code
-        - refresh_token
-        - client_credentials
-        - password
+    OAuthClientPublicInfo:
+      type: object
+      required:
+        - clientId
+        - clientName
+        - status
+      properties:
+        clientId:
+          type: string
+        clientName:
+          type: string
+        status:
+          type: integer
+          format: int32
     OidcCallbackRequest:
       type: object
       required:
@@ -2448,8 +1883,7 @@ components:
           type: string
         clientId:
           type: string
-          format: uuid
-    ReorderMenuRequest:
+    ReorderSysMenuRequest:
       type: object
       required:
         - orderedMenuIds
@@ -2458,65 +1892,7 @@ components:
           type: array
           items:
             type: string
-    Role:
-      type: object
-      required:
-        - id
-        - tenantId
-        - code
-        - name
-        - permissionIds
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: string
-          format: uuid
-        tenantId:
-          type: string
-          format: uuid
-        code:
-          type: string
-          minLength: 1
-          maxLength: 64
-        name:
-          type: string
-          minLength: 1
-          maxLength: 255
-        description:
-          type: string
-        permissionIds:
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    RoleMenuGrant:
-      type: object
-      required:
-        - roleId
-        - tenantId
-        - menuIds
-        - updatedAt
-      properties:
-        roleId:
-          type: string
-          format: uuid
-        tenantId:
-          type: string
-          format: uuid
-        menuIds:
-          type: array
-          items:
-            type: string
-        updatedAt:
-          type: string
-          format: date-time
-    SetRoleMenusRequest:
+    SetSysRoleMenusRequest:
       type: object
       required:
         - menuIds
@@ -2525,12 +1901,33 @@ components:
           type: array
           items:
             type: string
+    SetTenantMemberRolesRequest:
+      type: object
+      required:
+        - roleIds
+      properties:
+        roleIds:
+          type: array
+          items:
+            type: string
+    SubscribeTenantApplicationRequest:
+      type: object
+      required:
+        - clientId
+      properties:
+        clientId:
+          type: string
+        expireTime:
+          type: string
+          format: date-time
     SwitchTenantResponse:
       type: object
       required:
         - accessToken
+        - refreshToken
         - expiresAt
         - tenantId
+        - clientId
       properties:
         accessToken:
           type: string
@@ -2542,11 +1939,148 @@ components:
         tenantId:
           type: string
           format: uuid
+        clientId:
+          type: string
+    SysMenu:
+      type: object
+      required:
+        - id
+        - clientId
+        - parentId
+        - title
+        - type
+        - sortOrder
+        - status
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+        parentId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/SysMenuType'
+        path:
+          type: string
+        component:
+          type: string
+        perms:
+          type: string
+        icon:
+          type: string
+        sortOrder:
+          type: integer
+          format: int32
+        status:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+    SysMenuType:
+      type: string
+      enum:
+        - directory
+        - menu
+        - button
+    SysRole:
+      type: object
+      required:
+        - id
+        - tenantId
+        - clientId
+        - roleCode
+        - roleName
+        - isPreset
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+        roleCode:
+          type: string
+          minLength: 1
+          maxLength: 64
+        roleName:
+          type: string
+          minLength: 1
+          maxLength: 64
+        description:
+          type: string
+        isPreset:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SysRoleMenu:
+      type: object
+      required:
+        - roleId
+        - menuId
+      properties:
+        roleId:
+          type: string
+          format: uuid
+        menuId:
+          type: string
+          format: uuid
+    SysUser:
+      type: object
+      required:
+        - id
+        - username
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+          minLength: 1
+          maxLength: 64
+        email:
+          type: string
+          format: email
+        mobile:
+          type: string
+        status:
+          $ref: '#/components/schemas/SysUserStatus'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SysUserStatus:
+      type: string
+      enum:
+        - active
+        - disabled
     Tenant:
       type: object
       required:
         - id
-        - code
+        - tenantKey
         - name
         - status
         - createdAt
@@ -2555,75 +2089,110 @@ components:
         id:
           type: string
           format: uuid
-        code:
+        tenantKey:
           type: string
           minLength: 2
           maxLength: 64
-          example: acme
         name:
           type: string
           minLength: 2
-          maxLength: 255
+          maxLength: 128
         status:
           $ref: '#/components/schemas/TenantStatus'
-        settings:
-          $ref: '#/components/schemas/TenantSettings'
         createdAt:
           type: string
           format: date-time
         updatedAt:
           type: string
           format: date-time
-    TenantMembership:
+    TenantApplication:
       type: object
       required:
         - id
-        - userId
         - tenantId
-        - roleIds
+        - clientId
         - status
-        - joinedAt
+        - createdAt
       properties:
         id:
-          type: string
-          format: uuid
-        userId:
           type: string
           format: uuid
         tenantId:
           type: string
           format: uuid
-        roleIds:
+        clientId:
+          type: string
+        status:
+          type: integer
+          format: int32
+        expireTime:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    TenantMember:
+      type: object
+      required:
+        - id
+        - tenantId
+        - userId
+        - isOwner
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        memberName:
+          type: string
+        isOwner:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/TenantMemberStatus'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TenantMemberStatus:
+      type: string
+      enum:
+        - active
+        - disabled
+    TenantMemberView:
+      type: object
+      required:
+        - member
+        - user
+        - roles
+      properties:
+        member:
+          $ref: '#/components/schemas/TenantMember'
+        user:
+          $ref: '#/components/schemas/SysUser'
+        roles:
           type: array
           items:
             type: string
-        status:
-          $ref: '#/components/schemas/MembershipStatus'
-        joinedAt:
-          type: string
-          format: date-time
-    TenantSettings:
-      type: object
-      properties:
-        themeColor:
-          type: string
-        locale:
-          type: string
-        maxUsers:
-          type: integer
-          format: int32
     TenantStatus:
       type: string
       enum:
         - active
         - suspended
-        - archived
     TokenRequest:
       type: object
       required:
         - grantType
         - clientId
-        - tenantId
       properties:
         grantType:
           type: string
@@ -2636,21 +2205,20 @@ components:
           type: string
         clientId:
           type: string
-          format: uuid
         clientSecret:
           type: string
-        tenantId:
-          type: string
-          format: uuid
         redirectUri:
           type: string
     TokenResponse:
       type: object
       required:
         - accessToken
+        - refreshToken
         - tokenType
         - expiresIn
-        - scope
+        - userId
+        - clientId
+        - tenantId
       properties:
         accessToken:
           type: string
@@ -2663,135 +2231,101 @@ components:
           format: int32
         scope:
           type: string
-    UpdateAppRequest:
+        userId:
+          type: string
+        clientId:
+          type: string
+        tenantId:
+          type: string
+          format: uuid
+    UpdateOAuthClientRequest:
       type: object
       properties:
-        name:
+        clientName:
           type: string
-        description:
+        grantTypes:
           type: string
-        icon:
+        redirectUris:
           type: string
-        sortOrder:
+        scopes:
+          type: string
+        accessTokenValidity:
           type: integer
           format: int32
-        status:
-          $ref: '#/components/schemas/AppStatus'
-        redirectUris:
-          type: array
-          items:
-            type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        grantTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OAuthGrantType'
-        isFirstParty:
+        refreshTokenValidity:
+          type: integer
+          format: int32
+        autoApprove:
           type: boolean
-    UpdateMenuRequest:
+        status:
+          type: integer
+          format: int32
+    UpdateSysMenuRequest:
       type: object
       properties:
         parentId:
           type: string
-        name:
+          format: uuid
+        title:
           type: string
+        type:
+          $ref: '#/components/schemas/SysMenuType'
         path:
+          type: string
+        component:
+          type: string
+        perms:
           type: string
         icon:
           type: string
-        type:
-          $ref: '#/components/schemas/MenuType'
         sortOrder:
           type: integer
           format: int32
         status:
-          $ref: '#/components/schemas/MenuStatus'
-    UpdateRoleRequest:
+          type: integer
+          format: int32
+    UpdateSysRoleRequest:
       type: object
       properties:
-        name:
+        roleName:
           type: string
+          minLength: 1
+          maxLength: 64
         description:
           type: string
-        permissionIds:
-          type: array
-          items:
-            type: string
+        status:
+          type: integer
+          format: int32
+    UpdateSysUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        mobile:
+          type: string
+        status:
+          $ref: '#/components/schemas/SysUserStatus'
+    UpdateTenantApplicationRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: integer
+          format: int32
+        expireTime:
+          type: string
+          format: date-time
     UpdateTenantRequest:
       type: object
       properties:
         name:
           type: string
-        code:
-          type: string
           minLength: 2
-          maxLength: 64
+          maxLength: 128
         status:
           $ref: '#/components/schemas/TenantStatus'
-        settings:
-          $ref: '#/components/schemas/TenantSettings'
-    UpdateUserRequest:
-      type: object
-      properties:
-        displayName:
-          type: string
-        email:
-          type: string
-        status:
-          $ref: '#/components/schemas/UserStatus'
-        roleIds:
-          type: array
-          items:
-            type: string
-    User:
-      type: object
-      required:
-        - id
-        - tenantId
-        - username
-        - email
-        - status
-        - roleIds
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: string
-          format: uuid
-        tenantId:
-          type: string
-          format: uuid
-        username:
-          type: string
-          minLength: 1
-          maxLength: 64
-        email:
-          type: string
-          format: email
-        displayName:
-          type: string
-        status:
-          $ref: '#/components/schemas/UserStatus'
-        roleIds:
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    UserStatus:
-      type: string
-      enum:
-        - active
-        - invited
-        - suspended
-        - disabled
 servers:
   - url: https://api.example.com
     description: Production

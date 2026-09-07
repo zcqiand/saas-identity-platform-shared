@@ -1,18 +1,12 @@
 using TypeSpec.Http;
 
-// Tenant — multi-tenant root entity. Platform-level (admin) manages these.
+// tenant — organization boundary for runtime data and authorization.
+// TS model: Tenant ↔ DB table: public.tenant (ADR-0025 schema-first)
 namespace Saas.Identity.Shared;
 
 enum TenantStatus {
   active,
   suspended,
-  archived,
-}
-
-model TenantSettings {
-  themeColor?: string;
-  locale?: string;
-  maxUsers?: int32;
 }
 
 model Tenant {
@@ -20,15 +14,13 @@ model Tenant {
 
   @minLength(2)
   @maxLength(64)
-  @example("acme") code: string;
+  tenantKey: string;
 
   @minLength(2)
-  @maxLength(255)
+  @maxLength(128)
   name: string;
 
   status: TenantStatus;
-
-  settings?: TenantSettings;
 
   createdAt: utcDateTime;
 
@@ -38,23 +30,17 @@ model Tenant {
 model CreateTenantRequest {
   @minLength(2)
   @maxLength(64)
-  code: string;
+  tenantKey: string;
 
   @minLength(2)
-  @maxLength(255)
+  @maxLength(128)
   name: string;
-
-  settings?: TenantSettings;
 }
 
 model UpdateTenantRequest {
+  @minLength(2)
+  @maxLength(128)
   name?: string;
 
-  @minLength(2)
-  @maxLength(64)
-  code?: string;
-
   status?: TenantStatus;
-
-  settings?: TenantSettings;
 }

@@ -5,6 +5,38 @@
 // - oauth_client is the application boundary; tenant_application is subscription.
 // - role/menu grants are relational rows, never role_ids/menu_ids arrays.
 // - token rows always retain client, user and tenant context when issued.
+//
+// =====================================================================
+// TS model ↔ DB table mapping (ADR-0025 schema-first, 2026-09-08)
+// Each TypeSpec model name = its Drizzle TS const = the public.<table>
+// name in PG. Keep this list in sync with tsp/models/*.tsp.
+// =====================================================================
+//
+//  pgTable export            TS model              DB table
+//  ─────────────────────────────────────────────────────────────────
+//  sysUsers                   SysUser               public.sys_user
+//  tenants                    Tenant                public.tenant
+//  tenantMembers              TenantMember          public.tenant_member
+//  oauthClients               OAuthClient           public.oauth_client
+//  tenantApplications         TenantApplication     public.tenant_application
+//  oauthCodes                 OAuthCode             public.oauth_code
+//  oauthAccessTokens          OAuthAccessToken      public.oauth_access_token
+//  oauthRefreshTokens         OAuthRefreshToken     public.oauth_refresh_token
+//  sysMenus                   SysMenu               public.sys_menu
+//  sysRoles                   SysRole               public.sys_role
+//  sysRoleMenus               SysRoleMenu           public.sys_role_menu
+//  tenantMemberRoles          TenantMemberRole      public.tenant_member_role
+//
+// Other TypeSpec models (no DB table):
+//   CurrentUser, TenantMemberView, EffectiveMenuNode (DTO/response shapes)
+//   SysUserStatus, TenantMemberStatus, TenantStatus, SysMenuType (enums)
+//   LoginRequest/Response, TokenRequest/Response, OidcCallbackRequest,
+//   CreateSysUserRequest, UpdateSysUserRequest, SetTenantMemberRolesRequest,
+//   CreateOAuthClientRequest, UpdateOAuthClientRequest, OAuthClientPublicInfo,
+//   SubscribeTenantApplicationRequest, UpdateTenantApplicationRequest,
+//   CreateSysRoleRequest, UpdateSysRoleRequest,
+//   CreateSysMenuRequest, UpdateSysMenuRequest, ReorderSysMenuRequest,
+//   SetSysRoleMenusRequest, SwitchTenantResponse (request/response shapes)
 
 import {
   pgTable,
