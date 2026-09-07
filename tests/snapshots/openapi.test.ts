@@ -33,9 +33,9 @@ describe("OpenAPI snapshot", () => {
       "/api/v1/me/",
       "/api/v1/tenants/{tenantId}/members",
       "/api/v1/tenants/{tenantId}/roles",
-      "/api/v1/admin/oauth-clients",
-      "/api/v1/oauth-clients/{clientId}/sys-menus",
-      "/api/v1/tenants/{tenantId}/tenant-applications",
+      "/api/v1/admin/clients",
+      "/api/v1/clients/{clientId}/menus",
+      "/api/v1/tenants/{tenantId}/applications",
       "/api/v1/tenants/{tenantId}/roles/{roleId}/menus",
       "/api/v1/oauth/authorize",
       "/api/v1/oauth/token",
@@ -47,8 +47,11 @@ describe("OpenAPI snapshot", () => {
       "/api/v1/tenants/{tenantId}/api-keys",
       "/api/v1/tenants/{tenantId}/audit-events",
       "/api/v1/admin/apps",
-      "/api/v1/tenants/{tenantId}/applications",
       "/api/v1/tenants/{tenantId}/users",
+      "/api/v1/admin/oauth-clients",
+      "/api/v1/oauth-clients",
+      "/api/v1/oauth-clients/{clientId}/sys-menus",
+      "/api/v1/tenants/{tenantId}/tenant-applications",
     ]) {
       expect(yaml).not.toContain(legacyPath);
     }
@@ -57,22 +60,22 @@ describe("OpenAPI snapshot", () => {
 
 describe("M04.F04 租户应用订阅", () => {
   it("M04.F04.I01 lists tenant applications", () => {
-    pathPresent("/api/v1/tenants/{tenantId}/tenant-applications");
+    pathPresent("/api/v1/tenants/{tenantId}/applications");
     operationIdPresent("TenantApplications_listTenantApplications");
   });
 
   it("M04.F04.I02 subscribes an application", () => {
-    pathPresent("/api/v1/tenants/{tenantId}/tenant-applications");
+    pathPresent("/api/v1/tenants/{tenantId}/applications");
     operationIdPresent("TenantApplications_subscribeTenantApplication");
   });
 
   it("M04.F04.I03 updates an application subscription", () => {
-    pathPresent("/api/v1/tenants/{tenantId}/tenant-applications/{clientId}");
+    pathPresent("/api/v1/tenants/{tenantId}/applications/{clientId}");
     operationIdPresent("TenantApplications_updateTenantApplication");
   });
 
   it("M04.F04.I04 removes an application subscription", () => {
-    pathPresent("/api/v1/tenants/{tenantId}/tenant-applications/{clientId}");
+    pathPresent("/api/v1/tenants/{tenantId}/applications/{clientId}");
     operationIdPresent("TenantApplications_removeTenantApplication");
   });
 });

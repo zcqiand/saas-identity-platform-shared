@@ -8,16 +8,16 @@ tags:
   - name: me
   - name: tenant-members
   - name: tenant-sys-roles
-  - name: admin-oauth-clients
-  - name: oauth-clients
-  - name: oauth-clients-sys-menus
+  - name: admin-clients
+  - name: clients
+  - name: client-menus
   - name: tenant-sys-role-menus
   - name: oauth
   - name: tenant-applications
 paths:
-  /api/v1/admin/oauth-clients:
+  /api/v1/admin/clients:
     get:
-      operationId: AdminOAuthClients_listClients
+      operationId: AdminClients_listClients
       parameters:
         - name: page
           in: query
@@ -69,9 +69,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-oauth-clients
+        - admin-clients
     post:
-      operationId: AdminOAuthClients_createClient
+      operationId: AdminClients_createClient
       parameters: []
       responses:
         '200':
@@ -87,16 +87,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-oauth-clients
+        - admin-clients
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateOAuthClientRequest'
-  /api/v1/admin/oauth-clients/{clientId}:
+  /api/v1/admin/clients/{clientId}:
     get:
-      operationId: AdminOAuthClients_getClient
+      operationId: AdminClients_getClient
       parameters:
         - name: clientId
           in: path
@@ -117,9 +117,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-oauth-clients
+        - admin-clients
     patch:
-      operationId: AdminOAuthClients_updateClient
+      operationId: AdminClients_updateClient
       parameters:
         - name: clientId
           in: path
@@ -140,7 +140,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-oauth-clients
+        - admin-clients
       requestBody:
         required: true
         content:
@@ -148,7 +148,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateOAuthClientRequest'
     delete:
-      operationId: AdminOAuthClients_deleteClient
+      operationId: AdminClients_deleteClient
       parameters:
         - name: clientId
           in: path
@@ -165,10 +165,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-oauth-clients
-  /api/v1/admin/oauth-clients/{clientId}/status:
+        - admin-clients
+  /api/v1/admin/clients/{clientId}/status:
     patch:
-      operationId: AdminOAuthClients_setClientStatus
+      operationId: AdminClients_setClientStatus
       parameters:
         - name: clientId
           in: path
@@ -189,7 +189,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-oauth-clients
+        - admin-clients
       requestBody:
         required: true
         content:
@@ -437,6 +437,247 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TokenRequest'
+  /api/v1/clients/{clientId}:
+    get:
+      operationId: Clients_getClient
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthClientPublicInfo'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - clients
+  /api/v1/clients/{clientId}/menus:
+    get:
+      operationId: ClientMenus_listSysMenus
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - client-menus
+    post:
+      operationId: ClientMenus_createSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSysMenuRequest'
+  /api/v1/clients/{clientId}/menus/{menuId}:
+    get:
+      operationId: ClientMenus_getSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - client-menus
+    patch:
+      operationId: ClientMenus_updateSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSysMenuRequest'
+    delete:
+      operationId: ClientMenus_deleteSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - client-menus
+  /api/v1/clients/{clientId}/menus/{menuId}/parent:
+    patch:
+      operationId: ClientMenus_moveSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentId:
+                  type: string
+  /api/v1/clients/{clientId}/menus/{menuId}/reorder:
+    put:
+      operationId: ClientMenus_reorderSysMenus
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - client-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderSysMenuRequest'
   /api/v1/me:
     get:
       operationId: Me_whoami
@@ -542,247 +783,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - me
-  /api/v1/oauth-clients/{clientId}:
-    get:
-      operationId: OAuthClients_getOAuthClient
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuthClientPublicInfo'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients
-  /api/v1/oauth-clients/{clientId}/sys-menus:
-    get:
-      operationId: OAuthClientsSysMenus_listSysMenus
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients-sys-menus
-    post:
-      operationId: OAuthClientsSysMenus_createSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateSysMenuRequest'
-  /api/v1/oauth-clients/{clientId}/sys-menus/{menuId}:
-    get:
-      operationId: OAuthClientsSysMenus_getSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients-sys-menus
-    patch:
-      operationId: OAuthClientsSysMenus_updateSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateSysMenuRequest'
-    delete:
-      operationId: OAuthClientsSysMenus_deleteSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients-sys-menus
-  /api/v1/oauth-clients/{clientId}/sys-menus/{menuId}/parent:
-    patch:
-      operationId: OAuthClientsSysMenus_moveSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                parentId:
-                  type: string
-  /api/v1/oauth-clients/{clientId}/sys-menus/{menuId}/reorder:
-    put:
-      operationId: OAuthClientsSysMenus_reorderSysMenus
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - oauth-clients-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReorderSysMenuRequest'
   /api/v1/oauth/authorize:
     post:
       operationId: OAuth_authorize
@@ -841,6 +841,154 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TokenRequest'
+  /api/v1/tenants/{tenantId}/applications:
+    get:
+      operationId: TenantApplications_listTenantApplications
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                  - page
+                  - pageSize
+                  - total
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TenantApplication'
+                  page:
+                    type: integer
+                    format: int32
+                    example: 0
+                  pageSize:
+                    type: integer
+                    format: int32
+                    example: 20
+                  total:
+                    type: integer
+                    format: int64
+                    example: 0
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-applications
+    post:
+      operationId: TenantApplications_subscribeTenantApplication
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantApplication'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-applications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscribeTenantApplicationRequest'
+  /api/v1/tenants/{tenantId}/applications/{clientId}:
+    patch:
+      operationId: TenantApplications_updateTenantApplication
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantApplication'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-applications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTenantApplicationRequest'
+    delete:
+      operationId: TenantApplications_removeTenantApplication
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-applications
   /api/v1/tenants/{tenantId}/members:
     get:
       operationId: TenantMembers_listTenantUsers
@@ -1424,154 +1572,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - tenant-sys-role-menus
-  /api/v1/tenants/{tenantId}/tenant-applications:
-    get:
-      operationId: TenantApplications_listTenantApplications
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-        - name: pageSize
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - items
-                  - page
-                  - pageSize
-                  - total
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/TenantApplication'
-                  page:
-                    type: integer
-                    format: int32
-                    example: 0
-                  pageSize:
-                    type: integer
-                    format: int32
-                    example: 20
-                  total:
-                    type: integer
-                    format: int64
-                    example: 0
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-applications
-    post:
-      operationId: TenantApplications_subscribeTenantApplication
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantApplication'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-applications
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscribeTenantApplicationRequest'
-  /api/v1/tenants/{tenantId}/tenant-applications/{clientId}:
-    patch:
-      operationId: TenantApplications_updateTenantApplication
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantApplication'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-applications
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateTenantApplicationRequest'
-    delete:
-      operationId: TenantApplications_removeTenantApplication
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-applications
 components:
   schemas:
     AuthorizeCodeRequest:

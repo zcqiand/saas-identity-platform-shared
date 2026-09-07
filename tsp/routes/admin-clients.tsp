@@ -1,9 +1,9 @@
 using TypeSpec.Http;
 
 // M04 — platform-level oauth_client administration.
-@route("/admin/oauth-clients")
-@tag("admin-oauth-clients")
-namespace Saas.Identity.Shared.AdminOAuthClients {
+@route("/admin/clients")
+@tag("admin-clients")
+namespace Saas.Identity.Shared.AdminClients {
   // M04.F01.I01 list clients
   @get
   op listClients(@query page?: int32, @query pageSize?: int32): Page<OAuthClient> | ErrorResponse;
