@@ -7,7 +7,9 @@ import "./tsp/models/tenant.tsp";
 import "./tsp/models/sys-user.tsp";
 import "./tsp/models/sys-role.tsp";
 import "./tsp/models/tenant-member.tsp";
+import "./tsp/models/tenant-member-role.tsp";
 import "./tsp/models/oauth-client.tsp";
+import "./tsp/models/tenant-application.tsp";
 import "./tsp/models/sys-menu.tsp";
 import "./tsp/models/sys-role-menu.tsp";
 
