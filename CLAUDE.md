@@ -16,10 +16,10 @@ SaaS 多租户多应用身份平台全家族的契约源头（纯契约仓）。
 - **功能清单是锚点**：改 function-tree 走 `/tree-change`；同 commit；废弃只改状态，编号不复用
 - 禁止业务代码（handlers/services/controllers）
 - 禁止生成语言专属产物（TS/Java/C#/Kotlin/Swift 客户端下放给消费方自己 generate）
-- 禁止 npm runtime 依赖（仅 `@typespec/*` dev）
+- 禁止 npm runtime 依赖；devDep 白名单：`@typespec/*` + `drizzle-orm` + `drizzle-kit` + `postgres` + `pg`（ADR-0025）
 - 禁止手写 OpenAPI yaml（必须由 `tsp compile` 生成）
 - 禁止 npm package `exports` 暴露语言路径；只暴露 `./openapi`
-- **允许** `sql/migrations/*.sql` 作为 DDL 真源（Flyway 风格，ADR-0007）；禁止在其中写应用语言代码或手写迁移工具脚本
+- `sql/migrations/V<NNN>__<desc>.sql` 是 drizzle-kit generate 产物（Flyway 风格命名），由 `scripts/migrate-rename.mjs` 重命名得到；SSOT 是 `src/db/schema.ts`（ADR-0025）。**禁止手写 V 文件**
 - gen-shared 静默覆盖同名迁移是 FATAL —— 触发时先收敛分叉再跑（8/26 撞表雷教训）
 
 ## 3. 技术栈与版本（钉死于 version-lock.json）
