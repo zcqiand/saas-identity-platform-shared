@@ -6,18 +6,18 @@ tags:
   - name: auth
   - name: admin-tenants
   - name: me
-  - name: tenant-users
-  - name: tenant-roles
+  - name: tenant-members
+  - name: tenant-sys-roles
   - name: admin-oauth-clients
   - name: oauth-clients
-  - name: admin-client-menus
-  - name: tenant-role-menus
+  - name: admin-client-sys-menus
+  - name: tenant-sys-role-menus
   - name: oauth
   - name: tenant-applications
 paths:
   /api/v1/admin/clients/{clientId}/menus:
     get:
-      operationId: SysMenus_listSysMenus
+      operationId: AdminClientSysMenus_listSysMenus
       parameters:
         - name: clientId
           in: path
@@ -40,9 +40,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-client-menus
+        - admin-client-sys-menus
     post:
-      operationId: SysMenus_createSysMenu
+      operationId: AdminClientSysMenus_createSysMenu
       parameters:
         - name: clientId
           in: path
@@ -63,7 +63,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-client-menus
+        - admin-client-sys-menus
       requestBody:
         required: true
         content:
@@ -72,7 +72,7 @@ paths:
               $ref: '#/components/schemas/CreateSysMenuRequest'
   /api/v1/admin/clients/{clientId}/menus/{menuId}:
     get:
-      operationId: SysMenus_getSysMenu
+      operationId: AdminClientSysMenus_getSysMenu
       parameters:
         - name: clientId
           in: path
@@ -98,9 +98,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-client-menus
+        - admin-client-sys-menus
     patch:
-      operationId: SysMenus_updateSysMenu
+      operationId: AdminClientSysMenus_updateSysMenu
       parameters:
         - name: clientId
           in: path
@@ -126,7 +126,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-client-menus
+        - admin-client-sys-menus
       requestBody:
         required: true
         content:
@@ -134,7 +134,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateSysMenuRequest'
     delete:
-      operationId: SysMenus_deleteSysMenu
+      operationId: AdminClientSysMenus_deleteSysMenu
       parameters:
         - name: clientId
           in: path
@@ -156,10 +156,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-client-menus
+        - admin-client-sys-menus
   /api/v1/admin/clients/{clientId}/menus/{menuId}/parent:
     patch:
-      operationId: SysMenus_moveSysMenu
+      operationId: AdminClientSysMenus_moveSysMenu
       parameters:
         - name: clientId
           in: path
@@ -185,7 +185,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-client-menus
+        - admin-client-sys-menus
       requestBody:
         required: true
         content:
@@ -197,7 +197,7 @@ paths:
                   type: string
   /api/v1/admin/clients/{clientId}/menus/{menuId}/reorder:
     put:
-      operationId: SysMenus_reorderSysMenus
+      operationId: AdminClientSysMenus_reorderSysMenus
       parameters:
         - name: clientId
           in: path
@@ -225,7 +225,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - admin-client-menus
+        - admin-client-sys-menus
       requestBody:
         required: true
         content:
@@ -841,9 +841,301 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TokenRequest'
+  /api/v1/tenants/{tenantId}/members:
+    get:
+      operationId: TenantMembers_listTenantUsers
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/TenantMemberStatus'
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                  - page
+                  - pageSize
+                  - total
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TenantMemberView'
+                  page:
+                    type: integer
+                    format: int32
+                    example: 0
+                  pageSize:
+                    type: integer
+                    format: int32
+                    example: 20
+                  total:
+                    type: integer
+                    format: int64
+                    example: 0
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+    post:
+      operationId: TenantMembers_createTenantUser
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantMemberView'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSysUserRequest'
+  /api/v1/tenants/{tenantId}/members/invitations:
+    post:
+      operationId: TenantMembers_inviteTenantUser
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantMemberView'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                mobile:
+                  type: string
+  /api/v1/tenants/{tenantId}/members/{userId}:
+    get:
+      operationId: TenantMembers_getTenantUser
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantMemberView'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+    patch:
+      operationId: TenantMembers_updateTenantUser
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantMemberView'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSysUserRequest'
+    delete:
+      operationId: TenantMembers_deleteTenantUser
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+  /api/v1/tenants/{tenantId}/members/{userId}/roles:
+    put:
+      operationId: TenantMembers_assignTenantMemberRoles
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantMemberView'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetTenantMemberRolesRequest'
+  /api/v1/tenants/{tenantId}/members/{userId}/status:
+    patch:
+      operationId: TenantMembers_changeTenantUserStatus
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantMemberView'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - tenant-members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/TenantMemberStatus'
+              required:
+                - status
   /api/v1/tenants/{tenantId}/roles:
     get:
-      operationId: SysRoles_listSysRoles
+      operationId: TenantSysRoles_listSysRoles
       parameters:
         - name: tenantId
           in: path
@@ -906,9 +1198,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-roles
+        - tenant-sys-roles
     post:
-      operationId: SysRoles_createSysRole
+      operationId: TenantSysRoles_createSysRole
       parameters:
         - name: tenantId
           in: path
@@ -929,7 +1221,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-roles
+        - tenant-sys-roles
       requestBody:
         required: true
         content:
@@ -938,7 +1230,7 @@ paths:
               $ref: '#/components/schemas/CreateSysRoleRequest'
   /api/v1/tenants/{tenantId}/roles/{roleId}:
     get:
-      operationId: SysRoles_getSysRole
+      operationId: TenantSysRoles_getSysRole
       parameters:
         - name: tenantId
           in: path
@@ -964,9 +1256,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-roles
+        - tenant-sys-roles
     patch:
-      operationId: SysRoles_updateSysRole
+      operationId: TenantSysRoles_updateSysRole
       parameters:
         - name: tenantId
           in: path
@@ -992,7 +1284,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-roles
+        - tenant-sys-roles
       requestBody:
         required: true
         content:
@@ -1000,7 +1292,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateSysRoleRequest'
     delete:
-      operationId: SysRoles_deleteSysRole
+      operationId: TenantSysRoles_deleteSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1022,10 +1314,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-roles
+        - tenant-sys-roles
   /api/v1/tenants/{tenantId}/roles/{roleId}/menus:
     get:
-      operationId: SysRoleMenus_listSysRoleMenus
+      operationId: TenantSysRoleMenus_listSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1059,9 +1351,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-role-menus
+        - tenant-sys-role-menus
     put:
-      operationId: SysRoleMenus_setSysRoleMenus
+      operationId: TenantSysRoleMenus_setSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1095,7 +1387,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-role-menus
+        - tenant-sys-role-menus
       requestBody:
         required: true
         content:
@@ -1103,7 +1395,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SetSysRoleMenusRequest'
     delete:
-      operationId: SysRoleMenus_clearSysRoleMenus
+      operationId: TenantSysRoleMenus_clearSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1131,7 +1423,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-role-menus
+        - tenant-sys-role-menus
   /api/v1/tenants/{tenantId}/tenant-applications:
     get:
       operationId: TenantApplications_listTenantApplications
@@ -1280,298 +1572,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
         - tenant-applications
-  /api/v1/tenants/{tenantId}/users:
-    get:
-      operationId: TenantMembers_listTenantUsers
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-        - name: pageSize
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          explode: false
-        - name: status
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/TenantMemberStatus'
-          explode: false
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - items
-                  - page
-                  - pageSize
-                  - total
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/TenantMemberView'
-                  page:
-                    type: integer
-                    format: int32
-                    example: 0
-                  pageSize:
-                    type: integer
-                    format: int32
-                    example: 20
-                  total:
-                    type: integer
-                    format: int64
-                    example: 0
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-    post:
-      operationId: TenantMembers_createTenantUser
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantMemberView'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateSysUserRequest'
-  /api/v1/tenants/{tenantId}/users/invitations:
-    post:
-      operationId: TenantMembers_inviteTenantUser
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantMemberView'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                mobile:
-                  type: string
-  /api/v1/tenants/{tenantId}/users/{userId}:
-    get:
-      operationId: TenantMembers_getTenantUser
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantMemberView'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-    patch:
-      operationId: TenantMembers_updateTenantUser
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantMemberView'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateSysUserRequest'
-    delete:
-      operationId: TenantMembers_deleteTenantUser
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-  /api/v1/tenants/{tenantId}/users/{userId}/roles:
-    put:
-      operationId: TenantMembers_assignTenantMemberRoles
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantMemberView'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SetTenantMemberRolesRequest'
-  /api/v1/tenants/{tenantId}/users/{userId}/status:
-    patch:
-      operationId: TenantMembers_changeTenantUserStatus
-      parameters:
-        - name: tenantId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantMemberView'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - tenant-users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  $ref: '#/components/schemas/TenantMemberStatus'
-              required:
-                - status
 components:
   schemas:
     AuthorizeCodeRequest:

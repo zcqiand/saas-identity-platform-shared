@@ -31,7 +31,7 @@ describe("OpenAPI snapshot", () => {
       "/api/v1/auth/",
       "/api/v1/admin/tenants",
       "/api/v1/me/",
-      "/api/v1/tenants/{tenantId}/users",
+      "/api/v1/tenants/{tenantId}/members",
       "/api/v1/tenants/{tenantId}/roles",
       "/api/v1/admin/oauth-clients",
       "/api/v1/admin/clients/{clientId}/menus",
@@ -48,6 +48,7 @@ describe("OpenAPI snapshot", () => {
       "/api/v1/tenants/{tenantId}/audit-events",
       "/api/v1/admin/apps",
       "/api/v1/tenants/{tenantId}/applications",
+      "/api/v1/tenants/{tenantId}/users",
     ]) {
       expect(yaml).not.toContain(legacyPath);
     }
@@ -86,6 +87,6 @@ describe("M09.F03 当前用户有效菜单", () => {
 describe("M09.F02 角色菜单关系", () => {
   it("M09.F02.I01 exposes relational role menu replacement", () => {
     pathPresent("/api/v1/tenants/{tenantId}/roles/{roleId}/menus");
-    operationIdPresent("SysRoleMenus_setSysRoleMenus");
+    operationIdPresent("TenantSysRoleMenus_setSysRoleMenus");
   });
 });

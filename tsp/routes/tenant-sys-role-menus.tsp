@@ -2,8 +2,8 @@ using TypeSpec.Http;
 
 // M09 — sys_role_menu grants scoped by tenant and client.
 @route("/tenants/{tenantId}/roles/{roleId}/menus")
-@tag("tenant-role-menus")
-namespace Saas.Identity.Shared.SysRoleMenus {
+@tag("tenant-sys-role-menus")
+namespace Saas.Identity.Shared.TenantSysRoleMenus {
   // M09.F01.I01 role menu grants
   @get
   op listSysRoleMenus(

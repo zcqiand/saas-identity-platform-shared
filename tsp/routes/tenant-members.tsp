@@ -1,8 +1,8 @@
 using TypeSpec.Http;
 
 // M01 — tenant membership management. Role writes target tenant_member.
-@route("/tenants/{tenantId}/users")
-@tag("tenant-users")
+@route("/tenants/{tenantId}/members")
+@tag("tenant-members")
 namespace Saas.Identity.Shared.TenantMembers {
   // M01.F01.I01 list members
   @get
