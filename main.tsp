@@ -48,6 +48,18 @@ model ErrorResponse {
 }
 
 // ============================================================
+// M01.F04.I02 — 失败锁定响应（HTTP 423 Locked）
+// 连续失败超过阈值时由消费后端返回；lockedUntil 给客户端倒计时展示。
+// ============================================================
+@error
+model LockedAccountResponse {
+  @example("ACCOUNT_LOCKED") code: string;
+  message: string;
+  lockedUntil: utcDateTime;
+  remainingAttempts?: int32;
+}
+
+// ============================================================
 // Pagination wrapper
 // ============================================================
 model Page<T> {

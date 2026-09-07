@@ -369,7 +369,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                anyOf:
+                  - $ref: '#/components/schemas/LockedAccountResponse'
+                  - $ref: '#/components/schemas/ErrorResponse'
       tags:
         - auth
       requestBody:
@@ -1770,6 +1772,24 @@ components:
         details:
           type: object
           additionalProperties: {}
+    LockedAccountResponse:
+      type: object
+      required:
+        - code
+        - message
+        - lockedUntil
+      properties:
+        code:
+          type: string
+          example: ACCOUNT_LOCKED
+        message:
+          type: string
+        lockedUntil:
+          type: string
+          format: date-time
+        remainingAttempts:
+          type: integer
+          format: int32
     LoginRequest:
       type: object
       required:
@@ -2065,6 +2085,12 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/SysUserStatus'
+        failedAttempts:
+          type: integer
+          format: int32
+        lockedUntil:
+          type: string
+          format: date-time
         createdAt:
           type: string
           format: date-time

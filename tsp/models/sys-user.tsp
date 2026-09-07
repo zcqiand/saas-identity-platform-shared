@@ -22,6 +22,11 @@ model SysUser {
 
   status: SysUserStatus;
 
+  // M01.F04.I02 — 连续失败锁定（默认 5 次/15min，具体阈值由消费后端决定）
+  failedAttempts?: int32;
+
+  lockedUntil?: utcDateTime;
+
   createdAt: utcDateTime;
 
   updatedAt: utcDateTime;

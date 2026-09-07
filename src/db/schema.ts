@@ -65,6 +65,9 @@ export const sysUsers = pgTable(
     email: varchar("email", { length: 128 }),
     mobile: varchar("mobile", { length: 32 }),
     status: smallint("status").notNull().default(1),
+    // M01.F04.I02 — 连续失败锁定：阈值与窗口由消费后端决定，shared 仅落表
+    failedAttempts: integer("failed_attempts").notNull().default(0),
+    lockedUntil: timestamp("locked_until", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
