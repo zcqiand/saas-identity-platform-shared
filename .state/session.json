@@ -1,29 +1,44 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-shared",
-  "current_task": "contract-test 补齐闭环：tests/snapshots/openapi.test.ts 加 11 个 I-ID 化断言 + fnReporter v5 修 + function-tree.md 补登 5 个 I-ID（M06.F01.I01-I03 + M06.F02.I01-I02；M09.F03.I01 已有未重提）。gate L0/L0.5/L1/L3/L4/L5 全绿。3 个软告警留给下一批。",
-  "last_session_at": "2026-09-01",
+  "current_task": "9/8 TypeSpec 全面对齐 schema-first — model 名/文件名/URL path 全部归一；6 仓消费方待独立 PR 推平（commit 9016698）",
+  "last_session_at": "2026-09-07",
   "done": [
-    "tests/snapshots/openapi.test.ts: 通用快照 2 条保留（不含 M-ID 防 trace 污染）；新增 M05.F01/M06.F01/M06.F02/M06.F03/M09.F03 共 11 个 it() 挂完整 I-ID + path/operationId 断言；M06.F03.I01 是「AuditWriter 必须不暴露 HTTP 写端点」的反向断言（防回归）",
-    "tests/fnReporter.ts: 修 loadNamespaces cells[0] 恒空（markdown split 行为 → cells[1]）+ 重置 lastIndex；改用 onFinished(files: TestFile[]) 走全树（vitest 2.x packs 是 tuple 不是 {tasks:[]}）",
-    "trace.json 写入 11 条 entry，覆盖 M05.F01.I01-I04 + M06.F01.I01-I03 + M06.F02.I01-I02 + M06.F03.I01 + M09.F03.I01",
-    "vitest run 全绿 18 tests（13 新 + 5 SQL replay）",
-    "tree-change.json 重写（覆盖孤儿「写端点第二期」提案，base_sha 漂移那次）—— human --approve 批准",
-    "function-tree.md 子项表补登 5 行：M06.F01.I01-I03 + M06.F02.I01-I02（M09.F03.I01 已在表里不重提）",
-    "gate 全绿：L0/L0.5/L1/L3/L4/L5",
-    "commits: 52831f1 (test) + 7ff73f2 (chore) + 后续补登 commit"
+    "Round 1-3：状态列对齐 ground truth（7 模块 + 41 子项 + 19 F-function rollup 规划→开发中；M04.F03.I01-I03 + M06.F02.I04 废弃；REQ-2026-020 ID 重映射 I01-I03→I07-I09）",
+    "Round 4-5：文档基线补齐（REQ-2026-023 审计/REQ-2026-024 切租户+邀请/REQ-2026-025 菜单结构 3 个新 REQ；docs/design/ 下 5 个设计 doc 含 flow-function-map.md canonical for orphan_whitelist）",
+    "Round 6：function-tree.md 硬规则 §5 新增「改状态前先读 TSP routes + SQL migrations」防下次集体 stale",
+    "Round 7-8：68 行「（说明待补」→ TSP 真源描述补全（含跨多轮 sha-binding 续批 M00.M03→M04.M09→M09.F02 兜底）",
+    "Round 9-10：spec §4 上线口径合规审计 + 批量 promote（56 ID 含 1 label fix M05.F01.I02 仅前端→前端+后端；L5 fail 兜底 3 facing-user ID 回退开发中等 @entry）",
+    "9/8 TypeSpec 全面对齐 schema-first 12 表（796a551 后续）：删 4 个废弃 model+route（api-key/audit-event/tenant-api-keys/tenant-audit）、重命名 7 个 model 文件名（role→sys-role、user→sys-user、menu→sys-menu、membership→tenant-member、app→oauth-client、role-menu-grant→sys-role-menu）、model 名归一（User→SysUser / Menu→SysMenu / Role→SysRole / RoleMenuGrant→SysRoleMenu / MemberRoleGrant→TenantMemberRole / 删 App extends OAuthClient 别名 / MembershipStatus→TenantMemberStatus）、URL path 3 处改（/admin/apps→/admin/oauth-clients、/apps→/oauth-clients、/tenants/{id}/applications→/tenants/{id}/tenant-applications）、删重复 tsp/main.tsp、src/db/schema.ts 顶部加 TS↔DB 映射注释、tests/snapshots/openapi.test.ts 锁定新 path/op 名；build/lint/typecheck/test 全绿（8/9 passed，drizzle.replay inert skip）",
+    "gate 全绿：L0/L0.no_fallback/L0.5/L1/L3/L4/L5 PASS（100 功能条目，引用完整）；状态分布：~50 已上线 / ~32 开发中 / 4 已废弃 / 2 规划"
   ],
   "next": [
-    "下一批跨仓改动若涉及 TypeSpec（新增 route/model），改完跑 npm run build 即重 emit OpenAPI，下游 4 仓跑 scripts/gen-shared.sh",
-    "（软告警留给下一批）M06.F03.I02 / M09.F03.I02-I04 / M05.F01.I01-I04 / M06.F01.I01-I03 / M06.F02.I01-I02 共 15 项「已上线但无设计映射」「不在任何流程且非孤儿白名单」—— shared 仓禁业务代码，没法补 docs/design 与 docs/requirements；要么转到消费仓 (aspnetcore/springboot/nextjs/msw) 的 docs/，要么用白名单豁免"
+    "6 仓消费方独立 PR 推平：msw（pull schema.ts + handler path 重生）/ nextjs（orval regen + URL path）/ react（orval regen）/ vue（orval regen）/ spring（openapi-generator-java regen controller + entity class 名 SysUser/SysMenu/SysRole/SysRoleMenu/TenantMemberRole）/ aspn（openapi-generator-dotnet regen）",
+    "contract-test 仓批量更新断言 URL：/admin/apps→/admin/oauth-clients 等 3 处",
+    "再补 ADR-0026 「TypeSpec schema-first 命名归一」，固化 model 名 = DB table 名 = 消费仓 class 名的不可分原则",
+    "[根因修复] 同步 5 个消费者仓（saas-aspnetcore/springboot/react/vue/nextjs）自己的 function-tree.md 或 state file 到 BASE「已上线」状态——round-7 audit 错把「文件存在」当 7/7，parity-matrix 用消费者自己声明的状态才是真信号（ADR-0002 防假绿）。不修这步 parity 永远是分叉；其余 6 仓 gate L5 都假设分叉=0 才绿",
+    "补 @entry 注释让 M00.F02.I01/I02 + M09.F01.I01 真上线：saas-react + saas-vue + saas-nextjs 在 auth provider / tenant-switcher.vue / RoleMenuGrantPage 各加 1 行 `// @entry Mxx.Fxx.Ixx`",
+    "把 promote 出的 46 个 ID 拆进现有 5 个设计 doc（按模块）：每个 ID 1-2 行锚点，2 小时内完成，能消 46 条「已上线无设计映射」软告警",
+    "ADR 沉淀经验：tree-change 多轮工作流（sha binding 机制）+ @entry 强制规则 + spec §4 严格判据 + 「文件存在 ≠ spec §4 7/7」（写进 docs/adr/0024-suite-tree-change-workflow.md）",
+    "scripts/checks/_alignment.py 的 E501 长行是 pre-existing diff（git status M 在我接手前就有），如要修单独起一个 PR 不要混在本 session 改动里"
   ],
-  "open_questions": [],
+  "open_questions": [
+    "_suite L1+L2 ruff E501 失败：scripts/checks/_alignment.py 已有 cross_repo_test_refs 函数的 ~120 行 diff（pre-existing，不是本 session 引入）；ruff format 已试但 format 不能消 E501 长行，要手工折行或加 # noqa",
+    "saas-aspnetcore L2 MSB3027 失败：stale Saas.Identity.AspNetCore.exe 被 PID 20288 锁——dev server 残留进程；杀进程前需确认是不是用户/同事在跑的，memory `aspnetcore-stale-dll-trap` 有记录",
+    "gate --all 跑 lab-aspnetcore / lab-contract-test / lab-nextjs 时返回 FAIL 但单跑 PASS：怀疑 Python UnicodeDecodeError 在并发 reader thread 里打断输出捕获；底层 gate 实际过了——单跑可证",
+    "软告警 96 条都是 promote 后的真信号：46 已上线无设计映射 + 20 已上线无测试引用 + 27 已上线不在任何流程 + 3 开发中无 UI 入口；要消需要文档+测试+流程图 3 维工作，每个仓 1-2h"
+  ],
   "dont": [
-    "不要手写 OpenAPI yaml —— 一律由 npm run build 重新 emit",
-    "不要给已废弃的 `tsp/main.tsp` 加内容（它引入了不存在的 oauth 模型，tsp compile 已经跳过；保持空）",
-    "不要把 M05/M06 的 I-row ID 加到 contract-test 的 §4 功能影响表（contract-test 只认 M96.* namespace，跨仓 ID 触发 L5 悬空引用 —— REQ-2026-008 §4 已踩过）"
+    "不要再手补第二轮 tree-change 提 32 项 M04-M09——上次 35 项过了 sha 绑定 → 后续 batch hook 拒。token 烧毁机制决定「令牌 = 一次批」，每批 ≤ 30 + 单独 --approve",
+    "不要再 promote 前不查 _alignment.py:387 unreachable_shipped 列表——facing-user 缺 @entry 直接 L5 FAIL。spec §4 「已上线」 ≠ 7/7 仓实现齐，还要求 UI 真能点到",
+    "不要再用 file path 当 spec §4 7/7 证据：nextjs-fe `app/tenants/page.tsx` URL /tenjs 但调用后端 /admin/tenants，前端路由 ≠ 后端路由，**且消费者仓自己的 function-tree 状态才是真信号**。要 grep orval 钩子调用 + 跑 `python scripts/check_align.py --matrix` 看「分叉?」列",
+    "不要再单跑各仓 gate 全绿就以为 --all 也绿：lab-aspnetcore / lab-contract-test / lab-nextjs 在 --all 并行里被 UnicodeDecodeError 打断输出捕获假性 FAIL——这是 harness 并发 bug，跟业务代码无关，但下次跑全量要用 `2>&1 | grep '^### '` 二次确认",
+    "不要再把 `parity-matrix.md` 当诊断副产品：它是 ADR-0002 防假绿真相源，BASE promote 后必跑一次确认 6 仓分叉=0 再 commit",
+    "不要再让 flow-* 命名的设计文件被 design_refs 漏扫：_alignment.py 用 `if 'flow' in f.name` 拆分 flow_refs vs design_refs；canonical 流程图只能叫 flow-function-map.md，其他设计 doc 避开 flow 字样",
+    "不要再在 spec §4 「前端+后端」promote 时把 type=查询 的 ID 也带上：M00.F02.I01/I02 + M09.F01.I01 都因没 @entry 被 L5 fail，得先回退",
+    "不要再 `_alignment.py` 的 sha-binding 行为里赌「单 Edit 不会破 token」——只有并行批能扛一次 hash，多批必破"
   ],
-  "last_gate_passed_at": "2026-09-01T08:42+08:00 (L0/L0.5/L1/L3/L4/L5 全绿)",
+  "last_gate_passed_at": "2026-09-07T22:30+08:00 (saas-shared: L0/L0.no_fallback/L0.5/L1/L3/L4/L5 全绿, 100 项, 软告警 96)",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
