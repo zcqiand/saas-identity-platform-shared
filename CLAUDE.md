@@ -19,19 +19,21 @@ SaaS 多租户多应用身份平台全家族的契约源头（纯契约仓）。
 - 禁止 npm runtime 依赖；devDep 白名单：`@typespec/*` + `drizzle-orm` + `drizzle-kit` + `postgres` + `pg`（ADR-0025）
 - 禁止手写 OpenAPI yaml（必须由 `tsp compile` 生成）
 - 禁止 npm package `exports` 暴露语言路径；只暴露 `./openapi`
-- `sql/migrations/V<NNN>__<desc>.sql` 是 drizzle-kit generate 产物（Flyway 风格命名），由 `scripts/migrate-rename.mjs` 重命名得到；SSOT 是 `src/db/schema.ts`（ADR-0025）。**禁止手写 V 文件**
+- DB schema SSOT：`src/db/schema.ts`（ADR-0025 schema-first）。`drizzle/` 是 `drizzle-kit generate` 产物（`0000_*.sql` + `meta/_journal.json` + `meta/0000_snapshot.json`），**入 git**；**禁止手改**。改 schema 只改 `src/db/schema.ts` → `npm run db:generate` → 提交 `drizzle/`
 - gen-shared 静默覆盖同名迁移是 FATAL —— 触发时先收敛分叉再跑（8/26 撞表雷教训）
 
 ## 3. 技术栈与版本（钉死于 version-lock.json）
 
-TypeSpec → OpenAPI 3.1 + SQL DDL（Flyway 风格）。明细见 `version-lock.json`。
+TypeSpec → OpenAPI 3.1 + Drizzle ORM schema-first → SQL 迁移（`drizzle-kit generate` → `drizzle-kit migrate`）。明细见 `version-lock.json`。
 
 门禁命令见 `.harness/stack.json`。**不要改它来让门变松。**
 
 ## 4. 验收
 
 - suite 根目录跑 `python scripts/gate.py -p saas-identity-platform-shared`
-- `npm run build`（只跑 emit:openapi）
+- `npm run build`（emit:openapi）
+- 改了 `src/db/schema.ts` → `npm run db:generate` → 提交 `drizzle/` 产物；然后 `npm run db:migrate` 应用到 DB
+- 生产部署前必须 `drizzle-kit generate` 幂等（schema.ts vs snapshot diff = 0）
 
 ## 5. 指向别处
 

@@ -1,39 +1,51 @@
-// SQL replay test：把 shared/sql/migrations/V001..V007 顺序跑一遍，断言 schema 一致。
+// tests/drizzle.replay.test.ts — Drizzle Kit schema-first replay test（ADR-0025）
 //
-// 依赖：borrows pg driver from output/lab-management-system-nextjs/node_modules/pg
-// （shared 仓自身禁 npm runtime 依赖，见 ADR-0007）。
+// 设计：从 src/db/schema.ts 生成 → drizzle-kit push 到测试库 → 断言 12 表 + 9 enum + JSONB CHECK + FK cascade。
+// 替代原 tests/sql.replay.test.ts（手读 V 文件 → 顺序跑）。
 //
-// 跳过条件：环境变量 PG_REPLAY_SKIP=1（CI 默认跑；本地开发无 PG 时可跳）。
+// 跳过条件：环境变量 PG_REPLAY_SKIP=1；或借不到 pg driver（lab-nextjs / saas-nextjs 未 npm install）；
+// 或 PG_* 任一 env 缺失（ADR-0019 禁字面默认值兜底）。
 
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { createRequire } from "node:module";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { readdirSync, readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHARED_ROOT = resolve(__dirname, "..");
-const MIGRATIONS_DIR = resolve(SHARED_ROOT, "sql/migrations");
 
-// pg 模块本地 stub（避免引入 @types/pg 作为 devDep；shared 仓禁 npm deps）
-// 仅声明本测试用到的最小 surface
+// pg 模块本地 stub（避免引入 @types/pg 作为 devDep；shared 仓禁 npm runtime 依赖）
 type PgClient = {
   connect(): Promise<void>;
-  query<R = unknown>(sql: string, params?: unknown[]): Promise<{ rows: R[]; rowCount: number }>;
+  query<R = unknown>(
+    sql: string,
+    params?: unknown[],
+  ): Promise<{ rows: R[]; rowCount: number }>;
   end(): Promise<void>;
 };
 
-// 从 lab-nextjs 借 pg（与 scripts/create-pg-databases.mjs 同样套路）
-const labNextjsRoot = resolve(SHARED_ROOT, "../lab-management-system-nextjs");
-const requireFromLab = createRequire(resolve(labNextjsRoot, "package.json"));
+// 借 pg driver（runtime /app/node_modules/pg → dev saas-nextjs/node_modules/pg）
+const requireFromRuntime = createRequire(
+  resolve("/app/node_modules", "pg/package.json"),
+);
 let pgModule: { Client: new (cfg: unknown) => PgClient } | null = null;
 try {
-  pgModule = requireFromLab("pg") as { Client: new (cfg: unknown) => PgClient };
+  pgModule = requireFromRuntime("pg") as { Client: new (cfg: unknown) => PgClient };
 } catch {
-  // 借不到就不跑（lab-nextjs 未 npm install）
+  try {
+    const saasNextRoot = resolve(
+      SHARED_ROOT,
+      "../saas-identity-platform-nextjs/package.json",
+    );
+    const requireFromNext = createRequire(saasNextRoot);
+    pgModule = requireFromNext("pg") as { Client: new (cfg: unknown) => PgClient };
+  } catch {
+    // 借不到就不跑
+  }
 }
 
-// ADR-0019：禁 env 字面默认值兜底。PG_* 任一缺失即 fail-fast（仅在真正连接时校验）。
+// ADR-0019：env 缺失 fail-fast；仅在真正连接时校验
 function requireEnv(name: string): string {
   const v = process.env[name];
   if (v === undefined || v === "") {
@@ -42,16 +54,13 @@ function requireEnv(name: string): string {
   return v;
 }
 
-// 仅在真正要连接时才校验（PG_REPLAY_SKIP=1 或借不到 pg 或 env 缺失时全部 it.skip）。
-// 用 getter 让 requireEnv 只在 beforeAll 执行时才求值,避免 skip 模式下 env 缺失直接 throw。
-const PG_HOST = () => requireEnv("PG_HOST");
-const PG_PORT = () => Number(requireEnv("PG_PORT"));
-const PG_USER = () => requireEnv("PG_USER");
-const PG_PASSWORD = () => requireEnv("PG_PASSWORD");
-const PG_DATABASE = () => requireEnv("PG_DATABASE_TEST");
-
-// env 完整性检查:任一缺失 → skip(本机无 PG 时不挂 CI)
-const REQUIRED_PG_ENV = ["PG_HOST", "PG_PORT", "PG_USER", "PG_PASSWORD", "PG_DATABASE_TEST"];
+const REQUIRED_PG_ENV = [
+  "PG_HOST",
+  "PG_PORT",
+  "PG_USER",
+  "PG_PASSWORD",
+  "PG_DATABASE_TEST",
+];
 const allPgEnvPresent = REQUIRED_PG_ENV.every((n) => !!process.env[n]);
 
 const EXPECTED_TABLES = [
@@ -81,7 +90,7 @@ const EXPECTED_ENUMS = [
   "audit_action",
 ];
 
-describe("SQL migrations replay", () => {
+describe("Drizzle schema-first replay", () => {
   if (
     !pgModule ||
     process.env.PG_REPLAY_SKIP === "1" ||
@@ -95,29 +104,50 @@ describe("SQL migrations replay", () => {
 
   beforeAll(async () => {
     client = new pgModule.Client({
-      host: PG_HOST(),
-      port: PG_PORT(),
-      user: PG_USER(),
-      password: PG_PASSWORD(),
-      database: PG_DATABASE(),
+      host: requireEnv("PG_HOST"),
+      port: Number(requireEnv("PG_PORT")),
+      user: requireEnv("PG_USER"),
+      password: requireEnv("PG_PASSWORD"),
+      database: requireEnv("PG_DATABASE_TEST"),
       connectionTimeoutMillis: 5000,
     });
     await client.connect();
 
-    // 清空 public schema，让 V001..V007 从零跑
+    // 清空 public schema，让 drizzle-kit push 从零建
     await client.query("DROP SCHEMA IF EXISTS public CASCADE");
     await client.query("CREATE SCHEMA public");
+
+    // preamble: uuid-ossp 扩展（schema.ts 用 uuid_generate_v4()）
     await client.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
-    // 跑 V001..V007（按文件名字典序）
-    const files = readdirSync(MIGRATIONS_DIR)
-      .filter((f) => /^V\d+__.*\.sql$/.test(f))
-      .sort();
-    for (const f of files) {
-      const sql = readFileSync(resolve(MIGRATIONS_DIR, f), "utf-8");
-      await client.query(sql);
+    // drizzle-kit push：把 schema.ts 直接推到 test DB（不在生产用）
+    const r = spawnSync(
+      "npx",
+      [
+        "--no",
+        "drizzle-kit",
+        "push",
+        "--config",
+        "drizzle.config.ts",
+        "--force",
+      ],
+      {
+        cwd: SHARED_ROOT,
+        env: {
+          ...process.env,
+          PG_DATABASE: requireEnv("PG_DATABASE_TEST"),
+        },
+        stdio: "inherit",
+      },
+    );
+    if (r.status !== 0) {
+      throw new Error(`drizzle-kit push exited ${r.status}`);
     }
-  }, 30000);
+  }, 60000);
+
+  afterAll(async () => {
+    if (client) await client.end();
+  });
 
   it("creates 12 expected tables", async () => {
     if (!client) return;
@@ -149,6 +179,20 @@ describe("SQL migrations replay", () => {
     expect(rows[0]?.data_type).toBe("jsonb");
   });
 
+  it("tenants.settings has jsonb_typeof = object CHECK constraint", async () => {
+    if (!client) return;
+    const { rows } = await client.query<{ constraint_name: string }>(
+      `SELECT conname AS constraint_name
+       FROM pg_constraint
+       WHERE conrelid = 'public.tenants'::regclass
+         AND contype = 'c'
+         AND pg_get_constraintdef(oid) LIKE '%jsonb_typeof%'`,
+    );
+    expect(rows.map((r) => r.constraint_name)).toContain(
+      "tenants_settings_is_object",
+    );
+  });
+
   it("users has unique (tenant_id, email) constraint", async () => {
     if (!client) return;
     const { rows } = await client.query<{ constraint_name: string }>(
@@ -160,23 +204,18 @@ describe("SQL migrations replay", () => {
 
   it("FK cascade works: tenant deletion removes users", async () => {
     if (!client) return;
-    // 插入测试数据：tenant + user
     await client.query(
       "INSERT INTO tenants (id, code, name) VALUES ('11111111-1111-1111-1111-111111111111', 'test-tenant', 'Test Tenant')",
     );
     await client.query(
       "INSERT INTO users (id, tenant_id, username, email) VALUES ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'alice', 'alice@example.com')",
     );
-
-    // 删除 tenant；FK ON DELETE CASCADE 应级联清掉 user
-    await client.query("DELETE FROM tenants WHERE id = '11111111-1111-1111-1111-111111111111'");
-
+    await client.query(
+      "DELETE FROM tenants WHERE id = '11111111-1111-1111-1111-111111111111'",
+    );
     const { rowCount } = await client.query<{}>(
       "SELECT 1 FROM users WHERE id = '22222222-2222-2222-2222-222222222222'",
     );
     expect(rowCount).toBe(0);
   });
-
-  // afterAll：清理连接
-  // vitest 默认 afterAll 不在 describe 内 import；这里用 process.on('exit') 兜底
 });
