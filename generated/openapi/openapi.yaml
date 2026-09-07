@@ -10,228 +10,11 @@ tags:
   - name: tenant-sys-roles
   - name: admin-oauth-clients
   - name: oauth-clients
-  - name: admin-client-sys-menus
+  - name: admin-oauth-clients-sys-menus
   - name: tenant-sys-role-menus
   - name: oauth
   - name: tenant-applications
 paths:
-  /api/v1/admin/clients/{clientId}/menus:
-    get:
-      operationId: AdminClientSysMenus_listSysMenus
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-client-sys-menus
-    post:
-      operationId: AdminClientSysMenus_createSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-client-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateSysMenuRequest'
-  /api/v1/admin/clients/{clientId}/menus/{menuId}:
-    get:
-      operationId: AdminClientSysMenus_getSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-client-sys-menus
-    patch:
-      operationId: AdminClientSysMenus_updateSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-client-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateSysMenuRequest'
-    delete:
-      operationId: AdminClientSysMenus_deleteSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-client-sys-menus
-  /api/v1/admin/clients/{clientId}/menus/{menuId}/parent:
-    patch:
-      operationId: AdminClientSysMenus_moveSysMenu
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-client-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                parentId:
-                  type: string
-  /api/v1/admin/clients/{clientId}/menus/{menuId}/reorder:
-    put:
-      operationId: AdminClientSysMenus_reorderSysMenus
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: menuId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SysMenu'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-        - admin-client-sys-menus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReorderSysMenuRequest'
   /api/v1/admin/oauth-clients:
     get:
       operationId: AdminOAuthClients_listClients
@@ -419,9 +202,226 @@ paths:
                   format: int32
               required:
                 - status
+  /api/v1/admin/oauth-clients/{clientId}/sys-menus:
+    get:
+      operationId: AdminOAuthClientsSysMenus_listSysMenus
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-oauth-clients-sys-menus
+    post:
+      operationId: AdminOAuthClientsSysMenus_createSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-oauth-clients-sys-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSysMenuRequest'
+  /api/v1/admin/oauth-clients/{clientId}/sys-menus/{menuId}:
+    get:
+      operationId: AdminOAuthClientsSysMenus_getSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-oauth-clients-sys-menus
+    patch:
+      operationId: AdminOAuthClientsSysMenus_updateSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-oauth-clients-sys-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSysMenuRequest'
+    delete:
+      operationId: AdminOAuthClientsSysMenus_deleteSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-oauth-clients-sys-menus
+  /api/v1/admin/oauth-clients/{clientId}/sys-menus/{menuId}/parent:
+    patch:
+      operationId: AdminOAuthClientsSysMenus_moveSysMenu
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-oauth-clients-sys-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentId:
+                  type: string
+  /api/v1/admin/oauth-clients/{clientId}/sys-menus/{menuId}/reorder:
+    put:
+      operationId: AdminOAuthClientsSysMenus_reorderSysMenus
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SysMenu'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - admin-oauth-clients-sys-menus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderSysMenuRequest'
   /api/v1/admin/tenants:
     get:
-      operationId: Tenants_listTenants
+      operationId: AdminTenants_listTenants
       parameters:
         - name: page
           in: query
@@ -475,7 +475,7 @@ paths:
       tags:
         - admin-tenants
     post:
-      operationId: Tenants_createTenant
+      operationId: AdminTenants_createTenant
       parameters: []
       responses:
         '200':
@@ -500,7 +500,7 @@ paths:
               $ref: '#/components/schemas/CreateTenantRequest'
   /api/v1/admin/tenants/{id}:
     get:
-      operationId: Tenants_getTenant
+      operationId: AdminTenants_getTenant
       parameters:
         - name: id
           in: path
@@ -523,7 +523,7 @@ paths:
       tags:
         - admin-tenants
     patch:
-      operationId: Tenants_updateTenant
+      operationId: AdminTenants_updateTenant
       parameters:
         - name: id
           in: path
@@ -552,7 +552,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateTenantRequest'
     delete:
-      operationId: Tenants_deleteTenant
+      operationId: AdminTenants_deleteTenant
       parameters:
         - name: id
           in: path

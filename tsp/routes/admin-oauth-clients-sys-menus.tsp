@@ -1,9 +1,9 @@
 using TypeSpec.Http;
 
-// M08 — client-scoped sys_menu metadata.
-@route("/admin/clients/{clientId}/menus")
-@tag("admin-client-sys-menus")
-namespace Saas.Identity.Shared.AdminClientSysMenus {
+// M08 — oauth_client-scoped sys_menu metadata.
+@route("/admin/oauth-clients/{clientId}/sys-menus")
+@tag("admin-oauth-clients-sys-menus")
+namespace Saas.Identity.Shared.AdminOAuthClientsSysMenus {
   // M08.F01.I01 list flat menu nodes
   @get
   op listSysMenus(@path clientId: string): SysMenu[] | ErrorResponse;
