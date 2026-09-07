@@ -1,6 +1,6 @@
 {
-  "id": "b5ab965e-f3cf-4395-95e7-cafbd691cf95",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "c06d1a9b-1b30-49c4-a399-95b90b3eb546",
+  "prevId": "b5ab965e-f3cf-4395-95e7-cafbd691cf95",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -269,26 +269,18 @@
           "default": "CURRENT_TIMESTAMP"
         }
       },
-      "indexes": {
-        "uk_oauth_client_id": {
-          "name": "uk_oauth_client_id",
-          "columns": [
-            {
-              "expression": "client_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "uk_oauth_client_id": {
+          "name": "uk_oauth_client_id",
+          "nullsNotDistinct": false,
+          "columns": [
+            "client_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

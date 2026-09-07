@@ -5,8 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1788769844531,
-      "tag": "0000_oauth_codes_table",
+      "when": 1788784584322,
+      "tag": "0000_target_ddl",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788796171755,
+      "tag": "0001_colorful_sugar_man",
       "breakpoints": true
     }
   ]
