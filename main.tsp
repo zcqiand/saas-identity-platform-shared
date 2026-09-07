@@ -18,11 +18,11 @@ import "./tsp/routes/sessions.tsp";
 import "./tsp/routes/admin-tenants.tsp";
 import "./tsp/routes/me.tsp";
 import "./tsp/routes/tenant-members.tsp";
-import "./tsp/routes/tenant-sys-roles.tsp";
+import "./tsp/routes/tenant-roles.tsp";
 import "./tsp/routes/admin-clients.tsp";
 import "./tsp/routes/clients.tsp";
 import "./tsp/routes/client-menus.tsp";
-import "./tsp/routes/tenant-sys-role-menus.tsp";
+import "./tsp/routes/tenant-role-menus.tsp";
 import "./tsp/routes/oauth.tsp";
 import "./tsp/routes/tenant-applications.tsp";
 

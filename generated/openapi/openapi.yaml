@@ -7,11 +7,11 @@ tags:
   - name: admin-tenants
   - name: me
   - name: tenant-members
-  - name: tenant-sys-roles
+  - name: tenant-roles
   - name: admin-clients
   - name: clients
   - name: client-menus
-  - name: tenant-sys-role-menus
+  - name: tenant-role-menus
   - name: oauth
   - name: tenant-applications
 paths:
@@ -1283,7 +1283,7 @@ paths:
                 - status
   /api/v1/tenants/{tenantId}/roles:
     get:
-      operationId: TenantSysRoles_listSysRoles
+      operationId: TenantRoles_listSysRoles
       parameters:
         - name: tenantId
           in: path
@@ -1346,9 +1346,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-roles
+        - tenant-roles
     post:
-      operationId: TenantSysRoles_createSysRole
+      operationId: TenantRoles_createSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1369,7 +1369,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-roles
+        - tenant-roles
       requestBody:
         required: true
         content:
@@ -1378,7 +1378,7 @@ paths:
               $ref: '#/components/schemas/CreateSysRoleRequest'
   /api/v1/tenants/{tenantId}/roles/{roleId}:
     get:
-      operationId: TenantSysRoles_getSysRole
+      operationId: TenantRoles_getSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1404,9 +1404,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-roles
+        - tenant-roles
     patch:
-      operationId: TenantSysRoles_updateSysRole
+      operationId: TenantRoles_updateSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1432,7 +1432,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-roles
+        - tenant-roles
       requestBody:
         required: true
         content:
@@ -1440,7 +1440,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateSysRoleRequest'
     delete:
-      operationId: TenantSysRoles_deleteSysRole
+      operationId: TenantRoles_deleteSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1462,10 +1462,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-roles
+        - tenant-roles
   /api/v1/tenants/{tenantId}/roles/{roleId}/menus:
     get:
-      operationId: TenantSysRoleMenus_listSysRoleMenus
+      operationId: TenantRoleMenus_listSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1499,9 +1499,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-role-menus
+        - tenant-role-menus
     put:
-      operationId: TenantSysRoleMenus_setSysRoleMenus
+      operationId: TenantRoleMenus_setSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1535,7 +1535,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-role-menus
+        - tenant-role-menus
       requestBody:
         required: true
         content:
@@ -1543,7 +1543,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SetSysRoleMenusRequest'
     delete:
-      operationId: TenantSysRoleMenus_clearSysRoleMenus
+      operationId: TenantRoleMenus_clearSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1571,7 +1571,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
-        - tenant-sys-role-menus
+        - tenant-role-menus
 components:
   schemas:
     AuthorizeCodeRequest:

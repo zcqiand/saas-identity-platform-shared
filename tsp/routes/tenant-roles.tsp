@@ -2,8 +2,8 @@ using TypeSpec.Http;
 
 // M02 — tenant-private roles, always scoped to one OAuth client.
 @route("/tenants/{tenantId}/roles")
-@tag("tenant-sys-roles")
-namespace Saas.Identity.Shared.TenantSysRoles {
+@tag("tenant-roles")
+namespace Saas.Identity.Shared.TenantRoles {
   // M02.F01.I01 list roles
   @get
   op listSysRoles(
