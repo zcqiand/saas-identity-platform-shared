@@ -3,7 +3,7 @@ using TypeSpec.Http;
 // M00.F01 - Platform-level tenant admin (requires platform_admin role)
 @route("/admin/tenants")
 @tag("admin-tenants")
-namespace Saas.Identity.Shared.AdminTenants {
+namespace Saas.Identity.Shared.Tenants {
   // M00.F01.I01 列表
   @get
   op listTenants(@query page?: int32, @query pageSize?: int32): Page<Tenant> | ErrorResponse;

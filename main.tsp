@@ -12,15 +12,14 @@ import "./tsp/models/sys-menu.tsp";
 import "./tsp/models/sys-role-menu.tsp";
 
 // Routes
-import "./tsp/routes/auth.tsp";
-import "./tsp/routes/admin-tenants.tsp";
+import "./tsp/routes/sessions.tsp";
+import "./tsp/routes/tenants.tsp";
 import "./tsp/routes/me.tsp";
-import "./tsp/routes/tenant-users.tsp";
-import "./tsp/routes/tenant-roles.tsp";
-import "./tsp/routes/admin-oauth-clients.tsp";
+import "./tsp/routes/tenant-members.tsp";
+import "./tsp/routes/sys-roles.tsp";
 import "./tsp/routes/oauth-clients.tsp";
-import "./tsp/routes/admin-client-menus.tsp";
-import "./tsp/routes/tenant-role-menus.tsp";
+import "./tsp/routes/sys-menus.tsp";
+import "./tsp/routes/sys-role-menus.tsp";
 import "./tsp/routes/oauth.tsp";
 import "./tsp/routes/tenant-applications.tsp";
 

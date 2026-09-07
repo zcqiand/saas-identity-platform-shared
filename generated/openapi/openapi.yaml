@@ -17,7 +17,7 @@ tags:
 paths:
   /api/v1/admin/clients/{clientId}/menus:
     get:
-      operationId: AdminClientMenus_listSysMenus
+      operationId: SysMenus_listSysMenus
       parameters:
         - name: clientId
           in: path
@@ -42,7 +42,7 @@ paths:
       tags:
         - admin-client-menus
     post:
-      operationId: AdminClientMenus_createSysMenu
+      operationId: SysMenus_createSysMenu
       parameters:
         - name: clientId
           in: path
@@ -72,7 +72,7 @@ paths:
               $ref: '#/components/schemas/CreateSysMenuRequest'
   /api/v1/admin/clients/{clientId}/menus/{menuId}:
     get:
-      operationId: AdminClientMenus_getSysMenu
+      operationId: SysMenus_getSysMenu
       parameters:
         - name: clientId
           in: path
@@ -100,7 +100,7 @@ paths:
       tags:
         - admin-client-menus
     patch:
-      operationId: AdminClientMenus_updateSysMenu
+      operationId: SysMenus_updateSysMenu
       parameters:
         - name: clientId
           in: path
@@ -134,7 +134,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateSysMenuRequest'
     delete:
-      operationId: AdminClientMenus_deleteSysMenu
+      operationId: SysMenus_deleteSysMenu
       parameters:
         - name: clientId
           in: path
@@ -159,7 +159,7 @@ paths:
         - admin-client-menus
   /api/v1/admin/clients/{clientId}/menus/{menuId}/parent:
     patch:
-      operationId: AdminClientMenus_moveSysMenu
+      operationId: SysMenus_moveSysMenu
       parameters:
         - name: clientId
           in: path
@@ -197,7 +197,7 @@ paths:
                   type: string
   /api/v1/admin/clients/{clientId}/menus/{menuId}/reorder:
     put:
-      operationId: AdminClientMenus_reorderSysMenus
+      operationId: SysMenus_reorderSysMenus
       parameters:
         - name: clientId
           in: path
@@ -421,7 +421,7 @@ paths:
                 - status
   /api/v1/admin/tenants:
     get:
-      operationId: AdminTenants_listTenants
+      operationId: Tenants_listTenants
       parameters:
         - name: page
           in: query
@@ -475,7 +475,7 @@ paths:
       tags:
         - admin-tenants
     post:
-      operationId: AdminTenants_createTenant
+      operationId: Tenants_createTenant
       parameters: []
       responses:
         '200':
@@ -500,7 +500,7 @@ paths:
               $ref: '#/components/schemas/CreateTenantRequest'
   /api/v1/admin/tenants/{id}:
     get:
-      operationId: AdminTenants_getTenant
+      operationId: Tenants_getTenant
       parameters:
         - name: id
           in: path
@@ -523,7 +523,7 @@ paths:
       tags:
         - admin-tenants
     patch:
-      operationId: AdminTenants_updateTenant
+      operationId: Tenants_updateTenant
       parameters:
         - name: id
           in: path
@@ -552,7 +552,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateTenantRequest'
     delete:
-      operationId: AdminTenants_deleteTenant
+      operationId: Tenants_deleteTenant
       parameters:
         - name: id
           in: path
@@ -572,7 +572,7 @@ paths:
         - admin-tenants
   /api/v1/auth/login:
     post:
-      operationId: Auth_login
+      operationId: Sessions_login
       parameters: []
       responses:
         '200':
@@ -597,7 +597,7 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
   /api/v1/auth/logout:
     post:
-      operationId: Auth_logout
+      operationId: Sessions_logout
       parameters: []
       responses:
         '204':
@@ -606,7 +606,7 @@ paths:
         - auth
   /api/v1/auth/oidc/callback:
     post:
-      operationId: Auth_oidcCallback
+      operationId: Sessions_oidcCallback
       parameters: []
       responses:
         '200':
@@ -631,7 +631,7 @@ paths:
               $ref: '#/components/schemas/OidcCallbackRequest'
   /api/v1/auth/refresh:
     post:
-      operationId: Auth_refreshToken
+      operationId: Sessions_refreshToken
       parameters: []
       responses:
         '200':
@@ -843,7 +843,7 @@ paths:
               $ref: '#/components/schemas/TokenRequest'
   /api/v1/tenants/{tenantId}/roles:
     get:
-      operationId: TenantRoles_listSysRoles
+      operationId: SysRoles_listSysRoles
       parameters:
         - name: tenantId
           in: path
@@ -908,7 +908,7 @@ paths:
       tags:
         - tenant-roles
     post:
-      operationId: TenantRoles_createSysRole
+      operationId: SysRoles_createSysRole
       parameters:
         - name: tenantId
           in: path
@@ -938,7 +938,7 @@ paths:
               $ref: '#/components/schemas/CreateSysRoleRequest'
   /api/v1/tenants/{tenantId}/roles/{roleId}:
     get:
-      operationId: TenantRoles_getSysRole
+      operationId: SysRoles_getSysRole
       parameters:
         - name: tenantId
           in: path
@@ -966,7 +966,7 @@ paths:
       tags:
         - tenant-roles
     patch:
-      operationId: TenantRoles_updateSysRole
+      operationId: SysRoles_updateSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1000,7 +1000,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateSysRoleRequest'
     delete:
-      operationId: TenantRoles_deleteSysRole
+      operationId: SysRoles_deleteSysRole
       parameters:
         - name: tenantId
           in: path
@@ -1025,7 +1025,7 @@ paths:
         - tenant-roles
   /api/v1/tenants/{tenantId}/roles/{roleId}/menus:
     get:
-      operationId: TenantRoleMenus_listSysRoleMenus
+      operationId: SysRoleMenus_listSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1061,7 +1061,7 @@ paths:
       tags:
         - tenant-role-menus
     put:
-      operationId: TenantRoleMenus_setSysRoleMenus
+      operationId: SysRoleMenus_setSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1103,7 +1103,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SetSysRoleMenusRequest'
     delete:
-      operationId: TenantRoleMenus_clearSysRoleMenus
+      operationId: SysRoleMenus_clearSysRoleMenus
       parameters:
         - name: tenantId
           in: path
@@ -1282,7 +1282,7 @@ paths:
         - tenant-applications
   /api/v1/tenants/{tenantId}/users:
     get:
-      operationId: TenantUsers_listTenantUsers
+      operationId: TenantMembers_listTenantUsers
       parameters:
         - name: tenantId
           in: path
@@ -1347,7 +1347,7 @@ paths:
       tags:
         - tenant-users
     post:
-      operationId: TenantUsers_createTenantUser
+      operationId: TenantMembers_createTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1377,7 +1377,7 @@ paths:
               $ref: '#/components/schemas/CreateSysUserRequest'
   /api/v1/tenants/{tenantId}/users/invitations:
     post:
-      operationId: TenantUsers_inviteTenantUser
+      operationId: TenantMembers_inviteTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1412,7 +1412,7 @@ paths:
                   type: string
   /api/v1/tenants/{tenantId}/users/{userId}:
     get:
-      operationId: TenantUsers_getTenantUser
+      operationId: TenantMembers_getTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1440,7 +1440,7 @@ paths:
       tags:
         - tenant-users
     patch:
-      operationId: TenantUsers_updateTenantUser
+      operationId: TenantMembers_updateTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1474,7 +1474,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateSysUserRequest'
     delete:
-      operationId: TenantUsers_deleteTenantUser
+      operationId: TenantMembers_deleteTenantUser
       parameters:
         - name: tenantId
           in: path
@@ -1499,7 +1499,7 @@ paths:
         - tenant-users
   /api/v1/tenants/{tenantId}/users/{userId}/roles:
     put:
-      operationId: TenantUsers_assignTenantMemberRoles
+      operationId: TenantMembers_assignTenantMemberRoles
       parameters:
         - name: tenantId
           in: path
@@ -1534,7 +1534,7 @@ paths:
               $ref: '#/components/schemas/SetTenantMemberRolesRequest'
   /api/v1/tenants/{tenantId}/users/{userId}/status:
     patch:
-      operationId: TenantUsers_changeTenantUserStatus
+      operationId: TenantMembers_changeTenantUserStatus
       parameters:
         - name: tenantId
           in: path

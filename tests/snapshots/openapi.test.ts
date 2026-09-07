@@ -86,6 +86,6 @@ describe("M09.F03 当前用户有效菜单", () => {
 describe("M09.F02 角色菜单关系", () => {
   it("M09.F02.I01 exposes relational role menu replacement", () => {
     pathPresent("/api/v1/tenants/{tenantId}/roles/{roleId}/menus");
-    operationIdPresent("TenantRoleMenus_setSysRoleMenus");
+    operationIdPresent("SysRoleMenus_setSysRoleMenus");
   });
 });

@@ -1,36 +1,33 @@
 using TypeSpec.Http;
 
-// OAuth endpoints — 平台级标准路径（独立于 /admin/apps）。
-// authorize/token 都按 clientId 找到对应 App 记录，校验 redirect_uri / scope / grant_type。
+// OAuth protocol routes. The service resolves the selected tenant from the
+// authenticated member and never accepts a synthetic identity fallback.
 @route("/oauth")
 @tag("oauth")
 namespace Saas.Identity.Shared.OAuth {
-  // M04.F02.I07 授权码签发
+  // M04.F03.I07 authorization code issuance
   @post
   @route("/authorize")
   op authorize(@body body: AuthorizeCodeRequest): { code: string; state: string } | ErrorResponse;
 
-  // M04.F02.I08 令牌交换 + M04.F02.I09 令牌刷新（按 grantType 字段路由）
+  // M04.F03.I08 code exchange + M04.F03.I09 refresh rotation
   @post
   @route("/token")
   op token(@body body: TokenRequest): TokenResponse | ErrorResponse;
 }
 
-// === DTOs for OAuth endpoints (kept local to avoid polluting global namespace) ===
 model AuthorizeCodeRequest {
-  @format("uuid") clientId: string;
+  clientId: string;
 
   @minLength(1)
-  @maxLength(2048)
+  @maxLength(500)
   redirectUri: string;
 
   responseType: "code";
 
-  scope: string;
+  scope?: string;
 
   state: string;
-
-  @format("uuid") tenantId: string;
 }
 
 model TokenRequest {
@@ -40,11 +37,9 @@ model TokenRequest {
 
   refreshToken?: string;
 
-  @format("uuid") clientId: string;
+  clientId: string;
 
   clientSecret?: string;
-
-  @format("uuid") tenantId: string;
 
   redirectUri?: string;
 }
@@ -52,11 +47,71 @@ model TokenRequest {
 model TokenResponse {
   accessToken: string;
 
-  refreshToken?: string;
+  refreshToken: string;
 
   tokenType: string;
 
   expiresIn: int32;
 
-  scope: string;
+  scope?: string;
+
+  userId: string;
+
+  clientId: string;
+
+  @format("uuid") tenantId: string;
+}
+
+// Storage-shaped contract types are intentionally read-only and are not
+// exposed as CRUD endpoints.
+//
+// TS model: OAuthCode ↔ DB table: public.oauth_code (ADR-0025 schema-first)
+// TS model: OAuthAccessToken ↔ DB table: public.oauth_access_token (ADR-0025 schema-first)
+// TS model: OAuthRefreshToken ↔ DB table: public.oauth_refresh_token (ADR-0025 schema-first)
+model OAuthCode {
+  @format("uuid") id: string;
+
+  code: string;
+
+  clientId: string;
+
+  userId: string;
+
+  @format("uuid") tenantId: string;
+
+  expiresAt: utcDateTime;
+}
+
+model OAuthAccessToken {
+  @format("uuid") id: string;
+
+  tokenId: string;
+
+  clientId: string;
+
+  userId?: string;
+
+  @format("uuid") tenantId?: string;
+
+  expiresAt: utcDateTime;
+
+  revoked: boolean;
+}
+
+model OAuthRefreshToken {
+  @format("uuid") id: string;
+
+  refreshToken: string;
+
+  @format("uuid") accessTokenId: string;
+
+  clientId: string;
+
+  userId?: string;
+
+  @format("uuid") tenantId?: string;
+
+  expiresAt: utcDateTime;
+
+  revoked: boolean;
 }
