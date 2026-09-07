@@ -21,7 +21,7 @@ import "./tsp/routes/tenant-members.tsp";
 import "./tsp/routes/tenant-sys-roles.tsp";
 import "./tsp/routes/admin-oauth-clients.tsp";
 import "./tsp/routes/oauth-clients.tsp";
-import "./tsp/routes/admin-oauth-clients-sys-menus.tsp";
+import "./tsp/routes/oauth-clients-sys-menus.tsp";
 import "./tsp/routes/tenant-sys-role-menus.tsp";
 import "./tsp/routes/oauth.tsp";
 import "./tsp/routes/tenant-applications.tsp";
