@@ -73,6 +73,21 @@ CREATE TABLE IF NOT EXISTS "menus" (
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "oauth_codes" (
+	"id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
+	"code" varchar(255) NOT NULL,
+	"grant_type" varchar(32) DEFAULT 'authorization_code' NOT NULL,
+	"app_id" uuid NOT NULL,
+	"user_id" uuid,
+	"tenant_id" uuid NOT NULL,
+	"redirect_uri" varchar(2048),
+	"scope" varchar(512),
+	"expires_at" timestamp with time zone NOT NULL,
+	"consumed_at" timestamp with time zone,
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	CONSTRAINT "oauth_codes_grant_type_check" CHECK (grant_type IN ('authorization_code', 'refresh_token'))
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "permissions" (
 	"id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
 	"code" varchar(128) NOT NULL,
@@ -182,6 +197,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "oauth_codes" ADD CONSTRAINT "oauth_codes_app_id_apps_id_fk" FOREIGN KEY ("app_id") REFERENCES "public"."apps"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "role_menu_grants" ADD CONSTRAINT "role_menu_grants_role_id_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "public"."roles"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -245,6 +266,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS "menus_app_code_unique" ON "menus" USING btree
 CREATE INDEX IF NOT EXISTS "idx_menus_app_id" ON "menus" USING btree ("app_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_menus_parent_id" ON "menus" USING btree ("parent_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_menus_app_type" ON "menus" USING btree ("app_id","type");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "oauth_codes_code_unique" ON "oauth_codes" USING btree ("code");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "idx_oauth_codes_app_id" ON "oauth_codes" USING btree ("app_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "idx_oauth_codes_expires_at" ON "oauth_codes" USING btree ("expires_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "idx_oauth_codes_user_id" ON "oauth_codes" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "permissions_code_unique" ON "permissions" USING btree ("code");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_role_menu_grants_tenant_id" ON "role_menu_grants" USING btree ("tenant_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_role_menu_grants_menu_ids_gin" ON "role_menu_grants" USING gin ("menu_ids");--> statement-breakpoint

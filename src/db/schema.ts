@@ -434,6 +434,43 @@ export const auditRetentionPolicies = pgTable(
   ],
 );
 
+// V009: oauth_codes — OAuth 2.0 authorization_code + refresh_token 存储。
+// 原 V009__init_oauth_codes.sql（已删）。saas-aspnetcore (AppDbContext) +
+// saas-springboot (JPA) 都映射这张表；saas-nextjs 的 OAuth IdP 仍走进程内
+// oauth-store.ts（self-mode）。
+export const oauthCodes = pgTable(
+  "oauth_codes",
+  {
+    id: uuid("id").primaryKey().default(sql`uuid_generate_v4()`),
+    code: varchar("code", { length: 255 }).notNull(),
+    grantType: varchar("grant_type", { length: 32 })
+      .notNull()
+      .default("authorization_code"),
+    appId: uuid("app_id")
+      .notNull()
+      .references(() => apps.id, { onDelete: "cascade" }),
+    userId: uuid("user_id"),
+    tenantId: uuid("tenant_id").notNull(),
+    redirectUri: varchar("redirect_uri", { length: 2048 }),
+    scope: varchar("scope", { length: 512 }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    consumedAt: timestamp("consumed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => [
+    uniqueIndex("oauth_codes_code_unique").on(t.code),
+    index("idx_oauth_codes_app_id").on(t.appId),
+    index("idx_oauth_codes_expires_at").on(t.expiresAt),
+    index("idx_oauth_codes_user_id").on(t.userId),
+    check(
+      "oauth_codes_grant_type_check",
+      sql`grant_type IN ('authorization_code', 'refresh_token')`,
+    ),
+  ],
+);
+
 // ============================================================
 // 类型导出（消费方用；与 orval 生成的端点类型对齐）
 // ============================================================
@@ -459,3 +496,5 @@ export type RoleMenuGrant = typeof roleMenuGrants.$inferSelect;
 export type AuditEvent = typeof auditEvents.$inferSelect;
 export type NewAuditEvent = typeof auditEvents.$inferInsert;
 export type AuditRetentionPolicy = typeof auditRetentionPolicies.$inferSelect;
+export type OauthCode = typeof oauthCodes.$inferSelect;
+export type NewOauthCode = typeof oauthCodes.$inferInsert;
