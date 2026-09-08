@@ -43,23 +43,23 @@ model OidcCallbackRequest {
 @route("/auth")
 @tag("auth")
 namespace Saas.Identity.Shared.Sessions {
-  // M03.F01.I01 — global account password authentication
+  // M01.F04.I01 — global account password authentication
   // M01.F04.I02 — 失败锁定响应走 LockedAccountResponse（HTTP 423）
   @post
   @route("/login")
   op login(@body body: LoginRequest): LoginResponse | LockedAccountResponse | ErrorResponse;
 
-  // M03.F03.I05 — local session/token cleanup
+  // M01.F04.I06 — local session/token cleanup
   @post
   @route("/logout")
   op logout(): void;
 
-  // M03.F02.I03 — authorization code callback
+  // M01.F04.I04 — authorization code callback
   @post
   @route("/oidc/callback")
   op oidcCallback(@body body: OidcCallbackRequest): TokenResponse | ErrorResponse;
 
-  // M03.F02.I04 — refresh token rotation
+  // M01.F04.I05 — refresh token rotation
   @post
   @route("/refresh")
   op refreshToken(@body body: TokenRequest): TokenResponse | ErrorResponse;

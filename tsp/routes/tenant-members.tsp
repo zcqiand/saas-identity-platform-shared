@@ -1,10 +1,10 @@
 using TypeSpec.Http;
 
-// M01 — tenant membership management. Role writes target tenant_member.
+// M00.F02 — tenant membership management. Role writes target tenant_member.
 @route("/tenants/{tenantId}/members")
 @tag("tenant-members")
 namespace Saas.Identity.Shared.TenantMembers {
-  // M01.F01.I01 list members
+  // M00.F02.I01 list members
   @get
   op listTenantUsers(
     @path tenantId: string,
@@ -13,16 +13,16 @@ namespace Saas.Identity.Shared.TenantMembers {
     @query status?: TenantMemberStatus,
   ): Page<TenantMemberView> | ErrorResponse;
 
-  // M01.F01.I02 create global sys_user and tenant_member
+  // M00.F02.I02 create global sys_user and tenant_member
   @post
   op createTenantUser(@path tenantId: string, @body body: CreateSysUserRequest): TenantMemberView | ErrorResponse;
 
-  // M01.F01.I03 member detail
+  // M00.F02.I03 member detail
   @get
   @route("/{userId}")
   op getTenantUser(@path tenantId: string, @path userId: string): TenantMemberView | ErrorResponse;
 
-  // M01.F01.I04 update global sys_user/member fields
+  // M00.F02.I04 update global sys_user/member fields
   @patch
   @route("/{userId}")
   op updateTenantUser(
@@ -31,7 +31,7 @@ namespace Saas.Identity.Shared.TenantMembers {
     @body body: UpdateSysUserRequest,
   ): TenantMemberView | ErrorResponse;
 
-  // M01.F01.I05 remove tenant member; the global sys_user remains
+  // M00.F02.I05 remove tenant member; the global sys_user remains
   @delete
   @route("/{userId}")
   op deleteTenantUser(@path tenantId: string, @path userId: string): void | ErrorResponse;
@@ -45,7 +45,7 @@ namespace Saas.Identity.Shared.TenantMembers {
     @body body: SetTenantMemberRolesRequest,
   ): TenantMemberView | ErrorResponse;
 
-  // M01.F02.I02 invite a global account into a tenant
+  // M00.F02.I06 invite a global account into a tenant
   @post
   @route("/invitations")
   op inviteTenantUser(
@@ -53,7 +53,7 @@ namespace Saas.Identity.Shared.TenantMembers {
     @body body: { email?: string; mobile?: string },
   ): TenantMemberView | ErrorResponse;
 
-  // M01.F02.I03 member status
+  // M00.F02.I08 member status toggle (enable/disable)
   @patch
   @route("/{userId}/status")
   op changeTenantUserStatus(

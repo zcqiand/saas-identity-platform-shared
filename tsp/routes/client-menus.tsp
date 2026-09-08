@@ -1,23 +1,23 @@
 using TypeSpec.Http;
 
-// M08 — oauth_client-scoped sys_menu metadata.
+// M04.F04 — oauth_client-scoped sys_menu metadata (legacy M08).
 @route("/clients/{clientId}/menus")
 @tag("client-menus")
 namespace Saas.Identity.Shared.ClientMenus {
-  // M08.F01.I01 list flat menu nodes
+  // M04.F04.I01 list flat menu nodes
   @get
   op listSysMenus(@path clientId: string): SysMenu[] | ErrorResponse;
 
-  // M08.F01.I02 create menu
+  // M04.F04.I02 create menu
   @post
   op createSysMenu(@path clientId: string, @body body: CreateSysMenuRequest): SysMenu | ErrorResponse;
 
-  // M08.F01.I03 detail
+  // M04.F04.I03 detail
   @get
   @route("/{menuId}")
   op getSysMenu(@path clientId: string, @path menuId: string): SysMenu | ErrorResponse;
 
-  // M08.F01.I04 update
+  // M04.F04.I04 update
   @patch
   @route("/{menuId}")
   op updateSysMenu(
@@ -26,12 +26,12 @@ namespace Saas.Identity.Shared.ClientMenus {
     @body body: UpdateSysMenuRequest,
   ): SysMenu | ErrorResponse;
 
-  // M08.F01.I05 delete
+  // M04.F04.I05 delete
   @delete
   @route("/{menuId}")
   op deleteSysMenu(@path clientId: string, @path menuId: string): void | ErrorResponse;
 
-  // M08.F02.I06 sibling reorder
+  // M04.F04.I06 sibling reorder
   @put
   @route("/{menuId}/reorder")
   op reorderSysMenus(
@@ -40,7 +40,7 @@ namespace Saas.Identity.Shared.ClientMenus {
     @body body: ReorderSysMenuRequest,
   ): SysMenu[] | ErrorResponse;
 
-  // M08.F02.I07 parent move
+  // M04.F04.I07 parent move
   @patch
   @route("/{menuId}/parent")
   op moveSysMenu(

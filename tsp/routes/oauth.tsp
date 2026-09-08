@@ -5,12 +5,12 @@ using TypeSpec.Http;
 @route("/oauth")
 @tag("oauth")
 namespace Saas.Identity.Shared.OAuth {
-  // M04.F03.I07 authorization code issuance
+  // M04.F03.I01 authorization code issuance
   @post
   @route("/authorize")
   op authorize(@body body: AuthorizeCodeRequest): { code: string; state: string } | ErrorResponse;
 
-  // M04.F03.I08 code exchange + M04.F03.I09 refresh rotation
+  // M04.F03.I02 code exchange + M04.F03.I03 refresh rotation
   @post
   @route("/token")
   op token(@body body: TokenRequest): TokenResponse | ErrorResponse;

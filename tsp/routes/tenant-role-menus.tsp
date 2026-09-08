@@ -1,10 +1,10 @@
 using TypeSpec.Http;
 
-// M09 — sys_role_menu grants scoped by tenant and client.
+// M00.F04 — sys_role_menu grants scoped by tenant and client (legacy M09).
 @route("/tenants/{tenantId}/roles/{roleId}/menus")
 @tag("tenant-role-menus")
 namespace Saas.Identity.Shared.TenantRoleMenus {
-  // M09.F01.I01 role menu grants
+  // M00.F04.I02 role menu grants
   @get
   op listSysRoleMenus(
     @path tenantId: string,
@@ -12,7 +12,7 @@ namespace Saas.Identity.Shared.TenantRoleMenus {
     @query clientId: string,
   ): SysRoleMenu[] | ErrorResponse;
 
-  // M09.F02.I01 set role menus (relational rows, idempotent replacement)
+  // M00.F04.I03 set role menus (relational rows, idempotent replacement)
   @put
   op setSysRoleMenus(
     @path tenantId: string,
@@ -21,7 +21,7 @@ namespace Saas.Identity.Shared.TenantRoleMenus {
     @body body: SetSysRoleMenusRequest,
   ): SysRoleMenu[] | ErrorResponse;
 
-  // M09.F02.I03 clear role menus
+  // M00.F04.I04 clear role menus
   @delete
   op clearSysRoleMenus(
     @path tenantId: string,
