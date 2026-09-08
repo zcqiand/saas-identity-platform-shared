@@ -11,7 +11,7 @@
     "L4": { "name": "测试", "cmd": ["npx", "--no", "vitest", "run"], "fix": "先让测试变绿" },
     "L4.db.idempotent": {
       "name": "Drizzle schema 幂等",
-      "cmd": ["sh", "-c", "diff -q <(npx --no drizzle-kit generate --config drizzle.config.ts --name __ci_check 2>&1 | grep -E 'Your SQL migration file|No schema differences') /dev/null"],
+      "cmd": ["python", "scripts/check_drizzle_idempotent.py"],
       "fix": "schema.ts 与最新 snapshot diff：跑 npm run db:generate 把 diff 落到 drizzle/ 并提交",
       "skip_env": "CI_DRIZZLE_SKIP=1"
     }

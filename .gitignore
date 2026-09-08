@@ -12,3 +12,7 @@ generated/csharp/
 # Claude 临时文件
 .claude/
 .superpowers/
+
+# Ad-hoc debug script + suite handoff snapshot（不入仓，详见 review 2026-09-08）
+__inspect.mjs
+handoff.json

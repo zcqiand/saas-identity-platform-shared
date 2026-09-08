@@ -21,16 +21,22 @@ import { createRequire } from "node:module";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHARED_ROOT = resolve(__dirname, "..");
 
-// 优先 DATABASE_URL（与 saas-nextjs/db/index.ts 一致）；fallback 到 PG_* 散件
+// 连接配置必须显式提供，禁止把部署数据库写进脚本。
+function requireEnv(name) {
+  const value = process.env[name];
+  if (!value) throw new Error(`${name} env required`);
+  return value;
+}
+
 function buildDrizzleKitEnv() {
   const env = { ...process.env };
   if (!env.DATABASE_URL) {
-    const host = env.PG_HOST ?? "100.79.128.25";
-    const port = env.PG_PORT ?? "5432";
-    const user = env.PG_USER ?? "postgres";
-    const password = env.PG_PASSWORD ?? "";
-    const database = env.PG_DATABASE ?? "saas_dev";
-    env.DATABASE_URL = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+    const host = requireEnv("PG_HOST");
+    const port = requireEnv("PG_PORT");
+    const user = requireEnv("PG_USER");
+    const password = requireEnv("PG_PASSWORD");
+    const database = requireEnv("PG_DATABASE");
+    env.DATABASE_URL = `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:${port}/${database}`;
   }
   return env;
 }

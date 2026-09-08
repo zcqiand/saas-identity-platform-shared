@@ -14,11 +14,17 @@
 
 import { defineConfig } from "drizzle-kit";
 
-const pgHost = process.env.PG_HOST ?? "100.79.128.25";
-const pgPort = Number(process.env.PG_PORT ?? 5432);
-const pgUser = process.env.PG_USER ?? "postgres";
-const pgPassword = process.env.PG_PASSWORD ?? "";
-const pgDatabase = process.env.PG_DATABASE ?? "saas_dev";
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) throw new Error(`${name} env required`);
+  return value;
+}
+
+const pgHost = requireEnv("PG_HOST");
+const pgPort = Number(requireEnv("PG_PORT"));
+const pgUser = requireEnv("PG_USER");
+const pgPassword = requireEnv("PG_PASSWORD");
+const pgDatabase = requireEnv("PG_DATABASE");
 const pgSsl = process.env.PG_SSL === "1";
 
 export default defineConfig({

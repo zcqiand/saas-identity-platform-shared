@@ -1,10 +1,7 @@
-// tests/drizzle.replay.test.ts — Drizzle Kit schema-first replay test（ADR-0025）
+// tests/drizzle.replay.test.ts — target DDL schema replay
 //
-// 设计：从 src/db/schema.ts 生成 → drizzle-kit push 到测试库 → 断言 12 表 + 9 enum + JSONB CHECK + FK cascade。
-// 替代原 tests/sql.replay.test.ts（手读 V 文件 → 顺序跑）。
-//
-// 跳过条件：环境变量 PG_REPLAY_SKIP=1；或借不到 pg driver（lab-nextjs / saas-nextjs 未 npm install）；
-// 或 PG_* 任一 env 缺失（ADR-0019 禁字面默认值兜底）。
+// The target schema is destructive by design: replay starts with an empty
+// public schema and verifies the tenant/client/member isolation graph.
 
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { createRequire } from "node:module";
@@ -15,7 +12,6 @@ import { spawnSync } from "node:child_process";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHARED_ROOT = resolve(__dirname, "..");
 
-// pg 模块本地 stub（避免引入 @types/pg 作为 devDep；shared 仓禁 npm runtime 依赖）
 type PgClient = {
   connect(): Promise<void>;
   query<R = unknown>(
@@ -25,33 +21,27 @@ type PgClient = {
   end(): Promise<void>;
 };
 
-// 借 pg driver（runtime /app/node_modules/pg → dev saas-nextjs/node_modules/pg）
-const requireFromRuntime = createRequire(
-  resolve("/app/node_modules", "pg/package.json"),
-);
 let pgModule: { Client: new (cfg: unknown) => PgClient } | null = null;
 try {
+  const requireFromRuntime = createRequire(
+    resolve("/app/node_modules", "pg/package.json"),
+  );
   pgModule = requireFromRuntime("pg") as { Client: new (cfg: unknown) => PgClient };
 } catch {
   try {
-    const saasNextRoot = resolve(
-      SHARED_ROOT,
-      "../saas-identity-platform-nextjs/package.json",
+    const requireFromNext = createRequire(
+      resolve(SHARED_ROOT, "../saas-identity-platform-nextjs/package.json"),
     );
-    const requireFromNext = createRequire(saasNextRoot);
     pgModule = requireFromNext("pg") as { Client: new (cfg: unknown) => PgClient };
   } catch {
-    // 借不到就不跑
+    // The shared contract repo does not install pg as a runtime dependency.
   }
 }
 
-// ADR-0019：env 缺失 fail-fast；仅在真正连接时校验
 function requireEnv(name: string): string {
-  const v = process.env[name];
-  if (v === undefined || v === "") {
-    throw new Error(`${name} env required (ADR-0019 禁字面默认值)`);
-  }
-  return v;
+  const value = process.env[name];
+  if (!value) throw new Error(`${name} env required`);
+  return value;
 }
 
 const REQUIRED_PG_ENV = [
@@ -61,41 +51,41 @@ const REQUIRED_PG_ENV = [
   "PG_PASSWORD",
   "PG_DATABASE_TEST",
 ];
-const allPgEnvPresent = REQUIRED_PG_ENV.every((n) => !!process.env[n]);
+const allPgEnvPresent = REQUIRED_PG_ENV.every((name) => !!process.env[name]);
 
 const EXPECTED_TABLES = [
-  "tenants",
-  "users",
-  "tenant_memberships",
-  "roles",
-  "permissions",
-  "role_permissions",
+  "oauth_access_token",
+  "oauth_client",
+  "oauth_code",
+  "oauth_refresh_token",
+  "sys_menu",
+  "sys_role",
+  "sys_role_menu",
+  "sys_user",
+  "tenant",
+  "tenant_application",
+  "tenant_member",
+  "tenant_member_role",
+];
+
+const LEGACY_TABLES = [
   "api_keys",
   "apps",
-  "menus",
-  "role_menu_grants",
   "audit_events",
   "audit_retention_policies",
+  "menus",
+  "oauth_codes",
+  "permissions",
+  "role_menu_grants",
+  "role_permissions",
+  "roles",
+  "tenant_memberships",
+  "tenants",
+  "users",
 ];
 
-const EXPECTED_ENUMS = [
-  "tenant_status",
-  "user_status",
-  "membership_status",
-  "api_key_status",
-  "app_status",
-  "oauth_grant_type",
-  "menu_type",
-  "menu_status",
-  "audit_action",
-];
-
-describe("Drizzle schema-first replay", () => {
-  if (
-    !pgModule ||
-    process.env.PG_REPLAY_SKIP === "1" ||
-    !allPgEnvPresent
-  ) {
+describe("target DDL schema replay", () => {
+  if (!pgModule || process.env.PG_REPLAY_SKIP === "1" || !allPgEnvPresent) {
     it.skip("pg driver or required PG_* env not available", () => {});
     return;
   }
@@ -103,7 +93,7 @@ describe("Drizzle schema-first replay", () => {
   let client: PgClient | null = null;
 
   beforeAll(async () => {
-    client = new pgModule.Client({
+    client = new pgModule!.Client({
       host: requireEnv("PG_HOST"),
       port: Number(requireEnv("PG_PORT")),
       user: requireEnv("PG_USER"),
@@ -112,16 +102,11 @@ describe("Drizzle schema-first replay", () => {
       connectionTimeoutMillis: 5000,
     });
     await client.connect();
-
-    // 清空 public schema，让 drizzle-kit push 从零建
     await client.query("DROP SCHEMA IF EXISTS public CASCADE");
     await client.query("CREATE SCHEMA public");
-
-    // preamble: uuid-ossp 扩展（schema.ts 用 uuid_generate_v4()）
     await client.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
-    // drizzle-kit push：把 schema.ts 直接推到 test DB（不在生产用）
-    const r = spawnSync(
+    const result = spawnSync(
       "npx",
       [
         "--no",
@@ -140,8 +125,8 @@ describe("Drizzle schema-first replay", () => {
         stdio: "inherit",
       },
     );
-    if (r.status !== 0) {
-      throw new Error(`drizzle-kit push exited ${r.status}`);
+    if (result.status !== 0) {
+      throw new Error(`drizzle-kit push exited ${result.status}`);
     }
   }, 60000);
 
@@ -149,72 +134,147 @@ describe("Drizzle schema-first replay", () => {
     if (client) await client.end();
   });
 
-  it("creates 12 expected tables", async () => {
+  it("creates exactly the target tables", async () => {
     if (!client) return;
     const { rows } = await client.query<{ table_name: string }>(
       "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name",
     );
-    const tables = rows.map((r: { table_name: string }) => r.table_name);
-    for (const expected of EXPECTED_TABLES) {
-      expect(tables, `missing table: ${expected}`).toContain(expected);
+    const tables = rows.map((row) => row.table_name);
+    expect(tables).toEqual(EXPECTED_TABLES);
+    for (const legacy of LEGACY_TABLES) {
+      expect(tables, `legacy table remains: ${legacy}`).not.toContain(legacy);
     }
   });
 
-  it("creates 9 expected enum types", async () => {
+  it("uses UUID primary keys with uuid_generate_v4 defaults", async () => {
     if (!client) return;
-    const { rows } = await client.query<{ typname: string }>(
-      "SELECT typname FROM pg_type WHERE typtype = 'e' ORDER BY typname",
+    const { rows } = await client.query<{ table_name: string; column_default: string }>(
+      `SELECT table_name, column_default
+       FROM information_schema.columns
+       WHERE table_schema = 'public' AND column_name = 'id'
+       ORDER BY table_name`,
     );
-    const enums = rows.map((r: { typname: string }) => r.typname);
-    for (const expected of EXPECTED_ENUMS) {
-      expect(enums, `missing enum: ${expected}`).toContain(expected);
+    expect(rows).toHaveLength(12);
+    for (const row of rows) {
+      expect(row.column_default).toContain("uuid_generate_v4");
     }
   });
 
-  it("tenants has settings JSONB column", async () => {
+  it("enforces global user and tenant-member uniqueness", async () => {
     if (!client) return;
-    const { rows } = await client.query<{ data_type: string }>(
-      "SELECT data_type FROM information_schema.columns WHERE table_name = 'tenants' AND column_name = 'settings'",
+    const { rows: userIndexes } = await client.query<{ indexname: string }>(
+      "SELECT indexname FROM pg_indexes WHERE schemaname = 'public' AND tablename = 'sys_user'",
     );
-    expect(rows[0]?.data_type).toBe("jsonb");
+    const { rows: memberIndexes } = await client.query<{ indexname: string }>(
+      "SELECT indexname FROM pg_indexes WHERE schemaname = 'public' AND tablename = 'tenant_member'",
+    );
+    expect(userIndexes.map((row) => row.indexname)).toEqual(
+      expect.arrayContaining([
+        "uk_sys_user_username",
+        "uk_sys_user_email",
+        "uk_sys_user_mobile",
+      ]),
+    );
+    expect(memberIndexes.map((row) => row.indexname)).toContain("uk_tenant_user");
   });
 
-  it("tenants.settings has jsonb_typeof = object CHECK constraint", async () => {
+  it("enforces client-scoped subscription and role uniqueness", async () => {
     if (!client) return;
-    const { rows } = await client.query<{ constraint_name: string }>(
-      `SELECT conname AS constraint_name
-       FROM pg_constraint
-       WHERE conrelid = 'public.tenants'::regclass
-         AND contype = 'c'
-         AND pg_get_constraintdef(oid) LIKE '%jsonb_typeof%'`,
+    const { rows: subscriptionIndexes } = await client.query<{ indexname: string }>(
+      "SELECT indexname FROM pg_indexes WHERE schemaname = 'public' AND tablename = 'tenant_application'",
     );
-    expect(rows.map((r) => r.constraint_name)).toContain(
-      "tenants_settings_is_object",
+    const { rows: roleIndexes } = await client.query<{ indexname: string }>(
+      "SELECT indexname FROM pg_indexes WHERE schemaname = 'public' AND tablename = 'sys_role'",
+    );
+    expect(subscriptionIndexes.map((row) => row.indexname)).toContain("uk_tenant_client");
+    expect(roleIndexes.map((row) => row.indexname)).toContain("uk_tenant_client_role_code");
+  });
+
+  it("creates relational member-role and role-menu junction keys", async () => {
+    if (!client) return;
+    const { rows: memberRole } = await client.query<{ constraint_name: string }>(
+      `SELECT constraint_name FROM information_schema.table_constraints
+       WHERE table_schema = 'public' AND table_name = 'tenant_member_role'
+         AND constraint_type = 'PRIMARY KEY'`,
+    );
+    const { rows: roleMenu } = await client.query<{ constraint_name: string }>(
+      `SELECT constraint_name FROM information_schema.table_constraints
+       WHERE table_schema = 'public' AND table_name = 'sys_role_menu'
+         AND constraint_type = 'PRIMARY KEY'`,
+    );
+    expect(memberRole).toHaveLength(1);
+    expect(roleMenu).toHaveLength(1);
+    expect(memberRole[0].constraint_name).toContain("tenant_member_role");
+    expect(roleMenu[0].constraint_name).toContain("sys_role_menu");
+  });
+
+  it("links refresh tokens to access tokens and preserves tenant context", async () => {
+    if (!client) return;
+    const { rows: refreshColumns } = await client.query<{ column_name: string; is_nullable: string }>(
+      `SELECT column_name, is_nullable FROM information_schema.columns
+       WHERE table_schema = 'public' AND table_name = 'oauth_refresh_token'`,
+    );
+    const refreshTokenColumn = refreshColumns.find(
+      (row) => row.column_name === "access_token_id",
+    );
+    expect(refreshTokenColumn?.is_nullable).toBe("NO");
+
+    const { rows: foreignKeys } = await client.query<{ table_name: string; foreign_table_name: string }>(
+      `SELECT tc.table_name, ccu.table_name AS foreign_table_name
+       FROM information_schema.table_constraints tc
+       JOIN information_schema.constraint_column_usage ccu
+         ON tc.constraint_name = ccu.constraint_name
+       WHERE tc.constraint_type = 'FOREIGN KEY'
+         AND tc.table_schema = 'public'
+         AND tc.table_name IN ('oauth_code', 'oauth_access_token', 'oauth_refresh_token')`,
+    );
+    expect(foreignKeys).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ table_name: "oauth_code", foreign_table_name: "oauth_client" }),
+        expect.objectContaining({ table_name: "oauth_code", foreign_table_name: "tenant" }),
+        expect.objectContaining({ table_name: "oauth_refresh_token", foreign_table_name: "oauth_access_token" }),
+      ]),
     );
   });
 
-  it("users has unique (tenant_id, email) constraint", async () => {
+  it("cascades a tenant deletion through members and roles", async () => {
     if (!client) return;
-    const { rows } = await client.query<{ constraint_name: string }>(
-      "SELECT constraint_name FROM information_schema.table_constraints WHERE table_name = 'users' AND constraint_type = 'UNIQUE'",
-    );
-    const names = rows.map((r: { constraint_name: string }) => r.constraint_name);
-    expect(names).toContain("users_tenant_email_unique");
-  });
+    const tenantId = "11111111-1111-1111-1111-111111111111";
+    const userId = "22222222-2222-2222-2222-222222222222";
+    const memberId = "33333333-3333-3333-3333-333333333333";
+    const roleId = "44444444-4444-4444-4444-444444444444";
+    const clientId = "target-test-client";
 
-  it("FK cascade works: tenant deletion removes users", async () => {
-    if (!client) return;
     await client.query(
-      "INSERT INTO tenants (id, code, name) VALUES ('11111111-1111-1111-1111-111111111111', 'test-tenant', 'Test Tenant')",
+      "INSERT INTO tenant (id, tenant_key, name) VALUES ($1, 'target-test', 'Target Test')",
+      [tenantId],
     );
     await client.query(
-      "INSERT INTO users (id, tenant_id, username, email) VALUES ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'alice', 'alice@example.com')",
+      "INSERT INTO sys_user (id, username, password) VALUES ($1, 'target-user', 'hash')",
+      [userId],
     );
     await client.query(
-      "DELETE FROM tenants WHERE id = '11111111-1111-1111-1111-111111111111'",
+      "INSERT INTO oauth_client (client_id, client_secret, client_name, grant_types, redirect_uris) VALUES ($1, 'secret', 'Target', 'authorization_code', 'https://example.test/callback')",
+      [clientId],
     );
-    const { rowCount } = await client.query<{}>(
-      "SELECT 1 FROM users WHERE id = '22222222-2222-2222-2222-222222222222'",
+    await client.query(
+      "INSERT INTO tenant_member (id, tenant_id, user_id) VALUES ($1, $2, $3)",
+      [memberId, tenantId, userId],
+    );
+    await client.query(
+      "INSERT INTO sys_role (id, tenant_id, client_id, role_code, role_name) VALUES ($1, $2, $3, 'owner', 'Owner')",
+      [roleId, tenantId, clientId],
+    );
+    await client.query(
+      "INSERT INTO tenant_member_role (member_id, role_id) VALUES ($1, $2)",
+      [memberId, roleId],
+    );
+
+    await client.query("DELETE FROM tenant WHERE id = $1", [tenantId]);
+
+    const { rowCount } = await client.query(
+      "SELECT 1 FROM tenant_member WHERE id = $1 UNION ALL SELECT 1 FROM sys_role WHERE id = $2",
+      [memberId, roleId],
     );
     expect(rowCount).toBe(0);
   });
