@@ -1,5 +1,8 @@
 # REQ-2026-021 saas-aspnetcore /me/menus 真权限过滤 (role_menu_grants JOIN)
 
+> **2026-09-07 模块重组注意**：本 REQ 文档是历史快照，§5 中列出的 `M09.F03.I01-I04` 已合并到 **M04.F04.I08**。
+> 迁移表见 [function-tree.md §0.x](../functions/function-tree.md#0x-模块重组迁移记录2026-09-07)。
+
 | 项 | 值 |
 |---|---|
 | 提出人 | contract-test 88/0/8 绿但生产一致性分析（2026-08-31 sequence-2 探索） |

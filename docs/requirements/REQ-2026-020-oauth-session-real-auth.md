@@ -1,5 +1,9 @@
 # REQ-2026-020 saas OAuth 真用户认证 — saas session cookie 体系
 
+> **2026-09-07 模块重组注意**：本 REQ 文档是历史快照，§5 中列出的 `M03.F0x` / `M04.F03` 已迁至新结构。
+> 迁移表见 [function-tree.md §0.x](../functions/function-tree.md#0x-模块重组迁移记录2026-09-07)。
+> 关键映射：旧 M03.F01 → **M01.F04**；旧 M04.F03.I07-I09 → **M04.F03.I01-I03**。
+
 | 项 | 值 |
 |---|---|
 | 提出人 | ADR-0013（family OAuth 简化设计收口） |
@@ -88,10 +92,15 @@ saas-aspnetcore 当前 `/api/v1/oauth/authorize` + `/api/v1/oauth/token` + `/api
 | M03.F01.I01 | 密码登录 API | 新增 | AuthController.Login: username + password → session cookie | T-3 |
 | M03.F01.I02 | 失败锁定 | 新增 | 5 次密码错 → 15min 锁定 | T-3 |
 | M03.F01.I03 | 密码登录 UI | 新增 | saas-vue / saas-react LoginPage | T-8/T-9 |
+| M03.F02 | OIDC 回调与 IDToken 校验 | 变更 | 状态 规划→开发中；OIDC Code 换取 + refresh token 旋转 | T-3 |
+| M03.F02.I03 | OIDC Code 换取 | 新增 | AuthController.OidcCallback 接受 authorization_code → session 内 user 校验后写 oauth_codes | T-3 |
+| M03.F02.I04 | refresh token | 新增 | AuthController.Refresh 接受 refresh_token → 旋转新 token（同 session 校验） | T-3 |
+| M03.F03 | 登出（本地清理 + 全局 SSO） | 变更 | 状态 规划→开发中；I05 本地清理已实现，I06 全局 SSO 待 ADR | T-3 |
+| M03.F03.I05 | 登出（本地清理） | 新增 | AuthController.Logout 清 saas session cookie + 撤销 oauth_codes/tokens | T-3 |
 | M04.F03 | OAuth 授权码签发与令牌交换/刷新 | 变更 | 状态 规划→开发中；真 OAuth（session 校验） | T-4/T-5 |
-| M04.F03.I01 | OAuth authorize 检查 saas session | 新增 | OauthController.Authorize 检查 session cookie | T-4 |
-| M04.F03.I02 | OAuth token 交换 | 新增 | session 内 user_id 注入 | T-5 |
-| M04.F03.I03 | OAuth refresh token 旋转 | 新增 | session 校验 | T-5 |
+| M04.F03.I07 | 授权码签发（OAuth authorize 检查 saas session） | 新增 | OauthController.Authorize 检查 session cookie | T-4 |
+| M04.F03.I08 | 令牌交换（OAuth token 交换） | 新增 | session 内 user_id 注入 | T-5 |
+| M04.F03.I09 | 令牌刷新（OAuth refresh token 旋转） | 新增 | session 校验 | T-5 |
 | M09.F03 | 当前用户有效菜单 | 变更 | 状态 规划→开发中；session 校验 + 角色授权 | T-6 |
 | M09.F03.I01 | me/menus session 校验 | 新增 | MeController.Menus 检查 session | T-6 |
 

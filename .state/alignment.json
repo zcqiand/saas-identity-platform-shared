@@ -3,69 +3,133 @@
   "project": "saas-identity-platform-shared",
   "functions": {
     "modules": 9,
-    "features": 21,
-    "items": 70
+    "features": 22,
+    "items": 74
   },
-  "warnings_total": 24,
+  "warnings_total": 84,
   "warnings": {
     "已上线但无设计映射": [
-      "M01.F01.I02",
-      "M04.F03.I07",
-      "M04.F03.I08",
-      "M04.F03.I09",
-      "M05.F01.I05",
-      "M09.F02.I02",
-      "M09.F03.I04"
-    ],
-    "已上线但无测试引用": [
-      "M01.F01.I02",
-      "M04.F03.I07",
-      "M04.F03.I08",
-      "M04.F03.I09",
-      "M05.F01.I05",
-      "M09.F02.I02",
-      "M09.F03.I04"
-    ],
-    "已上线但不在任何流程且非孤儿白名单": [
-      "M01.F01.I02",
-      "M04.F03.I07",
-      "M04.F03.I08",
-      "M04.F03.I09",
-      "M05.F01.I05",
-      "M09.F02.I02",
-      "M09.F03.I04"
-    ],
-    "开发中但无需求文档引用": [
+      "M00.F01.I01",
+      "M00.F01.I02",
+      "M00.F01.I03",
+      "M00.F01.I04",
+      "M00.F01.I05",
+      "M00.F02.I03",
+      "M01.F01.I01",
+      "M01.F01.I03",
+      "M01.F01.I04",
+      "M01.F01.I05",
+      "M01.F01.I06",
+      "M01.F02.I01",
+      "M01.F02.I03",
+      "M02.F01.I01",
+      "M02.F01.I02",
+      "M02.F01.I03",
+      "M02.F01.I04",
+      "M02.F01.I05",
+      "M02.F02.I01",
+      "M03.F01.I01",
+      "M03.F01.I02",
+      "M03.F02.I03",
       "M03.F02.I04",
       "M03.F03.I05",
-      "M04.F02.I06"
+      "M04.F01.I01",
+      "M04.F01.I02",
+      "M04.F01.I03",
+      "M04.F01.I04",
+      "M04.F01.I05",
+      "M04.F02.I06",
+      "M08.F01.I01",
+      "M08.F01.I02",
+      "M08.F01.I03",
+      "M08.F01.I04",
+      "M08.F01.I05",
+      "M08.F02.I06",
+      "M08.F02.I07",
+      "M09.F02.I01",
+      "M09.F02.I03"
+    ],
+    "已上线但无测试引用": [
+      "M00.F01.I03",
+      "M00.F01.I04",
+      "M00.F01.I05",
+      "M01.F01.I06",
+      "M01.F02.I01",
+      "M01.F02.I02",
+      "M01.F02.I03",
+      "M02.F02.I01",
+      "M03.F01.I02",
+      "M04.F02.I06",
+      "M08.F01.I01",
+      "M08.F01.I02",
+      "M08.F01.I03",
+      "M08.F01.I04",
+      "M08.F01.I05",
+      "M08.F02.I06",
+      "M08.F02.I07"
+    ],
+    "已上线但不在任何流程且非孤儿白名单": [
+      "M00.F01.I01",
+      "M00.F01.I02",
+      "M00.F01.I03",
+      "M00.F01.I04",
+      "M00.F01.I05",
+      "M02.F01.I01",
+      "M02.F01.I02",
+      "M02.F01.I03",
+      "M02.F01.I04",
+      "M02.F01.I05",
+      "M02.F02.I01",
+      "M03.F02.I04",
+      "M04.F01.I01",
+      "M04.F01.I02",
+      "M04.F01.I03",
+      "M04.F01.I04",
+      "M04.F01.I05",
+      "M04.F02.I06",
+      "M08.F01.I01",
+      "M08.F01.I02",
+      "M08.F01.I03",
+      "M08.F01.I04",
+      "M08.F01.I05",
+      "M09.F02.I01",
+      "M09.F02.I03"
+    ],
+    "开发中但代码里无 UI 入口(用户还点不到)": [
+      "M00.F02.I01",
+      "M00.F02.I02",
+      "M09.F01.I01"
     ]
   },
   "unreachable_shipped": [],
   "function_map": {
     "M00.F01.I01": {
-      "name": "租户列表（平台）",
-      "status": "规划",
+      "name": "租户列表",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\admin-tenants.test.ts:1024 (path)"
+      ],
       "entry": []
     },
     "M00.F01.I02": {
       "name": "创建租户",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\admin-tenants.test.ts:1024 (path)"
+      ],
       "entry": []
     },
     "M00.F01.I03": {
       "name": "租户详情 / TenantGuard 校验",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -75,7 +139,7 @@
     },
     "M00.F01.I04": {
       "name": "更新租户",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -85,7 +149,7 @@
     },
     "M00.F01.I05": {
       "name": "删除租户",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -95,42 +159,72 @@
     },
     "M00.F02.I01": {
       "name": "当前用户 whoami",
-      "status": "规划",
+      "status": "开发中",
       "type": "查询",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-024-tenant-switch-and-user-invite.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:612 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:755 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\path.test.ts:1066 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\path.test.ts:1111 (path)"
+      ],
       "entry": []
     },
     "M00.F02.I02": {
       "name": "列出我的租户成员关系",
-      "status": "规划",
+      "status": "开发中",
       "type": "查询",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-024-tenant-switch-and-user-invite.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\me-tenants.test.ts:19 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\me-tenants.test.ts:525 (path)"
+      ],
       "entry": []
     },
     "M00.F02.I03": {
       "name": "切换当前租户",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-024-tenant-switch-and-user-invite.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\me-switch.test.ts:2204 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\me-switch.test.ts:729 (path)"
+      ],
       "entry": []
     },
     "M01.F01.I01": {
       "name": "用户列表（tenant-scoped）",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-read.test.ts:2491 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-read.test.ts:957 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-write-2.test.ts:1237 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-write.test.ts:985 (path)"
+      ],
       "entry": []
     },
     "M01.F01.I02": {
@@ -138,134 +232,180 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-read.test.ts:2491 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-read.test.ts:957 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-write-2.test.ts:1237 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-write.test.ts:53 (annot)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-write.test.ts:985 (path)"
+      ],
       "entry": []
     },
     "M01.F01.I03": {
       "name": "用户详情",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-read.test.ts:3661 (path)"
+      ],
       "entry": []
     },
     "M01.F01.I04": {
       "name": "更新用户",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-read.test.ts:3661 (path)"
+      ],
       "entry": []
     },
     "M01.F01.I05": {
       "name": "删除用户",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-users-read.test.ts:3661 (path)"
+      ],
       "entry": []
     },
     "M01.F01.I06": {
       "name": "分配角色（用户列表入口）",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [],
       "entry": []
     },
     "M01.F02.I01": {
       "name": "分配角色",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [],
       "entry": []
     },
     "M01.F02.I02": {
       "name": "邀请用户",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-024-tenant-switch-and-user-invite.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [],
       "entry": []
     },
     "M01.F02.I03": {
       "name": "状态切换",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [],
       "entry": []
     },
     "M02.F01.I01": {
       "name": "角色列表（tenant-scoped）",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:1078 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1167 (path)"
+      ],
       "entry": []
     },
     "M02.F01.I02": {
       "name": "创建角色",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:1078 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1167 (path)"
+      ],
       "entry": []
     },
     "M02.F01.I03": {
       "name": "角色详情",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:2381 (path)"
+      ],
       "entry": []
     },
     "M02.F01.I04": {
       "name": "更新角色",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:2381 (path)"
+      ],
       "entry": []
     },
     "M02.F01.I05": {
       "name": "删除角色",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:2381 (path)"
+      ],
       "entry": []
     },
     "M02.F02.I01": {
       "name": "权限矩阵",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -275,24 +415,32 @@
     },
     "M03.F01.I01": {
       "name": "密码登录 API",
-      "status": "开发中",
+      "status": "已上线",
       "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\auth.test.ts:1221 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\auth.test.ts:1537 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\auth.test.ts:2331 (path)"
+      ],
       "entry": []
     },
     "M03.F01.I02": {
       "name": "失败锁定",
-      "status": "开发中",
+      "status": "已上线",
       "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
       ],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [],
       "entry": []
@@ -311,32 +459,49 @@
     },
     "M03.F02.I03": {
       "name": "OIDC Code 换取",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\auth.test.ts:6226 (path)"
+      ],
       "entry": []
     },
     "M03.F02.I04": {
       "name": "refresh token",
-      "status": "开发中",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\auth.test.ts:4255 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\auth.test.ts:5439 (path)"
+      ],
       "entry": []
     },
     "M03.F03.I05": {
       "name": "登出（本地清理）",
-      "status": "开发中",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\auth.test.ts:3307 (path)"
+      ],
       "entry": []
     },
     "M03.F03.I06": {
@@ -351,57 +516,67 @@
     },
     "M04.F01.I01": {
       "name": "OAuth 应用列表",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\admin-apps-write.test.ts:888 (path)"
+      ],
       "entry": []
     },
     "M04.F01.I02": {
       "name": "创建 OAuth 应用",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\admin-apps-write.test.ts:888 (path)"
+      ],
       "entry": []
     },
     "M04.F01.I03": {
       "name": "OAuth 应用详情",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\admin-app-menus-write.test.ts:1054 (path)"
+      ],
       "entry": []
     },
     "M04.F01.I04": {
       "name": "更新 OAuth 应用",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\admin-app-menus-write.test.ts:1054 (path)"
+      ],
       "entry": []
     },
     "M04.F01.I05": {
       "name": "删除 OAuth 应用",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\admin-app-menus-write.test.ts:1054 (path)"
+      ],
       "entry": []
     },
     "M04.F02.I06": {
       "name": "启用/停用应用",
-      "status": "开发中",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -411,23 +586,21 @@
     },
     "M04.F03.I01": {
       "name": "OAuth authorize 检查 s",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [
-        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
-      ],
+      "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\oauth-architecture.md"
+      ],
       "tests": [],
       "entry": []
     },
     "M04.F03.I02": {
       "name": "OAuth token 交换 — ses",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [
-        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
-      ],
+      "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [],
@@ -435,11 +608,9 @@
     },
     "M04.F03.I03": {
       "name": "OAuth refresh token",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [
-        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
-      ],
+      "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [],
@@ -449,153 +620,278 @@
       "name": "授权码签发",
       "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\oauth-architecture.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:1738 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:2639 (path)"
+      ],
       "entry": []
     },
     "M04.F03.I08": {
       "name": "令牌交换",
       "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\oauth-architecture.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:3423 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:4655 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:5703 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:6653 (path)"
+      ],
       "entry": []
     },
     "M04.F03.I09": {
       "name": "令牌刷新",
       "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\oauth-architecture.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:3423 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:4655 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:5146 (annot)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:5703 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:6653 (path)"
+      ],
       "entry": []
     },
-    "M05.F01.I01": {
-      "name": "列表分页",
-      "status": "规划",
+    "M04.F04.I01": {
+      "name": "列出租户应用",
+      "status": "开发中",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [
-        "M05 API Key 生命周期 > M05.F01.I01 list API keys exposes GET /tenants/{tenantId}/api-keys"
+        "M04.F04 租户应用订阅 > M04.F04.I01 lists tenant applications"
+      ],
+      "entry": []
+    },
+    "M04.F04.I02": {
+      "name": "订阅应用",
+      "status": "开发中",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M04.F04 租户应用订阅 > M04.F04.I02 subscribes an application"
+      ],
+      "entry": []
+    },
+    "M04.F04.I03": {
+      "name": "更新应用订阅",
+      "status": "开发中",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M04.F04 租户应用订阅 > M04.F04.I03 updates an application subscription"
+      ],
+      "entry": []
+    },
+    "M04.F04.I04": {
+      "name": "移除应用订阅",
+      "status": "开发中",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "M04.F04 租户应用订阅 > M04.F04.I04 removes an application subscription"
+      ],
+      "entry": []
+    },
+    "M05.F01.I01": {
+      "name": "列表分页",
+      "status": "已废弃",
+      "type": "接口",
+      "requirements": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\api-key-lifecycle.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-api-keys-delete.test.ts:966 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-api-keys-read.test.ts:536 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-api-keys-write.test.ts:1160 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-misc-write.test.ts:1091 (path)"
       ],
       "entry": []
     },
     "M05.F01.I02": {
       "name": "创建",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\api-key-lifecycle.md"
+      ],
       "tests": [
-        "M05 API Key 生命周期 > M05.F01.I02 create API key exposes POST /tenants/{tenantId}/api-keys"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-api-keys-delete.test.ts:966 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-api-keys-read.test.ts:536 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-api-keys-write.test.ts:1160 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-misc-write.test.ts:1091 (path)"
       ],
       "entry": []
     },
     "M05.F01.I03": {
       "name": "吊销",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [
-        "M05 API Key 生命周期 > M05.F01.I03 revoke API key exposes POST /tenants/{tenantId}/api-keys/{keyId}/revoke"
+      "flows": [
+        "docs\\design\\flow-function-map.md"
       ],
+      "designs": [
+        "docs\\design\\api-key-lifecycle.md"
+      ],
+      "tests": [],
       "entry": []
     },
     "M05.F01.I04": {
       "name": "轮换",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [
-        "M05 API Key 生命周期 > M05.F01.I04 rotate API key exposes POST /tenants/{tenantId}/api-keys/{keyId}/rotate"
+      "flows": [
+        "docs\\design\\flow-function-map.md"
       ],
+      "designs": [
+        "docs\\design\\api-key-lifecycle.md"
+      ],
+      "tests": [],
       "entry": []
     },
     "M05.F01.I05": {
       "name": "物理删除",
-      "status": "已上线",
+      "status": "已废弃",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\api-key-lifecycle.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-api-keys-delete.test.ts:62 (annot)"
+      ],
       "entry": []
     },
     "M06.F01.I01": {
       "name": "列表审计事件",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-023-saas-audit-retention.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [
-        "M06.F01 审计事件查询 > M06.F01.I01 list audit events exposes GET /tenants/{tenantId}/audit-events"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-audit-read.test.ts:2683 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-audit-read.test.ts:4010 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-audit-read.test.ts:910 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-misc-write.test.ts:1190 (path)"
       ],
       "entry": []
     },
     "M06.F01.I02": {
       "name": "按用户查审计事件",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-023-saas-audit-retention.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [
-        "M06.F01 审计事件查询 > M06.F01.I02 list audit events by user exposes GET /tenants/{tenantId}/audit-events/by-user/{userId}"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-audit-read.test.ts:5139 (path)"
       ],
       "entry": []
     },
     "M06.F01.I03": {
       "name": "导出审计事件",
-      "status": "规划",
-      "type": null,
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [
-        "M06.F01 审计事件查询 > M06.F01.I03 export audit events exposes POST /tenants/{tenantId}/audit-events/export"
+      "status": "已废弃",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-023-saas-audit-retention.md"
       ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [],
+      "tests": [],
       "entry": []
     },
     "M06.F02.I01": {
       "name": "读取审计留存策略",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-023-saas-audit-retention.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [
-        "M06.F02 审计留存策略 > M06.F02.I01 get retention policy exposes GET /tenants/{tenantId}/audit-events/retention"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-audit-read.test.ts:6572 (path)"
       ],
       "entry": []
     },
     "M06.F02.I02": {
       "name": "设置审计留存策略",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-023-saas-audit-retention.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [
-        "M06.F02 审计留存策略 > M06.F02.I02 set retention policy exposes PUT /tenants/{tenantId}/audit-events/retention"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-audit-read.test.ts:6572 (path)"
       ],
       "entry": []
     },
     "M06.F02.I04": {
       "name": "留存策略设置",
-      "status": "规划",
+      "status": "已废弃",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -604,22 +900,28 @@
       "entry": []
     },
     "M06.F03.I01": {
-      "name": "AuditWriter.WriteAsy",
-      "status": "规划",
+      "name": "AuditWriter.WriteAsync",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [
-        "M06.F03 AuditWriter 副作用契约 > M06.F03.I01 AuditWriter must not expose any HTTP write endpoint"
+      "requirements": [
+        "docs\\requirements\\REQ-2026-023-saas-audit-retention.md"
       ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\api-key-lifecycle.md"
+      ],
+      "tests": [],
       "entry": []
     },
     "M06.F03.I02": {
-      "name": "列表 `?action=` 过滤",
-      "status": "规划",
+      "name": "列表`?action=` 过滤",
+      "status": "已废弃",
       "type": "接口",
-      "requirements": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-023-saas-audit-retention.md"
+      ],
       "flows": [],
       "designs": [],
       "tests": [],
@@ -627,7 +929,7 @@
     },
     "M08.F01.I01": {
       "name": "菜单树",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -637,7 +939,7 @@
     },
     "M08.F01.I02": {
       "name": "创建菜单",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -647,7 +949,7 @@
     },
     "M08.F01.I03": {
       "name": "菜单详情",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -657,7 +959,7 @@
     },
     "M08.F01.I04": {
       "name": "更新菜单",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -667,9 +969,11 @@
     },
     "M08.F01.I05": {
       "name": "删除菜单",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-025-menu-structure-move-reorder.md"
+      ],
       "flows": [],
       "designs": [],
       "tests": [],
@@ -677,47 +981,65 @@
     },
     "M08.F02.I06": {
       "name": "同级排序",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-025-menu-structure-move-reorder.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [],
       "entry": []
     },
     "M08.F02.I07": {
       "name": "切换父级",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
-      "requirements": [],
-      "flows": [],
+      "requirements": [
+        "docs\\requirements\\REQ-2026-025-menu-structure-move-reorder.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [],
       "tests": [],
       "entry": []
     },
     "M09.F01.I01": {
       "name": "角色已授权菜单",
-      "status": "规划",
+      "status": "开发中",
       "type": "查询",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3698 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1271 (path)"
+      ],
       "entry": []
     },
     "M09.F02.I01": {
       "name": "整批设置角色菜单",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "M09.F02 角色菜单关系 > M09.F02.I01 exposes relational role menu replacement",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:62 (annot)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3698 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1271 (path)"
+      ],
       "entry": []
     },
     "M09.F02.I02": {
-      "name": "设置角色菜单",
-      "status": "已上线",
+      "name": "设置角色菜单（已废弃）",
+      "status": "已废弃",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -727,63 +1049,93 @@
     },
     "M09.F02.I03": {
       "name": "清空角色菜单",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3698 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1271 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:513 (annot)"
+      ],
       "entry": []
     },
     "M09.F03.I01": {
       "name": "me/menus session 校验",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-020-oauth-session-real-auth.md",
         "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
       ],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
-        "M09.F03 当前用户有效菜单 > M09.F03.I01 me/menus session-checked endpoint exists (GET /api/v1/me/menus)"
+        "M09.F03 当前用户有效菜单 > M09.F03.I01 me/menus client-scoped endpoint exists"
       ],
       "entry": []
     },
     "M09.F03.I02": {
       "name": "角色授权菜单 ID 查询",
-      "status": "开发中",
-      "type": "接口",
-      "requirements": [
-        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
-      ],
-      "flows": [],
-      "designs": [],
-      "tests": [],
-      "entry": []
-    },
-    "M09.F03.I03": {
-      "name": "菜单树装配",
-      "status": "开发中",
-      "type": "接口",
-      "requirements": [
-        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
-      ],
-      "flows": [],
-      "designs": [],
-      "tests": [],
-      "entry": []
-    },
-    "M09.F03.I04": {
-      "name": "app 分组映射",
       "status": "已上线",
       "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
       ],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:1845 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:2074 (path)"
+      ],
+      "entry": []
+    },
+    "M09.F03.I03": {
+      "name": "菜单树装配",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:1845 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:2074 (path)"
+      ],
+      "entry": []
+    },
+    "M09.F03.I04": {
+      "name": "client 分组映射",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-021-saas-aspnetcore-me-menus-real-permission.md"
+      ],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:1845 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:2074 (path)"
+      ],
       "entry": []
     }
   }

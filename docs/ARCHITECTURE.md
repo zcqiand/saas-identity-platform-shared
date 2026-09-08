@@ -79,6 +79,9 @@ shared 仓同时承担两份**单点真理源**（[ADR-0007](../../../docs/adr/0
 - 手写 `generated/openapi/openapi.yaml`（必须 `tsp compile`）
 - `package.json` `exports` 暴露语言路径（如 `./api-client`）
 
+> 架构全景与三叉戟隔离（应用 / 租户 / 用户三大维度、运行时数据流转链路）见
+> [`docs/design/architecture-panorama.md`](design/architecture-panorama.md)。
+
 ---
 
 ## 2. 目录骨架
@@ -109,18 +112,19 @@ saas-identity-platform-shared/
 │   │   ├── role-menu-grant.tsp
 │   │   └── audit-event.tsp
 │   └── routes/                        ←   13 个 endpoint 集合
-│       ├── auth.tsp                   ←   M03 密码登录/登出
-│       ├── admin-tenants.tsp          ←   M00 平台 admin 租户 CRUD
-│       ├── admin-apps.tsp             ←   M04 平台 admin App CRUD
-│       ├── admin-app-menus.tsp        ←   M08 菜单 CRUD
-│       ├── me.tsp                     ←   /me + /me/tenants
-│       ├── apps.tsp                   ←   /apps/{code} 公共端点
-│       ├── tenant-users.tsp           ←   M01 tenant-scoped 用户
-│       ├── tenant-roles.tsp           ←   M02 角色 CRUD
-│       ├── tenant-role-menus.tsp      ←   M09 角色菜单授权
-│       ├── tenant-api-keys.tsp        ←   M05 API Key 生命周期
-│       ├── tenant-audit.tsp           ←   M06 审计事件查询
-│       └── oauth.tsp                  ←   M04.F03 OAuth authorize/token
+│       ├── auth.tsp                   ←   M01.F04 SSO 登录
+│       ├── admin-tenants.tsp          ←   M00.F01 租户维护
+│       ├── admin-apps.tsp             ←   M04.F01 应用维护 + M04.F02 启用/停用
+│       ├── admin-app-menus.tsp        ←   M04.F04 菜单管理
+│       ├── me.tsp                     ←   M01.F01 / M01.F03 当前用户视图
+│       ├── apps.tsp                   ←   M04.F01.I06 公共 client 元数据
+│       ├── tenant-users.tsp           ←   M00.F02 租户成员 + M01.F02.I01 角色成员
+│       ├── tenant-roles.tsp           ←   M00.F03 租户角色 + M00.F04.I01 角色权限
+│       ├── tenant-role-menus.tsp      ←   M00.F04 角色菜单授权
+│       ├── tenant-applications.tsp    ←   M00.F05 租户应用
+│       ├── tenant-api-keys.tsp        ←   已废弃（M05）
+│       ├── tenant-audit.tsp           ←   已废弃（M06）
+│       └── oauth.tsp                  ←   M04.F03 身份认证
 ├── sql/                               ← ★ PostgreSQL DDL（DB schema 真源）
 │   ├── README.md                      ←   命名约定 + 类型映射表
 │   └── migrations/                    ←   Flyway 风格 V<NNN>__<desc>.sql
@@ -242,19 +246,20 @@ namespace Saas.Identity.Shared;
 | `tenant.tsp` | `Tenant` / `TenantStatus` / `TenantSettings` | `tenants` | M00 多租户根 |
 | `user.tsp` | `User` / `UserStatus` | `users` | M01 tenant-scoped 用户 |
 | `membership.tsp` | `TenantMembership` / `MembershipStatus` | `tenant_memberships` | M01 跨租户视图 |
-| `role.tsp` | `Role` | `roles` + `permissions` + `role_permissions` | M02 角色 + 权限矩阵 |
-| `api-key.tsp` | `ApiKey` / `ApiKeyStatus` | `api_keys` | M05 tenant-scoped Key |
-| `app.tsp` | `App` / `AppPublicInfo` / `AppStatus` / `OAuthGrantType` / `CreateAppRequest` / `UpdateAppRequest` | `apps` | M04 平台级（菜单承载 + OAuth client） |
-| `menu.tsp` | `Menu` / `MenuType` / `MenuStatus` | `menus` | M08 应用下树形菜单 |
-| `role-menu-grant.tsp` | `RoleMenuGrant` | `role_menu_grants` | M09 角色菜单授权 |
-| `audit-event.tsp` | `AuditEvent` / `AuditAction` | `audit_events` + `audit_retention_policies` | M06 审计 |
+| `role.tsp` | `Role` | `roles` + `permissions` + `role_permissions` | **M00.F03** 角色 + **M00.F04** 权限矩阵 |
+| `api-key.tsp` | `ApiKey` / `ApiKeyStatus` | `api_keys` | 已废弃（M05） |
+| `app.tsp` | `App` / `AppPublicInfo` / `AppStatus` / `OAuthGrantType` / `CreateAppRequest` / `UpdateAppRequest` | `apps` | **M04.F01** 应用维护（菜单承载 + OAuth client） |
+| `menu.tsp` | `Menu` / `MenuType` / `MenuStatus` | `menus` | **M04.F04** 应用下树形菜单 |
+| `role-menu-grant.tsp` | `RoleMenuGrant` | `role_menu_grants` | **M00.F04** 角色权限（角色菜单授权） |
+| `audit-event.tsp` | `AuditEvent` / `AuditAction` | `audit_events` + `audit_retention_policies` | 已废弃（M06）|
 
 **App 是双重身份的复合实体**（详见 `tsp/models/app.tsp` 头注释）：
 
 > App —— 平台级统一实体。承担三类职责：
->   1. 业务应用（菜单承载）：M08 菜单挂在 appId 下
->   2. OAuth client：M04 OAuth 流（authorize/token）按 clientId 识别
->   3. 租户订阅：M09 菜单授权按 appCode + tenantId 维度派发
+>
+> 1. 业务应用（菜单承载）：**M04.F04** 菜单挂在 clientId 下
+> 2. OAuth client：**M04.F03** 身份认证流（authorize/token）按 clientId 识别
+> 3. 租户订阅：**M00.F05** 租户应用按 clientId + tenantId 维度派发
 
 **OAuth DTO** 在 `tsp/routes/oauth.tsp` 内联声明（`AuthorizeCodeRequest` / `TokenRequest` /
 `TokenResponse`）—— 不污染全局 namespace。
@@ -263,18 +268,19 @@ namespace Saas.Identity.Shared;
 
 | 文件 | 命名空间 | endpoint 前缀 | 功能 ID |
 |---|---|---|---|
-| `auth.tsp` | `Saas.Identity.Shared` | `/auth/{login,me,logout,refresh}` | M03.F01-03 |
-| `admin-tenants.tsp` | `Saas.Identity.Shared` | `/admin/tenants` | M00.F01-02 |
-| `admin-apps.tsp` | `Saas.Identity.Shared` | `/admin/apps` | M04.F01-02 |
-| `admin-app-menus.tsp` | `Saas.Identity.Shared` | `/admin/apps/{appId}/menus` | M08.F01-02 |
-| `apps.tsp` | `Saas.Identity.Shared` | `/apps/{code}`（公开） | 公开端点 |
-| `me.tsp` | `Saas.Identity.Shared` | `/me` + `/me/tenants/{id}/switch` | 当前用户视图 |
-| `tenant-users.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/users` | M01.F01-02 |
-| `tenant-roles.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/roles` | M02.F01-02 |
-| `tenant-role-menus.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/roles/{roleId}/menus` | M09.F01-03 |
-| `tenant-api-keys.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/api-keys` | M05.F01 |
-| `tenant-audit.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/audit-events` | M06.F01-02 |
-| `oauth.tsp` | `Saas.Identity.Shared.OAuth` | `/oauth/{authorize,token}` | M04.F03 |
+| `auth.tsp` | `Saas.Identity.Shared` | `/auth/{login,logout,refresh,oidc/callback}` | **M01.F04** SSO 登录 |
+| `admin-tenants.tsp` | `Saas.Identity.Shared` | `/admin/tenants` | **M00.F01** 租户维护 |
+| `admin-apps.tsp` | `Saas.Identity.Shared` | `/admin/apps` | **M04.F01** 应用维护 + **M04.F02** 启用/停用 |
+| `admin-app-menus.tsp` | `Saas.Identity.Shared` | `/admin/clients/{clientId}/menus` | **M04.F04** 菜单管理（I01-I07） |
+| `apps.tsp` | `Saas.Identity.Shared` | `/apps/{clientId}`（公开） | **M04.F01.I06** 公共 client 元数据 |
+| `me.tsp` | `Saas.Identity.Shared` | `/me` + `/me/tenants/{id}/switch` + `/me/menus` | **M01.F01 / M01.F03 / M04.F04.I08** |
+| `tenant-users.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/users` | **M00.F02** 租户成员 + **M01.F02.I01** 角色成员 |
+| `tenant-roles.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/roles` | **M00.F03** 租户角色 + **M00.F04.I01** 角色权限矩阵 |
+| `tenant-role-menus.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/roles/{roleId}/menus` | **M00.F04** 角色权限（I02-I04） |
+| `tenant-applications.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/applications` | **M00.F05** 租户应用 |
+| `tenant-api-keys.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/api-keys` | 已废弃（M05.F01） |
+| `tenant-audit.tsp` | `Saas.Identity.Shared` | `/tenants/{tenantId}/audit-events` | 已废弃（M06） |
+| `oauth.tsp` | `Saas.Identity.Shared.OAuth` | `/oauth/{authorize,token}` | **M04.F03** 身份认证 |
 
 **endpoint 路径前缀约定**：
 
@@ -335,7 +341,7 @@ namespace Saas.Identity.Shared;
 | `menus` | V005 | Menu / MenuType / MenuStatus | 树形；parent_id 自引用 |
 | `role_menu_grants` | V005 | RoleMenuGrant | tenant-scoped M:N；整批 PUT |
 | `audit_events` | V006 | AuditEvent / AuditAction | insert-only；metadata JSONB |
-| `audit_retention_policies` | V006 | (推导 from M06.F02) | 一租户一行 |
+| `audit_retention_policies` | V006 | (推导 from M06.F02) | 一租户一行；已废弃 |
 
 ```
 9 个 PG 原生 enum 类型：
