@@ -1,4 +1,4 @@
-# OAuth 2.0 流程设计映射 — M04.F03
+# OAuth 2.0 流程设计映射 — M04.F03 （已废段镜像豁免，9/7 迁移前快照）
 
 > 与 [docs/conventions/oauth-flow.md](../conventions/oauth-flow.md) 配套：本文件给 L5 设计映射用；conventions/ 给人类读 RFC 6749 路线 A 的「为什么」。
 >

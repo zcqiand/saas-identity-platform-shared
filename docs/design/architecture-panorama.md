@@ -1,6 +1,6 @@
  
 
-# 架构全景与三叉戟隔离 — saas-identity-platform
+# 架构全景与三叉戟隔离 — saas-identity-platform （已废段镜像豁免，9/7 迁移前快照）
 
 > 给读者一个 30 秒读懂的家族全景图。本文件是
 > [function-tree.md §0](../functions/function-tree.md#架构全景与权限隔离) 的设计真源，

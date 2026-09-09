@@ -1,4 +1,4 @@
-# REQ-2026-020 saas OAuth 真用户认证 — saas session cookie 体系
+# REQ-2026-020 saas OAuth 真用户认证 — saas session cookie 体系 （已废段镜像豁免，9/7 迁移前快照）
 
 > **2026-09-07 模块重组注意**：本 REQ 文档是历史快照，§5 中列出的 `M03.F0x` / `M04.F03` 已迁至新结构。
 > 迁移表见 [function-tree.md §0.x](../functions/function-tree.md#0x-模块重组迁移记录2026-09-07)。

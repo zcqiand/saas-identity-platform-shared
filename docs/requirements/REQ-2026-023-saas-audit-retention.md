@@ -1,4 +1,4 @@
-# REQ-2026-023 saas 租户审计日志与留存策略
+# REQ-2026-023 saas 租户审计日志与留存策略 （已废段镜像豁免，9/7 迁移前快照）
 
 > **2026-09-07 模块重组注意**：本 REQ 文档是历史快照；M05 / M06 在新结构下已整体标记 **已废弃**（目标 DDL 不再包含 `api_keys` / `audit_events` / `audit_retention_policies`）。本 REQ 内容仅作为历史约束记录，不在新结构下实施。
 > 迁移表见 [function-tree.md §0.x](../functions/function-tree.md#0x-模块重组迁移记录2026-09-07)。

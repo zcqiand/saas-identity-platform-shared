@@ -27,7 +27,7 @@ namespace Saas.Identity.Shared.AdminClients {
   @route("/{clientId}")
   op deleteClient(@path clientId: string): void | ErrorResponse;
 
-  // M04.F02.I06 enable/disable client
+  // M04.F02.I01 enable/disable client
   @patch
   @route("/{clientId}/status")
   op setClientStatus(

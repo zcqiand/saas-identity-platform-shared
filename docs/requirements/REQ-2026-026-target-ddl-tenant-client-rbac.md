@@ -1,4 +1,4 @@
-# REQ-2026-026 目标 DDL：tenant/client/member/RBAC 隔离
+# REQ-2026-026 目标 DDL：tenant/client/member/RBAC 隔离 （已废段镜像豁免，9/7 迁移前快照）
 
 > **2026-09-07 模块重组注意**：本 REQ 文档是历史快照；DDL 边界不变，关联功能 ID 调整：
 > M00（租户）/ M01（用户）/ M02 → M00.F03/F04（角色）/ M03 → M01.F04（SSO）/ M04（应用+身份认证+菜单）。

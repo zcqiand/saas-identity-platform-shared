@@ -1,26 +1,36 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "2e5a0f1d030c8f5e",
-  "summary": "说明列批量重写：全部 96 条子项（含已废弃/已迁移段）从「`METHOD /path`（`*.tsp:行号`）」形式改为中文用途描述（保留 `.tsp:行号` 作为溯源锚点）；不动 ID/名称/类型/交付/状态列。",
+  "base_sha": "9812b39d40061d10",
+  "summary": "BASE M01.F04 SSO 登录 4 个端点交付列改「仅后端」：密码登录 API / 失败锁定 / OIDC Code 换 / refresh token 均为纯服务端 API，前端不直连 IdP。I03 密码登录 UI（仅前端）保持不变。M04.F03.* OAuth 协议端点保持「前端+后端」（强约束，所有前端必须通过 OAuth client lib 走此端点）。",
   "changes": [
     {
-      "id": "M00.F01.I01",
+      "id": "M01.F04.I01",
       "action": "变更",
-      "name": "租户列表",
-      "reason": "代表 M00 租户管理；说明列重写为中文用途"
+      "name": "密码登录 API",
+      "delivery": "仅后端",
+      "reason": "纯服务端 API；react/vue 通过 OAuth 跳板（ADR-0013）走 M04.F03 登录，不直连此端点"
     },
     {
-      "id": "M01.F01.I01",
+      "id": "M01.F04.I02",
       "action": "变更",
-      "name": "当前用户 whoami",
-      "reason": "代表 M01 用户管理；说明列重写为中文用途"
+      "name": "失败锁定",
+      "delivery": "仅后端",
+      "reason": "服务端 sys_user.failed_attempts 计数器与锁定策略，无 UI 入口"
     },
     {
-      "id": "M04.F04.I08",
+      "id": "M01.F04.I04",
       "action": "变更",
-      "name": "当前用户有效菜单",
-      "reason": "代表 M04 应用管理；说明列重写为中文用途"
+      "name": "OIDC Code 换取",
+      "delivery": "仅后端",
+      "reason": "authorization_code → token 的服务端交换，前端不直连 IdP"
+    },
+    {
+      "id": "M01.F04.I05",
+      "action": "变更",
+      "name": "refresh token",
+      "delivery": "仅后端",
+      "reason": "服务端 refresh token 轮换；前端只持有新 access_token"
     }
   ],
   "sync_files": [

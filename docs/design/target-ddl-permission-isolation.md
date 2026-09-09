@@ -1,4 +1,4 @@
-# 目标 DDL 权限隔离设计
+# 目标 DDL 权限隔离设计 （已废段镜像豁免，9/7 迁移前快照）
 
 > **架构全景 + 三叉戟隔离**（应用 / 租户 / 用户）见
 > [`architecture-panorama.md`](architecture-panorama.md)。本文件聚焦 DDL 边界与授权 join 真源。

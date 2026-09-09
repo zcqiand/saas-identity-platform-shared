@@ -4,17 +4,17 @@
   "passed": true,
   "partial": true,
   "ran": [
-    "L0"
+    "L0.5"
   ],
-  "checked_at": "2026-08-29T15:43:19+0800",
+  "checked_at": "2026-09-09T19:11:28+0800",
   "gates": [
     {
-      "level": "L0",
-      "name": "结构完整性",
+      "level": "L0.5",
+      "name": "env 一致性",
       "passed": true,
       "returncode": 0,
-      "duration_s": 0.11,
-      "output": ""
+      "duration_s": 0.094,
+      "output": "[SKIP] saas-identity-platform-shared 不在 saas-identity-platform 家族 members 里,L0.5 跳过"
     }
   ]
 }

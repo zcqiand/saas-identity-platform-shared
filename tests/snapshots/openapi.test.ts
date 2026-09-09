@@ -80,15 +80,15 @@ describe("M04.F04 租户应用订阅", () => {
   });
 });
 
-describe("M09.F03 当前用户有效菜单", () => {
-  it("M09.F03.I01 me/menus client-scoped endpoint exists", () => {
+describe("当前用户有效菜单（9/7 已废段，路径仍存在）", () => {
+  it("me/menus client-scoped endpoint exists", () => {
     pathPresent("/api/v1/me/menus");
     operationIdPresent("Me_getMyMenus");
   });
 });
 
-describe("M09.F02 角色菜单关系", () => {
-  it("M09.F02.I01 exposes relational role menu replacement", () => {
+describe("角色菜单关系（9/7 已废段，路径仍存在）", () => {
+  it("exposes relational role menu replacement", () => {
     pathPresent("/api/v1/tenants/{tenantId}/roles/{roleId}/menus");
     operationIdPresent("TenantRoleMenus_setSysRoleMenus");
   });
