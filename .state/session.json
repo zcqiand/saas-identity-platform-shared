@@ -13,6 +13,7 @@
     "gate 全绿：L0/L0.no_fallback/L0.5/L1/L3/L4/L5 PASS（100 功能条目，引用完整）；状态分布：~50 已上线 / ~32 开发中 / 4 已废弃 / 2 规划"
   ],
   "next": [
+    "**【2026-09-09 紧急】修 `_orphans.py` 2 个算法 bug（ADR-0029 follow-up）** — springboot 3 SAFE orphan（AuthApi.java / SysRoleMenuId.java / TenantMemberRoleId.java）全部假阳性：(1) `*Api.java` 文件名比对 TypeSpec **namespace** 是错配（openapi-generator 用 `@tag`）；(2) `*Id.java` 是 `@Embeddable` 复合 PK helper 不是 pgTable。memory: `memory/orphans-py-false-positive-api-and-id.md`。V1 warning 档不阻断但 V2 flip error 前必须修。",
     "6 仓消费方独立 PR 推平：msw（pull schema.ts + handler path 重生）/ nextjs（orval regen + URL path）/ react（orval regen）/ vue（orval regen）/ spring（openapi-generator-java regen controller + entity class 名 SysUser/SysMenu/SysRole/SysRoleMenu/TenantMemberRole）/ aspn（openapi-generator-dotnet regen）",
     "contract-test 仓批量更新断言 URL：/admin/apps→/admin/oauth-clients 等 3 处",
     "再补 ADR-0026 「TypeSpec schema-first 命名归一」，固化 model 名 = DB table 名 = 消费仓 class 名的不可分原则",
