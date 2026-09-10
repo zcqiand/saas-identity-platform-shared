@@ -705,7 +705,7 @@ paths:
       parameters:
         - name: clientId
           in: query
-          required: true
+          required: false
           schema:
             type: string
           explode: false
@@ -734,7 +734,7 @@ paths:
       parameters:
         - name: clientId
           in: query
-          required: true
+          required: false
           schema:
             type: string
           explode: false
@@ -766,7 +766,7 @@ paths:
             type: string
         - name: clientId
           in: query
-          required: true
+          required: false
           schema:
             type: string
           explode: false
@@ -1294,7 +1294,7 @@ paths:
             type: string
         - name: clientId
           in: query
-          required: true
+          required: false
           schema:
             type: string
           explode: false
@@ -1481,7 +1481,7 @@ paths:
             type: string
         - name: clientId
           in: query
-          required: true
+          required: false
           schema:
             type: string
           explode: false
@@ -1515,7 +1515,7 @@ paths:
             type: string
         - name: clientId
           in: query
-          required: true
+          required: false
           schema:
             type: string
           explode: false
@@ -1555,7 +1555,7 @@ paths:
             type: string
         - name: clientId
           in: query
-          required: true
+          required: false
           schema:
             type: string
           explode: false

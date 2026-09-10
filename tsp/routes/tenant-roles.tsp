@@ -8,7 +8,7 @@ namespace Saas.Identity.Shared.TenantRoles {
   @get
   op listSysRoles(
     @path tenantId: string,
-    @query clientId: string,
+    @query clientId?: string,
     @query page?: int32,
     @query pageSize?: int32,
   ): Page<SysRole> | ErrorResponse;

@@ -293,7 +293,7 @@
       "designs": [],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:1078 (path)",
-        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1167 (path)"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1089 (path)"
       ],
       "entry": []
     },
@@ -306,7 +306,7 @@
       "designs": [],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:1078 (path)",
-        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1167 (path)"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1089 (path)"
       ],
       "entry": []
     },
@@ -366,7 +366,7 @@
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3698 (path)",
-        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1271 (path)"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1193 (path)"
       ],
       "entry": []
     },
@@ -380,7 +380,7 @@
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3698 (path)",
-        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1271 (path)"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1193 (path)"
       ],
       "entry": []
     },
@@ -394,7 +394,7 @@
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3698 (path)",
-        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1271 (path)"
+        "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1193 (path)"
       ],
       "entry": []
     },

@@ -10,7 +10,7 @@ namespace Saas.Identity.Shared.TenantRoleMenus {
   op listSysRoleMenus(
     @path tenantId: string,
     @path roleId: string,
-    @query clientId: string,
+    @query clientId?: string,
   ): RoleMenuGrant | ErrorResponse;
 
   // M00.F04.I03 set role menus (relational rows, idempotent replacement)
@@ -18,7 +18,7 @@ namespace Saas.Identity.Shared.TenantRoleMenus {
   op setSysRoleMenus(
     @path tenantId: string,
     @path roleId: string,
-    @query clientId: string,
+    @query clientId?: string,
     @body body: SetSysRoleMenusRequest,
   ): RoleMenuGrant | ErrorResponse;
 
@@ -27,6 +27,6 @@ namespace Saas.Identity.Shared.TenantRoleMenus {
   op clearSysRoleMenus(
     @path tenantId: string,
     @path roleId: string,
-    @query clientId: string,
+    @query clientId?: string,
   ): void | ErrorResponse;
 }
