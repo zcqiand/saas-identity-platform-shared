@@ -1491,9 +1491,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SysRoleMenu'
+                $ref: '#/components/schemas/RoleMenuGrant'
         default:
           description: An unexpected error response.
           content:
@@ -1527,9 +1525,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SysRoleMenu'
+                $ref: '#/components/schemas/RoleMenuGrant'
         default:
           description: An unexpected error response.
           content:
@@ -1912,6 +1908,27 @@ components:
           type: array
           items:
             type: string
+    RoleMenuGrant:
+      type: object
+      required:
+        - roleId
+        - tenantId
+        - menuIds
+        - updatedAt
+      properties:
+        roleId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        menuIds:
+          type: array
+          items:
+            type: string
+        updatedAt:
+          type: string
+          format: date-time
     SetSysRoleMenusRequest:
       type: object
       required:
@@ -2050,18 +2067,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    SysRoleMenu:
-      type: object
-      required:
-        - roleId
-        - menuId
-      properties:
-        roleId:
-          type: string
-          format: uuid
-        menuId:
-          type: string
-          format: uuid
     SysUser:
       type: object
       required:
@@ -2101,6 +2106,7 @@ components:
       type: string
       enum:
         - active
+        - invited
         - disabled
     Tenant:
       type: object

@@ -64,6 +64,7 @@ export const sysUsers = pgTable(
     password: varchar("password", { length: 255 }).notNull(),
     email: varchar("email", { length: 128 }),
     mobile: varchar("mobile", { length: 32 }),
+    // status 值域（家族约定 2026-09-10）：1=active, 2=invited, 0=disabled
     status: smallint("status").notNull().default(1),
     // M01.F04.I02 — 连续失败锁定：阈值与窗口由消费后端决定，shared 仅落表
     failedAttempts: integer("failed_attempts").notNull().default(0),

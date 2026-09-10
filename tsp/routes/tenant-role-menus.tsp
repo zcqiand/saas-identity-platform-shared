@@ -1,6 +1,7 @@
 using TypeSpec.Http;
 
 // M00.F04 — sys_role_menu grants scoped by tenant and client (legacy M09).
+// 2026-09-10 I20 对齐（方案 C）：GET/PUT 返回聚合 RoleMenuGrant（不再返关系行数组）。
 @route("/tenants/{tenantId}/roles/{roleId}/menus")
 @tag("tenant-role-menus")
 namespace Saas.Identity.Shared.TenantRoleMenus {
@@ -10,7 +11,7 @@ namespace Saas.Identity.Shared.TenantRoleMenus {
     @path tenantId: string,
     @path roleId: string,
     @query clientId: string,
-  ): SysRoleMenu[] | ErrorResponse;
+  ): RoleMenuGrant | ErrorResponse;
 
   // M00.F04.I03 set role menus (relational rows, idempotent replacement)
   @put
@@ -19,7 +20,7 @@ namespace Saas.Identity.Shared.TenantRoleMenus {
     @path roleId: string,
     @query clientId: string,
     @body body: SetSysRoleMenusRequest,
-  ): SysRoleMenu[] | ErrorResponse;
+  ): RoleMenuGrant | ErrorResponse;
 
   // M00.F04.I04 clear role menus
   @delete

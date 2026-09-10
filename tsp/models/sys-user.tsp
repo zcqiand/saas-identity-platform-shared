@@ -6,9 +6,12 @@ namespace Saas.Identity.Shared;
 
 enum SysUserStatus {
   active,
+  invited,
   disabled,
 }
 
+// status DB 值域（家族约定 2026-09-10）：1=active, 2=invited, 0=disabled。
+// DB 列是裸 smallint 无 CHECK（drizzle/0000_target_ddl.sql:97），加值无需迁移。
 model SysUser {
   @format("uuid") id: string;
 
