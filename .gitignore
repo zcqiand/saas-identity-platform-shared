@@ -16,3 +16,7 @@ generated/csharp/
 # Ad-hoc debug script + suite handoff snapshot（不入仓，详见 review 2026-09-08）
 __inspect.mjs
 handoff.json
+
+# env 真值（2026-08-28 语义：gitignored，与前端仓对齐；test/example 是进仓契约不含 secret）
+.env.production
+.env.local
