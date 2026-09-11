@@ -23,3 +23,17 @@
 | 账号锁定（423/429） | toast 含「锁定」提示（vue 带倒计时 + 禁用提交按钮），停留登录页 |
 | 防重复提交 | submitting 期间按钮禁用（文案变「登录中…」） |
 | session 写入 | userId 取 `LoginResponse.user.id`；currentTenantId 取 `availableTenants[0].tenantId` |
+
+## M00.F01 租户管理（平台 admin CRUD）
+
+> 2026-09-11 REQ(e2e)-2026-003 首次成文；字段对齐 shared SSOT（tenantKey，9/7 起 code→tenantKey）。
+
+| 项 | 值 |
+|---|---|
+| 入口 | 侧边栏「租户管理」→ `/tenants` |
+| 列表 | 表格行（TableRow）；列 = Code(tenantKey, mono) / 名称 / 状态徽章 / 操作；空态「还没有租户」 |
+| 表单 | Dialog（CrudDialog）：tenantKey（必填，placeholder acme）/ 名称（必填）/ 状态 select（**仅 active 启用 / suspended 暂停**，契约无 archived） |
+| 创建 | 新建按钮 data-fn=M00.F01.I02 → Dialog → 保存 → toast「租户已创建」+ 行出现 |
+| 更新 | 行内编辑按钮 data-fn=M00.F01.I04 → Dialog 预填 → 保存 → toast「租户已更新」+ 行文本更新 |
+| 删除 | 行内删除按钮 data-fn=M00.F01.I05 → **AlertDialog 二次确认**（确认按钮文案「删除」）→ 确认 → toast「租户已删除」+ 行消失；确认动作必须在异步完成后才关弹窗（受控契约） |
+| 失败 | 各操作 toast.error（「创建失败：…」等），停留当前态 |
