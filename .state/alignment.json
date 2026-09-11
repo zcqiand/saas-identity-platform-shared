@@ -539,7 +539,9 @@
       "type": "页面",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\ui-interaction-spec.md"
+      ],
       "tests": [],
       "entry": []
     },

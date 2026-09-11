@@ -62,3 +62,30 @@
 | 表单 | roleCode（必填）/ roleName（必填）；创建提交归并 clientId="saas-console"（契约必填；管理台自建角色归属自身 client，表单不暴露） |
 | 创建/更新/删除 | 同租户管理范式（Dialog + toast + 行出现/更新/消失；删除 AlertDialog「删除」确认） |
 | 权限矩阵按钮 | **已废弃**（PUT permissions 契约下线）；三端不得再渲染该入口 |
+
+## M00.F04 角色菜单授权（③b）
+
+> 2026-09-11 REQ(e2e)-2026-005 ③b 首次成文；字段对齐 SSOT（SysMenu: clientId/title/type(directory|menu|button)/status:number）。
+
+| 项 | 值 |
+|---|---|
+| 入口 | 角色列表行内「菜单授权」→ /tenants/:t/roles/:r/menus |
+| 矩阵 | 按 client 分组的勾选列表（标题 + path）；每 client 独立菜单数据 |
+| 初始态 | 回读 GET 该角色 grant，勾选数反映 seed/上次保存真值（不得本地臆断初始计数） |
+| 保存 | 按钮显「保存 (N)」实时计数；PUT menuIds 集合 → toast「菜单授权已保存」 |
+| 清空 | 「清空」按钮归零计数（不自动保存） |
+| 写测试纪律 | E2E 写操作自产自销——保存后必须还原，勿污染后续读断言（msw 内存跨用例共享） |
+
+## M04.F03 OAuth 跳板登录（SSO，RFC 6749 §4.1.1/§4.1.2）
+
+> 2026-09-11 REQ(e2e)-2026-006 首次成文——ADR-0015 留给 E2E 的浏览器语义层。
+
+| 项 | 值 |
+|---|---|
+| 跳板 URL | /login?client_id=&redirect_uri=&state=（无 code） |
+| 登录前 | 表单正常渲染；守卫不得抢跳 /tenants（三端守卫都必须豁免跳板范式） |
+| 登录成功 | 调 POST /oauth/authorize（真源，**禁止 barrel 死桩**——假 code 跳 RP 是最危险假绿）→ 302/跳转 redirect_uri?code&state |
+| payload | 契约 AuthorizeCodeRequest：clientId/redirectUri/responseType/scope/state（**无 tenantId**；code 绑认证身份） |
+| 非法 redirect_uri | authorize 400 → 停留登录页 + toast，不得跳非白名单域 |
+| 已登录直访跳板 URL | 无需再认证，自动 authorize 领 code 回跳（不渲染表单卡死） |
+| code 回跳 | /login?code=&redirect_uri=&state= → 解析即回跳 RP（原样透传，防 code 泄漏到日志） |
