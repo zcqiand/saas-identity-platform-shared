@@ -37,3 +37,28 @@
 | 更新 | 行内编辑按钮 data-fn=M00.F01.I04 → Dialog 预填 → 保存 → toast「租户已更新」+ 行文本更新 |
 | 删除 | 行内删除按钮 data-fn=M00.F01.I05 → **AlertDialog 二次确认**（确认按钮文案「删除」）→ 确认 → toast「租户已删除」+ 行消失；确认动作必须在异步完成后才关弹窗（受控契约） |
 | 失败 | 各操作 toast.error（「创建失败：…」等），停留当前态 |
+
+## M01.F04.I06 登出（本地清理）+ M01.F03.I02 切换当前租户
+
+> 2026-09-11 REQ(e2e)-2026-004 首次成文。
+
+| 项 | 值 |
+|---|---|
+| 登出入口 | 侧边栏底部「登出」按钮 data-fn 同子项 ID |
+| 登出行为 | **await 登出 API 后**清本地 session 再跳 /login（时序错会被路由守卫拦回——vue 实锤修过）；登出后直访工作区被踢回 /login |
+| 切换入口 | 顶栏切换器（data-testid=tenant-switcher）Dropdown |
+| 切换数据 | 成员关系 GET /me/tenants（TenantMember[]，契约无租户名）；显示名 join 平台租户列表（管理台自身数据源） |
+| 切换行为 | 选中项 → POST /me/tenants/:id/switch → 新 token 落 session → 进该租户工作区（路由实现三端允许不同）+ 列表缓存失效；404 toast「该租户不存在或你不是其成员」 |
+| 过滤 | 状态非 active 的成员关系不出现在切换列表 |
+
+## M00.F03 角色管理（tenant-scoped CRUD）
+
+> 2026-09-11 REQ(e2e)-2026-005（③a）首次成文；字段对齐 SSOT（SysRole: roleCode/roleName/clientId/isPreset/status）。
+
+| 项 | 值 |
+|---|---|
+| 入口 | 侧边栏「角色管理」→ /tenants/:tenantId/roles |
+| 列表 | Code(roleCode, mono) / 名称(roleName)；无「权限」列（契约无 permissionIds，权限面由菜单授权承接） |
+| 表单 | roleCode（必填）/ roleName（必填）；创建提交归并 clientId="saas-console"（契约必填；管理台自建角色归属自身 client，表单不暴露） |
+| 创建/更新/删除 | 同租户管理范式（Dialog + toast + 行出现/更新/消失；删除 AlertDialog「删除」确认） |
+| 权限矩阵按钮 | **已废弃**（PUT permissions 契约下线）；三端不得再渲染该入口 |
