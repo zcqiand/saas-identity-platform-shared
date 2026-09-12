@@ -5,12 +5,11 @@
 ## 待办
 
 - （待补：从 session.json 债务清单迁入）
-- saas_prod 重建到 pivot 后模型（2026-09-12 盘点，用户裁定暂不动）：
-  现状停在 8/22 旧 SQL 迁移（V001-V005 journal：apps/users/tenants/api_keys/audit_events 等 14 表），
-  pivot（ADR-0025/0028）的 oauth_client/sys_user/tenant 新模型从未到达；库内无真业务数据
-  （= 8 月种子基线 + oauth_codes 2282 条垃圾）。重建 = drop 旧表 → PG_DATABASE=saas_prod
-  node scripts/migrate-db.mjs → nextjs DATABASE_URL=...saas_prod node scripts/seed-db.mjs。
-  前置条件：确认 VPS prod 后端（xiangru.uk 系）未在连此库跑 pivot 前版本，或已安排停机窗口。
+- ~~saas_prod 重建到 pivot 后模型~~ ✅ 2026-09-13 完成：
+  旧 14 表 drop（先本地 JSON 全量备份 saas_prod-backup-20260913.json，1.09MB=种子基线+2282 垃圾 oauth_codes）
+  → drizzle migrate（3 迁移全 apply）→ nextjs seed-db 灌库（与 dev 基线一致）。
+  途中修了 migrate 路径从零 replay 必炸的两处（见 drizzle/0000 与 0001 内注释）；
+  VPS prod 旧镜像容器在重建窗口期会打到缺表（后续 tag push 触发 CI 部署新镜像收敛）。
 
 ## 迭代方向
 

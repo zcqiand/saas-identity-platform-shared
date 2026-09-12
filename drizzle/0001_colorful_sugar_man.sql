@@ -1,2 +1,4 @@
-DROP INDEX IF EXISTS "uk_oauth_client_id";--> statement-breakpoint
-ALTER TABLE "oauth_client" ADD CONSTRAINT "uk_oauth_client_id" UNIQUE("client_id");
+-- 2026-09-13 no-op：本迁移原为 uk_oauth_client_id 的 INDEX→CONSTRAINT 换形。
+-- 0000 已直接以 UNIQUE CONSTRAINT 形态建该列（且必须先于 FK ALTER 段，见 0000 内注释），
+-- 从零 replay 时本迁移的两条语句会 2BP01（约束 backing index 不可 DROP INDEX）。
+-- 改写时无任何库 apply 过 journal（saas_dev/test 皆 push 建，无 __drizzle_migrations）。

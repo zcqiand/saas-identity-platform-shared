@@ -28,6 +28,9 @@ CREATE TABLE IF NOT EXISTS "oauth_client" (
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
+-- 2026-09-13 修复：client_id 被 6 表 FK 引用（42830），必须是 UNIQUE CONSTRAINT 且
+-- 须在 FK ALTER 段之前建（此前在文件尾部且是 CREATE UNIQUE INDEX 形态，从零 replay 必炸）。
+ALTER TABLE "oauth_client" ADD CONSTRAINT "uk_oauth_client_id" UNIQUE ("client_id");--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "oauth_code" (
 	"id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
 	"code" varchar(128) NOT NULL,
@@ -263,7 +266,6 @@ END $$;
 CREATE UNIQUE INDEX IF NOT EXISTS "uk_access_token_id" ON "oauth_access_token" USING btree ("token_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_access_token_user_tenant" ON "oauth_access_token" USING btree ("user_id","tenant_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_access_token_expires" ON "oauth_access_token" USING btree ("expires_at");--> statement-breakpoint
-CREATE UNIQUE INDEX IF NOT EXISTS "uk_oauth_client_id" ON "oauth_client" USING btree ("client_id");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "uk_oauth_code" ON "oauth_code" USING btree ("code");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_oauth_code_expires" ON "oauth_code" USING btree ("expires_at");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "idx_oauth_code_client_user_tenant" ON "oauth_code" USING btree ("client_id","user_id","tenant_id");--> statement-breakpoint

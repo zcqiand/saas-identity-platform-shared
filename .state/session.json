@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-shared",
-  "current_task": "9/8 TypeSpec 全面对齐 schema-first — model 名/文件名/URL path 全部归一；6 仓消费方待独立 PR 推平（commit 9016698）",
-  "last_session_at": "2026-09-07",
+  "current_task": "2026-09-13 saas_prod 重建完成（drop 旧14表→migrate 3 迁移→seed 灌库）+ migrate 路径从零 replay 两处修复（0000 唯一约束提前+CONSTRAINT 形态；0001 改 no-op）",
+  "last_session_at": "2026-09-13",
   "done": [
     "Round 1-3：状态列对齐 ground truth（7 模块 + 41 子项 + 19 F-function rollup 规划→开发中；M04.F03.I01-I03 + M06.F02.I04 废弃；REQ-2026-020 ID 重映射 I01-I03→I07-I09）",
     "Round 4-5：文档基线补齐（REQ-2026-023 审计/REQ-2026-024 切租户+邀请/REQ-2026-025 菜单结构 3 个新 REQ；docs/design/ 下 5 个设计 doc 含 flow-function-map.md canonical for orphan_whitelist）",
@@ -41,5 +41,6 @@
   ],
   "last_gate_passed_at": "2026-09-07T22:30+08:00 (saas-shared: L0/L0.no_fallback/L0.5/L1/L3/L4/L5 全绿, 100 项, 软告警 96)",
   "active_branch": "master",
-  "ahead_of_origin": "0"
+  "ahead_of_origin": "0",
+  "last_session_summary": "PLAN saas_prod 重建待办销账；备份 saas_prod-backup-20260913.json；dry-run 金标准过（scratch 库 13 表/21 FK）后再上 prod"
 }
