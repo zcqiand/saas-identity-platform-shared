@@ -106,8 +106,12 @@ describe("target DDL schema replay", () => {
     await client.query("CREATE SCHEMA public");
     await client.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
+    // Windows：spawnSync("npx") 无法解析 npx.cmd（ENOENT → status null），
+    // push 根本没跑、断言却报 "exited null"。win32 走 npx.cmd + shell；
+    // 断言强度不变（status 必须 === 0），Linux 行为不变。
+    const isWin = process.platform === "win32";
     const result = spawnSync(
-      "npx",
+      isWin ? "npx.cmd" : "npx",
       [
         "--no",
         "drizzle-kit",
@@ -123,6 +127,7 @@ describe("target DDL schema replay", () => {
           PG_DATABASE: requireEnv("PG_DATABASE_TEST"),
         },
         stdio: "inherit",
+        shell: isWin,
       },
     );
     if (result.status !== 0) {
@@ -154,7 +159,9 @@ describe("target DDL schema replay", () => {
        WHERE table_schema = 'public' AND column_name = 'id'
        ORDER BY table_name`,
     );
-    expect(rows).toHaveLength(12);
+    // 12 张表里 sys_role_menu / tenant_member_role 是复合主键 junction 表，
+    // 没有 id 列（见下方 junction PK 断言），带 uuid 默认值 id 列的是 10 张。
+    expect(rows).toHaveLength(10);
     for (const row of rows) {
       expect(row.column_default).toContain("uuid_generate_v4");
     }

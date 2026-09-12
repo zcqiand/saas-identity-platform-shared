@@ -16,10 +16,19 @@ model LoginRequest {
   clientId: string;
 }
 
+// 裁决 1 对齐 oracle（saas-msw :5100 实测 2026-09-12）：
+// - availableTenants 行 = TenantMembership（id/userId/tenantId/roleIds/status/joinedAt），
+//   不是嵌套 TenantMember；
+// - 补顶层 userId 与 currentTenantId（旧契约缺失）；
+// - switch 响应不带 clientId（见 SwitchTenantResponse），此处 clientId = 登录所用 client。
 model LoginResponse {
   user: SysUser;
 
-  availableTenants: TenantMember[];
+  availableTenants: TenantMembership[];
+
+  @format("uuid") userId: string;
+
+  @format("uuid") currentTenantId?: string;
 
   accessToken?: string;
 

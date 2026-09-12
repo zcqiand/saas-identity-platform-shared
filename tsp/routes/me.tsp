@@ -9,9 +9,10 @@ namespace Saas.Identity.Shared.Me {
   op whoami(): CurrentUser | ErrorResponse;
 
   // M01.F03.I01 list current user's tenant members for a client
+  // 裁决 1：行 shape = 扁平 TenantMembership（oracle 实测）
   @get
   @route("/tenants")
-  op listMyTenants(@query clientId?: string): TenantMember[] | ErrorResponse;
+  op listMyTenants(@query clientId?: string): TenantMembership[] | ErrorResponse;
 
   // M01.F03.I02 select tenant and issue a tenant/client-scoped token
   @post

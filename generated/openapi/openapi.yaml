@@ -746,7 +746,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TenantMember'
+                  $ref: '#/components/schemas/TenantMembership'
         default:
           description: An unexpected error response.
           content:
@@ -1036,7 +1036,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/TenantMemberView'
+                      $ref: '#/components/schemas/TenantMemberUserView'
                   page:
                     type: integer
                     format: int32
@@ -1071,7 +1071,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TenantMemberView'
+                $ref: '#/components/schemas/TenantMemberUserView'
         default:
           description: An unexpected error response.
           content:
@@ -1141,7 +1141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TenantMemberView'
+                $ref: '#/components/schemas/TenantMemberUserView'
         default:
           description: An unexpected error response.
           content:
@@ -1169,7 +1169,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TenantMemberView'
+                $ref: '#/components/schemas/TenantMemberUserView'
         default:
           description: An unexpected error response.
           content:
@@ -1228,7 +1228,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TenantMemberView'
+                $ref: '#/components/schemas/TenantMemberUserView'
         default:
           description: An unexpected error response.
           content:
@@ -1263,7 +1263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TenantMemberView'
+                $ref: '#/components/schemas/TenantMemberUserView'
         default:
           description: An unexpected error response.
           content:
@@ -1702,20 +1702,22 @@ components:
     CurrentUser:
       type: object
       required:
-        - user
+        - id
         - memberships
       properties:
-        user:
-          $ref: '#/components/schemas/SysUser'
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
         memberships:
           type: array
           items:
-            $ref: '#/components/schemas/TenantMember'
+            $ref: '#/components/schemas/TenantMembership'
         currentTenantId:
           type: string
           format: uuid
-        clientId:
-          type: string
     EffectiveMenuNode:
       type: object
       required:
@@ -1808,6 +1810,7 @@ components:
       required:
         - user
         - availableTenants
+        - userId
         - clientId
       properties:
         user:
@@ -1815,7 +1818,13 @@ components:
         availableTenants:
           type: array
           items:
-            $ref: '#/components/schemas/TenantMember'
+            $ref: '#/components/schemas/TenantMembership'
+        userId:
+          type: string
+          format: uuid
+        currentTenantId:
+          type: string
+          format: uuid
         accessToken:
           type: string
         refreshToken:
@@ -1964,7 +1973,6 @@ components:
         - refreshToken
         - expiresAt
         - tenantId
-        - clientId
       properties:
         accessToken:
           type: string
@@ -1976,8 +1984,6 @@ components:
         tenantId:
           type: string
           format: uuid
-        clientId:
-          type: string
     SysMenu:
       type: object
       required:
@@ -2199,7 +2205,45 @@ components:
       type: string
       enum:
         - active
+        - invited
+        - suspended
         - disabled
+    TenantMemberUserView:
+      type: object
+      required:
+        - id
+        - tenantId
+        - username
+        - status
+        - roleIds
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        username:
+          type: string
+          minLength: 1
+          maxLength: 64
+        email:
+          type: string
+          format: email
+        status:
+          $ref: '#/components/schemas/TenantMemberStatus'
+        roleIds:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     TenantMemberView:
       type: object
       required:
@@ -2215,6 +2259,34 @@ components:
           type: array
           items:
             type: string
+    TenantMembership:
+      type: object
+      required:
+        - id
+        - userId
+        - tenantId
+        - roleIds
+        - status
+        - joinedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        roleIds:
+          type: array
+          items:
+            type: string
+        status:
+          $ref: '#/components/schemas/TenantMemberStatus'
+        joinedAt:
+          type: string
+          format: date-time
     TenantStatus:
       type: string
       enum:

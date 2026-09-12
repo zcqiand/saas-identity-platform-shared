@@ -1,6 +1,9 @@
 using TypeSpec.Http;
 
 // M00.F02 — tenant membership management. Role writes target tenant_member.
+// 裁决 1（2026-09-12）：路径参数 {userId} 语义 = sys_user.id（user_id），
+// 除 invitations 外响应均为扁平 TenantMemberUserView（顶层 id = user id）。
+// 端点路径不动（L2 SSOT 按路径扫源码）。
 @route("/tenants/{tenantId}/members")
 @tag("tenant-members")
 namespace Saas.Identity.Shared.TenantMembers {
@@ -11,16 +14,16 @@ namespace Saas.Identity.Shared.TenantMembers {
     @query page?: int32,
     @query pageSize?: int32,
     @query status?: TenantMemberStatus,
-  ): Page<TenantMemberView> | ErrorResponse;
+  ): Page<TenantMemberUserView> | ErrorResponse;
 
   // M00.F02.I02 create global sys_user and tenant_member
   @post
-  op createTenantUser(@path tenantId: string, @body body: CreateSysUserRequest): TenantMemberView | ErrorResponse;
+  op createTenantUser(@path tenantId: string, @body body: CreateSysUserRequest): TenantMemberUserView | ErrorResponse;
 
   // M00.F02.I03 member detail
   @get
   @route("/{userId}")
-  op getTenantUser(@path tenantId: string, @path userId: string): TenantMemberView | ErrorResponse;
+  op getTenantUser(@path tenantId: string, @path userId: string): TenantMemberUserView | ErrorResponse;
 
   // M00.F02.I04 update global sys_user/member fields
   @patch
@@ -29,7 +32,7 @@ namespace Saas.Identity.Shared.TenantMembers {
     @path tenantId: string,
     @path userId: string,
     @body body: UpdateSysUserRequest,
-  ): TenantMemberView | ErrorResponse;
+  ): TenantMemberUserView | ErrorResponse;
 
   // M00.F02.I05 remove tenant member; the global sys_user remains
   @delete
@@ -43,9 +46,10 @@ namespace Saas.Identity.Shared.TenantMembers {
     @path tenantId: string,
     @path userId: string,
     @body body: SetTenantMemberRolesRequest,
-  ): TenantMemberView | ErrorResponse;
+  ): TenantMemberUserView | ErrorResponse;
 
   // M00.F02.I06 invite a global account into a tenant
+  // 邀请端点维持嵌套 TenantMemberView（oracle 方案 C，不随裁决 1 扁平化）
   @post
   @route("/invitations")
   op inviteTenantUser(
@@ -60,5 +64,5 @@ namespace Saas.Identity.Shared.TenantMembers {
     @path tenantId: string,
     @path userId: string,
     @body body: { status: TenantMemberStatus },
-  ): TenantMemberView | ErrorResponse;
+  ): TenantMemberUserView | ErrorResponse;
 }
