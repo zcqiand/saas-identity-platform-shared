@@ -20,3 +20,6 @@ handoff.json
 # env 真值（2026-08-28 语义：gitignored，与前端仓对齐；test/example 是进仓契约不含 secret）
 .env.production
 .env.local
+
+# 生产备份 JSON（本地快照，绝不入库 —— 2026-09-13 误扫事故）
+saas_prod-backup-*.json
