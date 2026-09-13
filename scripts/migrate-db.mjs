@@ -84,6 +84,10 @@ async function main() {
   await ensureExtensions();
 
   // drizzle-kit migrate 读 drizzle.config.ts，自动用 PG_* env 拼连接
+  // Windows：spawnSync 裸起 `npx`（.cmd shim）在 Node ≥18.20 会 EINVAL / 退 null
+  // —— DDL 实际已生效但脚本按失败处理（rebaseline-db.mjs 同款教训）。win32 走
+  // shell:true 让 cmd.exe 解析 npx；args 全是固定字面量，无注入面。
+  const isWin = process.platform === "win32";
   const r = spawnSync(
     "npx",
     ["--no", "drizzle-kit", "migrate", "--config", "drizzle.config.ts"],
@@ -91,11 +95,17 @@ async function main() {
       cwd: SHARED_ROOT,
       env,
       stdio: "inherit",
+      shell: isWin,
     },
   );
 
   if (r.status !== 0) {
-    console.error(`[migrate-db] FATAL: drizzle-kit migrate 退出 ${r.status}`);
+    console.error(
+      `[migrate-db] FATAL: drizzle-kit migrate 退出 ${r.status}` +
+        (isWin && r.status === null
+          ? "（Windows spawn 退 null —— exit code 不可信，请用 post-flight 查 __drizzle_migrations 核对实际应用情况）"
+          : ""),
+    );
     process.exit(r.status ?? 1);
   }
 
