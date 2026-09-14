@@ -32,7 +32,7 @@ async function main() {
       clientName: "实验室管理系统",
       grantTypes: "authorization_code,refresh_token",
       redirectUris:
-        "https://lab-react.xiangru.uk/login,https://lab-vue.xiangru.uk/login,https://lab-nextjs.xiangru.uk/login,http://localhost:5200/login,http://localhost:5201/callback,http://localhost:5202/login,http://localhost:5203/login",
+        "https://lab-react.xiangru.uk/login,https://lab-vue.xiangru.uk/login,https://lab-nextjs.xiangru.uk/login,http://localhost:5200/login,http://localhost:5201/callback,http://localhost:5201/login,http://localhost:5202/login,http://localhost:5203/login",
       scopes: "openid,profile,email",
       autoApprove: true,
     })
