@@ -266,9 +266,9 @@ async function main() {
     const extraGrantRows = [];
     for (const r of roles) {
       if (grantedRoleIds.has(r.id)) continue;
-      if (r.code !== "admin") continue;
+      if (r.roleCode !== "admin") continue;
       for (const m of menus) {
-        if ((appCodeById.get(m.appId) ?? DEFAULT_CLIENT_ID) === DEFAULT_CLIENT_ID) {
+        if (appCodeById.get(m.clientId) === DEFAULT_CLIENT_ID) {
           extraGrantRows.push([resolveId(r.id), resolveId(m.id)]);
         }
       }
