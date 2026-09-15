@@ -27,7 +27,9 @@
 //   apps      → oauth_client      client_id 列 = app code（家族约定：
 //                                 oauth_client.client_id 是字符串 code 非 UUID）
 //   menus     → sys_menu          parentId null→零 UUID；type group/page→1/2
-//                                 （nextjs menus route 的映射，aspnetcore 同）
+//                                 （nextjs menus route 的映射，aspnetcore 同）；
+//                                 clientId 查不到对应 app → fail-safe skip
+//                                 （ADR-0019：业务身份列禁兜底字面量，2026-09-16）
 //   role-menu-grants → sys_role_menu（roleId × menuIds 拆行）
 //   tenant_application：每租户 × lab-management 一行（固定可读 UUID）
 //
@@ -42,6 +44,7 @@
 //
 // 用法：
 //   DATABASE_URL=postgresql://... node scripts/seed-db.mjs
+// 测试可 import { seedDatabase } 注入种子直连复用（不触发 env fail-fast）。
 
 import { createRequire } from "node:module";
 import { resolve, dirname } from "node:path";
@@ -96,6 +99,204 @@ const statusToSmallint = (s) =>
 // msw menu type → sys_menu.type smallint（与 nextjs/aspnetcore 一致：group=1 page=2）
 const menuTypeToSmallint = (t) => (t === "directory" ? 1 : t === "menu" ? 2 : 3);
 
+// ── 灌库主体（导出：集成测试注入种子直连复用；CLI 由 main 装配）─────────────
+// 返回摘要计数；sys_menu_skipped = fail-safe skip 的菜单行数（ADR-0019）。
+export async function seedDatabase(client, seeds) {
+  const { tenants, users, roles, memberships, apps, menus, roleMenuGrants } = seeds;
+
+  async function insertAll(table, columns, rows) {
+    const colList = columns.join(", ");
+    const placeholders = columns.map((_, i) => `$${i + 1}`).join(", ");
+    const sql = `INSERT INTO ${table} (${colList}) VALUES (${placeholders})`;
+    for (const row of rows) {
+      await client.query(sql, row);
+    }
+  }
+
+  console.log(
+    `[seed-db] 读入 seeds：tenants=${tenants.length} users=${users.length} ` +
+      `roles=${roles.length} memberships=${memberships.length} ` +
+      `apps=${apps.length} menus=${menus.length} role_menu_grants=${roleMenuGrants.length}`,
+  );
+
+  // ── 幂等：清空业务表（不动 __drizzle_migrations tracking 表）────────────
+  // RESTART IDENTITY CASCADE 沿 FK 级联清，顺序无关
+  await client.query(
+    `TRUNCATE TABLE
+       oauth_access_token, oauth_code, oauth_refresh_token,
+       sys_role_menu, sys_menu, sys_role,
+       tenant_member_role, tenant_member, tenant_application,
+       sys_user, oauth_client, tenant
+     RESTART IDENTITY CASCADE`,
+  );
+  console.log("[seed-db] 已清空业务表（RESTART IDENTITY CASCADE）。");
+
+  // 1. tenant（fixture 字段已对齐契约 tenantKey → DB tenant_key；settings 列已随 pivot 删除）
+  await insertAll(
+    "tenant",
+    ["id", "tenant_key", "name", "status", "created_at", "updated_at"],
+    tenants.map((t) => [
+      resolveId(t.id), t.tenantKey, t.name, statusToSmallint(t.status),
+      t.createdAt, t.updatedAt,
+    ]),
+  );
+  console.log(`[seed-db] tenant: ${tenants.length}`);
+
+  // 2. oauth_client（client_id 列 = clientId，业务 code 形如 "lab-management"；clientSecret 透传 fixture）
+  await insertAll(
+    "oauth_client",
+    [
+      "id", "client_id", "client_secret", "client_name",
+      "grant_types", "redirect_uris", "scopes",
+      "access_token_validity", "refresh_token_validity",
+      "auto_approve", "status", "created_at", "updated_at",
+    ],
+    apps.map((a) => [
+      resolveId(a.id), a.clientId, a.clientSecret, a.clientName,
+      (a.grantTypes ?? []).join(","), (a.redirectUris ?? []).join(","),
+      (a.scopes ?? []).join(","),
+      7200, 2592000,
+      a.isFirstParty === true, statusToSmallint(a.status),
+      a.createdAt, a.updatedAt,
+    ]),
+  );
+  console.log(`[seed-db] oauth_client: ${apps.length}`);
+
+  // 3. sys_user（全局自然人；password = 家族 dev 约定 plain:dev123456）
+  await insertAll(
+    "sys_user",
+    ["id", "username", "password", "email", "mobile", "status", "created_at", "updated_at"],
+    users.map((u) => [
+      resolveId(u.id), u.username, "plain:dev123456", u.email, null,
+      statusToSmallint(u.status), u.createdAt, u.updatedAt,
+    ]),
+  );
+  console.log(`[seed-db] sys_user: ${users.length}`);
+
+  // 4. sys_role（2026-09-11 fixture 对齐契约字段 roleCode/roleName/clientId/isPreset/status）
+  await insertAll(
+    "sys_role",
+    [
+      "id", "tenant_id", "client_id", "role_code", "role_name",
+      "description", "is_preset", "status", "created_at", "updated_at",
+    ],
+    roles.map((r) => [
+      resolveId(r.id), resolveId(r.tenantId), r.clientId ?? DEFAULT_CLIENT_ID,
+      r.roleCode, r.roleName, r.description ?? null, r.isPreset ?? true,
+      r.status ?? 1, r.createdAt, r.updatedAt,
+    ]),
+  );
+  console.log(`[seed-db] sys_role: ${roles.length}`);
+
+  // 5. tenant_member + tenant_member_role（membership 拆两表；roleIds 进关联表）
+  await insertAll(
+    "tenant_member",
+    ["id", "tenant_id", "user_id", "member_name", "is_owner", "status", "created_at", "updated_at"],
+    memberships.map((m) => {
+      const user = users.find((u) => u.id === m.userId);
+      return [
+        resolveId(m.id), resolveId(m.tenantId), resolveId(m.userId),
+        user?.username ?? null,
+        m.roleIds?.length === 1 && m.roleIds[0].endsWith("00000000001"), // 首角色是 admin 视为 owner
+        statusToSmallint(m.status), m.joinedAt, m.joinedAt,
+      ];
+    }),
+  );
+  const memberRoleRows = memberships.flatMap((m) =>
+    (m.roleIds ?? []).map((rid) => [resolveId(m.id), resolveId(rid)]),
+  );
+  await insertAll("tenant_member_role", ["member_id", "role_id"], memberRoleRows);
+  console.log(
+    `[seed-db] tenant_member: ${memberships.length}, tenant_member_role: ${memberRoleRows.length}`,
+  );
+
+  // 6. tenant_application（每租户订阅 DEFAULT_CLIENT_ID 至 2027 年底；固定可读 UUID）
+  await insertAll(
+    "tenant_application",
+    ["id", "tenant_id", "client_id", "status", "expire_time", "created_at"],
+    tenants.map((t, i) => [
+      `${TENANT_APP_ID_PREFIX}${i + 1}`, resolveId(t.id), DEFAULT_CLIENT_ID,
+      1, "2027-12-31T23:59:59Z", t.createdAt,
+    ]),
+  );
+  console.log(`[seed-db] tenant_application: ${tenants.length}`);
+
+  // 7. sys_menu（parentId null→零 UUID；sys_menu.client_id = app clientId，业务 code 形）
+  // fail-safe skip（ADR-0019 对齐，2026-09-16）：clientId 查不到对应 app 的菜单行
+  // 跳过并在摘要计数（sys_menu_skipped），禁止静默兜底写 'lab-management' 字面量
+  // —— app_code 是业务身份列，键缺失写错 client 等于把菜单挂到别家应用头上。
+  const appCodeById = new Map(apps.map((a) => [a.id, a.clientId]));
+  const skippedMenus = [];
+  const menuRows = menus.flatMap((m) => {
+    const appCode = appCodeById.get(m.clientId);
+    if (appCode === undefined) {
+      skippedMenus.push(m);
+      return [];
+    }
+    return [[
+      resolveId(m.id),
+      appCode,
+      m.parentId ? resolveId(m.parentId) : ZERO_UUID,
+      m.title, menuTypeToSmallint(m.type),
+      m.path ?? null, null, null, m.icon ?? null,
+      m.sortOrder ?? 0, 1, m.createdAt,
+    ]];
+  });
+  await insertAll(
+    "sys_menu",
+    [
+      "id", "client_id", "parent_id", "title", "type",
+      "path", "component", "perms", "icon", "sort_order", "status", "created_at",
+    ],
+    menuRows,
+  );
+  if (skippedMenus.length > 0) {
+    console.log(
+      `[seed-db] sys_menu: skip ${skippedMenus.length} 行（clientId 无对应 app：` +
+        `${skippedMenus.map((m) => `${m.id}→${m.clientId}`).join(", ")}）`,
+    );
+  }
+  console.log(`[seed-db] sys_menu: ${menuRows.length}`);
+
+  // 8. sys_role_menu（role-menu-grants 拆行；fixture grants 只覆盖 acme admin，
+  //    其余租户的 admin 角色补挂该 client 全部菜单，保证 me/menus 非空可比）
+  //    注：clientId 无对应 app 的菜单行已被 7 skip，天然不进补齐集合。
+  const grantedRoleIds = new Set(roleMenuGrants.map((g) => g.roleId));
+  const extraGrantRows = [];
+  for (const r of roles) {
+    if (grantedRoleIds.has(r.id)) continue;
+    if (r.roleCode !== "admin") continue;
+    for (const m of menus) {
+      if (appCodeById.get(m.clientId) === DEFAULT_CLIENT_ID) {
+        extraGrantRows.push([resolveId(r.id), resolveId(m.id)]);
+      }
+    }
+  }
+  const grantRows = [
+    ...roleMenuGrants.flatMap((g) =>
+      (g.menuIds ?? []).map((mid) => [resolveId(g.roleId), resolveId(mid)]),
+    ),
+    ...extraGrantRows,
+  ];
+  await insertAll("sys_role_menu", ["role_id", "menu_id"], grantRows);
+  console.log(
+    `[seed-db] sys_role_menu: ${grantRows.length} (fixture ${grantRows.length - extraGrantRows.length} + 补齐 ${extraGrantRows.length})`,
+  );
+
+  return {
+    tenant: tenants.length,
+    oauth_client: apps.length,
+    sys_user: users.length,
+    sys_role: roles.length,
+    tenant_member: memberships.length,
+    tenant_member_role: memberRoleRows.length,
+    tenant_application: tenants.length,
+    sys_menu: menuRows.length,
+    sys_menu_skipped: skippedMenus.length,
+    sys_role_menu: grantRows.length,
+  };
+}
+
 async function main() {
   // 无兜底，缺了就炸（禁 env 默认值兜底，ADR-0019）
   const DATABASE_URL = process.env.DATABASE_URL;
@@ -109,15 +310,6 @@ async function main() {
     connectionTimeoutMillis: 10000,
   });
 
-  async function insertAll(table, columns, rows) {
-    const colList = columns.join(", ");
-    const placeholders = columns.map((_, i) => `$${i + 1}`).join(", ");
-    const sql = `INSERT INTO ${table} (${colList}) VALUES (${placeholders})`;
-    for (const row of rows) {
-      await client.query(sql, row);
-    }
-  }
-
   try {
     console.log(
       `[seed-db] 连接 ${DATABASE_URL.replace(/:[^:@/]+@/, ":***@")} ...`,
@@ -125,164 +317,15 @@ async function main() {
     await client.connect();
     console.log("[seed-db] 已连接。");
 
-    const tenants = loadJson("tenant.json");
-    const users = loadJson("sys_user.json");
-    const roles = loadJson("sys_role.json");
-    const memberships = loadJson("tenant_member.json");
-    const apps = loadJson("oauth_client.json");
-    const menus = loadJson("sys_menu.json");
-    const roleMenuGrants = loadJson("sys_role_menu.json");
-
-    console.log(
-      `[seed-db] 读入 seeds：tenants=${tenants.length} users=${users.length} ` +
-        `roles=${roles.length} memberships=${memberships.length} ` +
-        `apps=${apps.length} menus=${menus.length} role_menu_grants=${roleMenuGrants.length}`,
-    );
-
-    // ── 幂等：清空业务表（不动 __drizzle_migrations tracking 表）────────────
-    // RESTART IDENTITY CASCADE 沿 FK 级联清，顺序无关
-    await client.query(
-      `TRUNCATE TABLE
-         oauth_access_token, oauth_code, oauth_refresh_token,
-         sys_role_menu, sys_menu, sys_role,
-         tenant_member_role, tenant_member, tenant_application,
-         sys_user, oauth_client, tenant
-       RESTART IDENTITY CASCADE`,
-    );
-    console.log("[seed-db] 已清空业务表（RESTART IDENTITY CASCADE）。");
-
-    // 1. tenant（fixture 字段已对齐契约 tenantKey → DB tenant_key；settings 列已随 pivot 删除）
-    await insertAll(
-      "tenant",
-      ["id", "tenant_key", "name", "status", "created_at", "updated_at"],
-      tenants.map((t) => [
-        resolveId(t.id), t.tenantKey, t.name, statusToSmallint(t.status),
-        t.createdAt, t.updatedAt,
-      ]),
-    );
-    console.log(`[seed-db] tenant: ${tenants.length}`);
-
-    // 2. oauth_client（client_id 列 = clientId，业务 code 形如 "lab-management"；clientSecret 透传 fixture）
-    await insertAll(
-      "oauth_client",
-      [
-        "id", "client_id", "client_secret", "client_name",
-        "grant_types", "redirect_uris", "scopes",
-        "access_token_validity", "refresh_token_validity",
-        "auto_approve", "status", "created_at", "updated_at",
-      ],
-      apps.map((a) => [
-        resolveId(a.id), a.clientId, a.clientSecret, a.clientName,
-        (a.grantTypes ?? []).join(","), (a.redirectUris ?? []).join(","),
-        (a.scopes ?? []).join(","),
-        7200, 2592000,
-        a.isFirstParty === true, statusToSmallint(a.status),
-        a.createdAt, a.updatedAt,
-      ]),
-    );
-    console.log(`[seed-db] oauth_client: ${apps.length}`);
-
-    // 3. sys_user（全局自然人；password = 家族 dev 约定 plain:dev123456）
-    await insertAll(
-      "sys_user",
-      ["id", "username", "password", "email", "mobile", "status", "created_at", "updated_at"],
-      users.map((u) => [
-        resolveId(u.id), u.username, "plain:dev123456", u.email, null,
-        statusToSmallint(u.status), u.createdAt, u.updatedAt,
-      ]),
-    );
-    console.log(`[seed-db] sys_user: ${users.length}`);
-
-    // 4. sys_role（2026-09-11 fixture 对齐契约字段 roleCode/roleName/clientId/isPreset/status）
-    await insertAll(
-      "sys_role",
-      [
-        "id", "tenant_id", "client_id", "role_code", "role_name",
-        "description", "is_preset", "status", "created_at", "updated_at",
-      ],
-      roles.map((r) => [
-        resolveId(r.id), resolveId(r.tenantId), r.clientId ?? DEFAULT_CLIENT_ID,
-        r.roleCode, r.roleName, r.description ?? null, r.isPreset ?? true,
-        r.status ?? 1, r.createdAt, r.updatedAt,
-      ]),
-    );
-    console.log(`[seed-db] sys_role: ${roles.length}`);
-
-    // 5. tenant_member + tenant_member_role（membership 拆两表；roleIds 进关联表）
-    await insertAll(
-      "tenant_member",
-      ["id", "tenant_id", "user_id", "member_name", "is_owner", "status", "created_at", "updated_at"],
-      memberships.map((m) => {
-        const user = users.find((u) => u.id === m.userId);
-        return [
-          resolveId(m.id), resolveId(m.tenantId), resolveId(m.userId),
-          user?.username ?? null,
-          m.roleIds?.length === 1 && m.roleIds[0].endsWith("00000000001"), // 首角色是 admin 视为 owner
-          statusToSmallint(m.status), m.joinedAt, m.joinedAt,
-        ];
-      }),
-    );
-    const memberRoleRows = memberships.flatMap((m) =>
-      (m.roleIds ?? []).map((rid) => [resolveId(m.id), resolveId(rid)]),
-    );
-    await insertAll("tenant_member_role", ["member_id", "role_id"], memberRoleRows);
-    console.log(
-      `[seed-db] tenant_member: ${memberships.length}, tenant_member_role: ${memberRoleRows.length}`,
-    );
-
-    // 6. tenant_application（每租户订阅 DEFAULT_CLIENT_ID 至 2027 年底；固定可读 UUID）
-    await insertAll(
-      "tenant_application",
-      ["id", "tenant_id", "client_id", "status", "expire_time", "created_at"],
-      tenants.map((t, i) => [
-        `${TENANT_APP_ID_PREFIX}${i + 1}`, resolveId(t.id), DEFAULT_CLIENT_ID,
-        1, "2027-12-31T23:59:59Z", t.createdAt,
-      ]),
-    );
-    console.log(`[seed-db] tenant_application: ${tenants.length}`);
-
-    // 7. sys_menu（parentId null→零 UUID；sys_menu.client_id = app clientId，业务 code 形）
-    const appCodeById = new Map(apps.map((a) => [a.id, a.clientId]));
-    await insertAll(
-      "sys_menu",
-      [
-        "id", "client_id", "parent_id", "title", "type",
-        "path", "component", "perms", "icon", "sort_order", "status", "created_at",
-      ],
-      menus.map((m) => [
-        resolveId(m.id),
-        appCodeById.get(m.clientId) ?? DEFAULT_CLIENT_ID,
-        m.parentId ? resolveId(m.parentId) : ZERO_UUID,
-        m.title, menuTypeToSmallint(m.type),
-        m.path ?? null, null, null, m.icon ?? null,
-        m.sortOrder ?? 0, 1, m.createdAt,
-      ]),
-    );
-    console.log(`[seed-db] sys_menu: ${menus.length}`);
-
-    // 8. sys_role_menu（role-menu-grants 拆行；fixture grants 只覆盖 acme admin，
-    //    其余租户的 admin 角色补挂该 client 全部菜单，保证 me/menus 非空可比）
-    const grantedRoleIds = new Set(roleMenuGrants.map((g) => g.roleId));
-    const extraGrantRows = [];
-    for (const r of roles) {
-      if (grantedRoleIds.has(r.id)) continue;
-      if (r.roleCode !== "admin") continue;
-      for (const m of menus) {
-        if (appCodeById.get(m.clientId) === DEFAULT_CLIENT_ID) {
-          extraGrantRows.push([resolveId(r.id), resolveId(m.id)]);
-        }
-      }
-    }
-    const grantRows = [
-      ...roleMenuGrants.flatMap((g) =>
-        (g.menuIds ?? []).map((mid) => [resolveId(g.roleId), resolveId(mid)]),
-      ),
-      ...extraGrantRows,
-    ];
-    await insertAll("sys_role_menu", ["role_id", "menu_id"], grantRows);
-    console.log(
-      `[seed-db] sys_role_menu: ${grantRows.length} (fixture ${grantRows.length - extraGrantRows.length} + 补齐 ${extraGrantRows.length})`,
-    );
+    await seedDatabase(client, {
+      tenants: loadJson("tenant.json"),
+      users: loadJson("sys_user.json"),
+      roles: loadJson("sys_role.json"),
+      memberships: loadJson("tenant_member.json"),
+      apps: loadJson("oauth_client.json"),
+      menus: loadJson("sys_menu.json"),
+      roleMenuGrants: loadJson("sys_role_menu.json"),
+    });
 
     // ── 验证 count ────────────────────────────────────────────────────────────
     const tables = [
