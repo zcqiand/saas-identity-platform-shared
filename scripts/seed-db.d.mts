@@ -22,6 +22,7 @@ export interface SeedUser {
 export interface SeedRole {
   id: string;
   tenantId: string;
+  /** 缺失或不在 apps 集合 → 该行 fail-safe skip（ADR-0019） */
   clientId?: string;
   roleCode: string;
   roleName: string;
@@ -87,6 +88,8 @@ export interface SeedSummary {
   oauth_client: number;
   sys_user: number;
   sys_role: number;
+  /** clientId 缺失/不在 apps 集合被 skip 的 sys_role 行数（ADR-0019 fail-safe skip） */
+  sys_role_skipped: number;
   tenant_member: number;
   tenant_member_role: number;
   tenant_application: number;

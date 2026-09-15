@@ -22,7 +22,9 @@
 //                                 与 aspnetcore/nextjs login 的 Phase 5 校验对齐）
 //   roles     → sys_role          code→role_code；client_id 取该租户订阅的
 //                                 首个 client（fixture 未按 client 分域，全挂
-//                                 lab-management）；is_preset=true
+//                                 lab-management）；is_preset=true；
+//                                 clientId 缺失/不在 apps 集合 → fail-safe skip
+//                                 （ADR-0019，与 sys_menu 同款，2026-09-16）
 //   memberships → tenant_member + tenant_member_role（roleIds 拆关联表）
 //   apps      → oauth_client      client_id 列 = app code（家族约定：
 //                                 oauth_client.client_id 是字符串 code 非 UUID）
@@ -174,19 +176,37 @@ export async function seedDatabase(client, seeds) {
   console.log(`[seed-db] sys_user: ${users.length}`);
 
   // 4. sys_role（2026-09-11 fixture 对齐契约字段 roleCode/roleName/clientId/isPreset/status）
+  // fail-safe skip（ADR-0019 对齐，与 sys_menu 同款，2026-09-16）：clientId 缺失或
+  // 不在 apps 集合的行跳过并在摘要计数（sys_role_skipped），禁止静默兜底写
+  // 'lab-management' 字面量。skipped 角色同步排除出补齐集合（防 sys_role_menu 孤儿）。
+  const appClientIds = new Set(apps.map((a) => a.clientId));
+  const skippedRoles = [];
+  const seedableRoles = roles.filter((r) => {
+    if (r.clientId === undefined || !appClientIds.has(r.clientId)) {
+      skippedRoles.push(r);
+      return false;
+    }
+    return true;
+  });
   await insertAll(
     "sys_role",
     [
       "id", "tenant_id", "client_id", "role_code", "role_name",
       "description", "is_preset", "status", "created_at", "updated_at",
     ],
-    roles.map((r) => [
-      resolveId(r.id), resolveId(r.tenantId), r.clientId ?? DEFAULT_CLIENT_ID,
+    seedableRoles.map((r) => [
+      resolveId(r.id), resolveId(r.tenantId), r.clientId,
       r.roleCode, r.roleName, r.description ?? null, r.isPreset ?? true,
       r.status ?? 1, r.createdAt, r.updatedAt,
     ]),
   );
-  console.log(`[seed-db] sys_role: ${roles.length}`);
+  if (skippedRoles.length > 0) {
+    console.log(
+      `[seed-db] sys_role: skip ${skippedRoles.length} 行（clientId 缺失/无对应 app：` +
+        `${skippedRoles.map((r) => `${r.id}→${r.clientId ?? "(缺失)"}`).join(", ")}）`,
+    );
+  }
+  console.log(`[seed-db] sys_role: ${seedableRoles.length}`);
 
   // 5. tenant_member + tenant_member_role（membership 拆两表；roleIds 进关联表）
   await insertAll(
@@ -263,7 +283,7 @@ export async function seedDatabase(client, seeds) {
   //    注：clientId 无对应 app 的菜单行已被 7 skip，天然不进补齐集合。
   const grantedRoleIds = new Set(roleMenuGrants.map((g) => g.roleId));
   const extraGrantRows = [];
-  for (const r of roles) {
+  for (const r of seedableRoles) {
     if (grantedRoleIds.has(r.id)) continue;
     if (r.roleCode !== "admin") continue;
     for (const m of menus) {
@@ -287,7 +307,8 @@ export async function seedDatabase(client, seeds) {
     tenant: tenants.length,
     oauth_client: apps.length,
     sys_user: users.length,
-    sys_role: roles.length,
+    sys_role: seedableRoles.length,
+    sys_role_skipped: skippedRoles.length,
     tenant_member: memberships.length,
     tenant_member_role: memberRoleRows.length,
     tenant_application: tenants.length,

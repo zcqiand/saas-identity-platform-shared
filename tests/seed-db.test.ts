@@ -8,7 +8,7 @@ import { createRequire } from "node:module";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { seedDatabase } from "../scripts/seed-db.mjs";
-import type { SeedMenu, SeedSet } from "../scripts/seed-db.d.mts";
+import type { SeedMenu, SeedRole, SeedSet } from "../scripts/seed-db.d.mts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHARED_ROOT = resolve(__dirname, "..");
@@ -109,58 +109,86 @@ describe.skipIf(!process.env.DATABASE_URL)("seed-db 集成（saas_dev）", () =>
   );
 
   it(
-    "sys_menu fail-safe skip：clientId 查不到 app 的菜单行不落库，摘要计数反映 skip（ADR-0019）",
+    "sys_menu / sys_role fail-safe skip：clientId 查不到 app 的行不落库，摘要计数反映 skip（ADR-0019）",
     { timeout: 60_000 },
     async () => {
       const menus = require("./seeds/sys_menu.json") as SeedMenu[];
+      const roles = require("./seeds/sys_role.json") as SeedRole[];
       const seeds = {
         tenants: require("./seeds/tenant.json"),
         users: require("./seeds/sys_user.json"),
-        roles: require("./seeds/sys_role.json"),
         memberships: require("./seeds/tenant_member.json"),
         apps: require("./seeds/oauth_client.json"),
         roleMenuGrants: require("./seeds/sys_role_menu.json"),
-      } as Omit<SeedSet, "menus">;
+      } as Omit<SeedSet, "menus" | "roles">;
 
-      // 注入毒行：clientId 指向 apps 集合里不存在的 app id。
+      // 注入毒行：clientId 指向 apps 集合里不存在的 app。
       // 旧行为（?? DEFAULT_CLIENT_ID 兜底）会把它静默存成 'lab-management'。
-      const orphan: SeedMenu = {
+      const orphanMenu: SeedMenu = {
         ...menus[0],
         id: "00000000-0000-0000-0000-00000000d001",
         clientId: "00000000-0000-0000-0000-ffffffffffff",
       };
-      const seededMenus = [...menus, orphan];
+      const seededMenus = [...menus, orphanMenu];
+      // sys_role 毒行 ×2：clientId 不在 apps 集合 / clientId 缺失，两条路径都锁
+      const orphanRoleUnknown: SeedRole = {
+        ...roles[0],
+        id: "00000000-0000-0000-0000-00000000d002",
+        clientId: "no-such-app",
+      };
+      const orphanRoleMissing: SeedRole = {
+        ...roles[0],
+        id: "00000000-0000-0000-0000-00000000d003",
+      };
+      delete (orphanRoleMissing as Partial<SeedRole>).clientId;
+      const seededRoles = [...roles, orphanRoleUnknown, orphanRoleMissing];
 
       const pg = require("pg");
       const client = new pg.Client({ connectionString: process.env.DATABASE_URL });
       await client.connect();
       try {
-        const summary = await seedDatabase(client, { ...seeds, menus: seededMenus });
+        const summary = await seedDatabase(client, {
+          ...seeds, menus: seededMenus, roles: seededRoles,
+        });
 
-        // 摘要计数：菜单总数 -1（skip），skip 计数 =1
+        // 摘要计数：毒行全部 skip，落库计数 = 种子行数
         expect(summary.sys_menu_skipped).toBe(1);
         expect(summary.sys_menu).toBe(menus.length);
+        expect(summary.sys_role_skipped).toBe(2);
+        expect(summary.sys_role).toBe(roles.length);
 
-        // 不落库：毒行 id 不在 sys_menu，且无任何行被兜底写成别的 client
-        const orphanRows = await client.query(
+        // 不落库：毒行 id 都不在对应表
+        const orphanMenuRows = await client.query(
           "SELECT count(*)::int AS n FROM sys_menu WHERE id = $1",
-          [orphan.id],
+          [orphanMenu.id],
         );
-        expect(orphanRows.rows[0].n).toBe(0);
-        const total = await client.query(
+        expect(orphanMenuRows.rows[0].n).toBe(0);
+        const orphanRoleRows = await client.query(
+          "SELECT count(*)::int AS n FROM sys_role WHERE id = ANY($1)",
+          [[orphanRoleUnknown.id, orphanRoleMissing.id]],
+        );
+        expect(orphanRoleRows.rows[0].n).toBe(0);
+        const menuTotal = await client.query(
           "SELECT count(*)::int AS n FROM sys_menu",
         );
-        expect(total.rows[0].n).toBe(menus.length);
+        expect(menuTotal.rows[0].n).toBe(menus.length);
+        const roleTotal = await client.query(
+          "SELECT count(*)::int AS n FROM sys_role",
+        );
+        expect(roleTotal.rows[0].n).toBe(roles.length);
 
-        // 旁证：所有落库行的 client_id 都来自 apps 集合的 clientId（无字面量污染）
+        // 旁证：两表落库行的 client_id 都来自 apps 集合的 clientId（无字面量污染）
         const clientIds = new Set(
           (seeds.apps as Array<{ clientId: string }>).map((a) => a.clientId),
         );
-        const alien = await client.query(
+        for (const sql of [
           "SELECT DISTINCT client_id AS cid FROM sys_menu",
-        );
-        for (const row of alien.rows as Array<{ cid: string }>) {
-          expect(clientIds.has(row.cid)).toBe(true);
+          "SELECT DISTINCT client_id AS cid FROM sys_role",
+        ]) {
+          const alien = await client.query(sql);
+          for (const row of alien.rows as Array<{ cid: string }>) {
+            expect(clientIds.has(row.cid)).toBe(true);
+          }
         }
       } finally {
         await client.end();
