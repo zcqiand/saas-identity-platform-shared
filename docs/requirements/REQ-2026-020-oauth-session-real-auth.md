@@ -60,7 +60,7 @@ saas-aspnetcore 当前 `/api/v1/oauth/authorize` + `/api/v1/oauth/token` + `/api
 | AC-6 | lab 后端用 code 调 `/api/v1/oauth/token`（带 cookie） | POST token | 200 `{accessToken, refreshToken, user_id}` — user_id 从 session 注入，不接受请求体 user_id / tenantId 直发 |
 | AC-7 | saas `/api/v1/me/menus` 用 saas session 内 user_id 查角色授权 | GET menus | 200 `{<appCode>: [menus...]}` |
 | AC-8 | saas-vue / saas-react LoginPage 输入 alice/dev123456 | 提交 | 浏览器跳 saas 授权流；sessionStorage 写 saas session；cookie 自动带 |
-| AC-9 | lab-vue 用户 `/login` → lab 后端 authorize → 拼 saas-vue/login?code&redirect_uri&state | 浏览器跳 | saas-vue login UI 显示「已登录 alice，是否授权 lab-mgmt」；点确认 → 302 lab/callback?code |
+| AC-9 | lab-vue 用户 `/login` → lab 后端 authorize → 拼 saas-vue/login?code&redirect_uri&state | 浏览器跳 | saas-vue login UI 显示「已登录 alice，是否授权 lab-management」；点确认 → 302 lab/callback?code |
 | AC-10 | saas-msw mock 全覆盖：login + authorize + token + me/menus + lockout | vitest run | 5 用例 TDD 全过；cookie `saasSession` 自动带（msw cookie jar） |
 
 ## 3. 任务拆解

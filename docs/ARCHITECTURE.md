@@ -136,7 +136,7 @@ saas-identity-platform-shared/
 │       ├── V006__init_audit_events.sql
 │       ├── V007__indexes.sql
 │       ├── V008__users_role_ids_and_drop_redundant_index.sql
-│       └── V014__seed_lab_mgmt_app.sql  ← 跨家族 seed（lab-mgmt OAuth client）
+│       └── V014__seed_lab_mgmt_app.sql  ← 跨家族 seed（lab-management OAuth client）
 ├── generated/                         ← ★ emit 产物（git tracked；给消费仓读）
 │   ├── openapi/
 │   │   └── openapi.yaml               ←   70KB OpenAPI 3.0 spec（git tracked）
@@ -354,7 +354,7 @@ V006: audit_action
 
 **V014 是特殊迁移**——`V014__seed_lab_mgmt_app.sql`：
 
-- seed `apps` 表里固定 UUID `11111111-1111-1111-1111-111111111111`（client_id 同值）的 lab-mgmt 应用
+- seed `apps` 表里固定 UUID `11111111-1111-1111-1111-111111111111`（client_id 同值）的 lab-management 应用
 - 新建 `oauth_codes` 表（Phase 6 真 OAuth；替代 saas-nextjs 进程内 oauth-store）
 - 跨家族 seed：让 3 个 saas 后端（nextjs / aspnetcore / springboot）共用同一 app 记录
 - 强制 `CREATE TABLE IF NOT EXISTS oauth_codes`（**拆雷点**——2026-08-26 lab V014/V015 撞号事故同款雷）
@@ -616,7 +616,7 @@ msw 仓的 fixture 是 in-memory JSON / TS（`src/seeds/*.json`），不直接�
 | `sync-db.mjs` 借 pg driver | shared 仓禁 runtime npm dep；从 nextjs 仓 `node_modules/pg` 借 |
 | `tests/sql.replay.test.ts` 借 pg driver（lab-nextjs） | 同上套路；环境友好（借不到 skip） |
 | `sql/README.md` 列 9 enum + 12 表期望清单 | 既是文档也是 CI 断言源（与 `sync-db.mjs::verify` 共用） |
-| V014 跨家族 seed | lab-mgmt OAuth client 固定 UUID；3 saas 后端共用 |
+| V014 跨家族 seed | lab-management OAuth client 固定 UUID；3 saas 后端共用 |
 
 ---
 

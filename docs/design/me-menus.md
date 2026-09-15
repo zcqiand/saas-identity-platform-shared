@@ -28,7 +28,7 @@
     ↓
 [6. 按 app_id 分组 → 取 apps.code 作 key]
     ↓
-[7. 输出: { "lab-mgmt": [menus...], "erp": [menus...] }]
+[7. 输出: { "lab-management": [menus...], "erp": [menus...] }]
 ```
 
 ## 3. 设计决策
@@ -45,7 +45,7 @@
 
 ```json
 // ✅ 正确
-{ "lab-mgmt": [...], "erp": [...] }
+{ "lab-management": [...], "erp": [...] }
 
 // ❌ 错（前端按 code 找不到）
 { "uuid-1": [...], "uuid-2": [...] }

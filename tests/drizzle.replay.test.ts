@@ -53,6 +53,16 @@ const REQUIRED_PG_ENV = [
 ];
 const allPgEnvPresent = REQUIRED_PG_ENV.every((name) => !!process.env[name]);
 
+// 家族安全互锁（2026-09-14 lab 门禁链把 saas_test 清库重灌成 lab 表的事故，对称防线）：
+// 本测试会 DROP public 全量重灌 saas DDL，目标库必须显式是 saas_*——
+// 防止 lab_* 值（或手误传错库）跨族执行把对方测试库清掉。
+if (allPgEnvPresent && !process.env.PG_DATABASE_TEST!.startsWith("saas_")) {
+  throw new Error(
+    `PG_DATABASE_TEST=${process.env.PG_DATABASE_TEST} 不是 saas_* 库——` +
+      "drizzle.replay 会 DROP public 重灌 saas DDL，拒绝跨族执行",
+  );
+}
+
 const EXPECTED_TABLES = [
   "oauth_access_token",
   "oauth_client",
