@@ -63,13 +63,6 @@ namespace Saas.Identity.Shared.Sessions {
   @route("/logout")
   op logout(): void;
 
-  // M01.F04.I04 — authorization code callback
-  @post
-  @route("/oidc/callback")
-  op oidcCallback(@body body: OidcCallbackRequest): TokenResponse | ErrorResponse;
-
-  // M01.F04.I05 — refresh token rotation
-  @post
-  @route("/refresh")
-  op refreshToken(@body body: TokenRequest): TokenResponse | ErrorResponse;
+  // M01.F04.I04 + M01.F04.I05 已废弃（saas-2026-09-16-001 + 003），端点删除
+  // 客户端统一走 M04.F03.I02 /oauth/token（authorization_code + refresh_token 双 grant）
 }

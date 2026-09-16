@@ -1,39 +1,28 @@
 {
   "schema": 1,
+  "proposal_id": "saas-2026-09-16-003-del-sessions-tsp-I04-I05-endpoints",
+  "project": "saas-identity-platform-shared",
+  "created_at": "2026-09-16",
+  "author": "项目所有者（via Claude）",
+  "base_sha": "b25c55113d6486c5",
   "approved": true,
-  "base_sha": "9812b39d40061d10",
-  "summary": "BASE M01.F04 SSO 登录 4 个端点交付列改「仅后端」：密码登录 API / 失败锁定 / OIDC Code 换 / refresh token 均为纯服务端 API，前端不直连 IdP。I03 密码登录 UI（仅前端）保持不变。M04.F03.* OAuth 协议端点保持「前端+后端」（强约束，所有前端必须通过 OAuth client lib 走此端点）。",
+  "summary": "配套清理 SSOT：删 sessions.tsp:66-74 I04/I05 端点定义（/oidc/callback + /refresh），保持 1:1 强绑定（ADR-0034 §3 第 3 项）。客户端统一收口到 M04.F03.I02「OIDC token 端点（双 grant）」。",
+  "rationale": "saas-2026-09-16-001 已把 M01.F04.I04/I05 改为已废弃，但 sessions.tsp:66-74 仍挂着这两个端点定义，违反 1:1 强绑定（端点存在 ↔ I 已废弃）。/oidc/callback 与 /oauth/token (authorization_code grant) 语义重复，/refresh 与 /oauth/token (refresh_token grant) 语义重复，按 [tree 删/合并候选必须前端+后端实测](tree-merge-candidates-need-frontend-backend-grep.md) 4 档判定结论——双 grant 单端点是 RFC 6749 强制约束的合并形态。客户端应改用 M04.F03.I02。",
   "changes": [
     {
-      "id": "M01.F04.I01",
-      "action": "变更",
-      "name": "密码登录 API",
-      "delivery": "仅后端",
-      "reason": "纯服务端 API；react/vue 通过 OAuth 跳板（ADR-0013）走 M04.F03 登录，不直连此端点"
-    },
-    {
-      "id": "M01.F04.I02",
-      "action": "变更",
-      "name": "失败锁定",
-      "delivery": "仅后端",
-      "reason": "服务端 sys_user.failed_attempts 计数器与锁定策略，无 UI 入口"
-    },
-    {
       "id": "M01.F04.I04",
-      "action": "变更",
-      "name": "OIDC Code 换取",
-      "delivery": "仅后端",
-      "reason": "authorization_code → token 的服务端交换，前端不直连 IdP"
+      "action": "废弃",
+      "name": "~~OIDC Code 换取~~",
+      "reason": "SSOT 端点 /oidc/callback 删除；客户端走 M04.F03.I02 (/oauth/token authorization_code grant)。详见提案 saas-2026-09-16-001 + 003。"
     },
     {
       "id": "M01.F04.I05",
-      "action": "变更",
-      "name": "refresh token",
-      "delivery": "仅后端",
-      "reason": "服务端 refresh token 轮换；前端只持有新 access_token"
+      "action": "废弃",
+      "name": "~~refresh token~~",
+      "reason": "SSOT 端点 /refresh 删除；客户端走 M04.F03.I02 (/oauth/token refresh_token grant)。详见提案 saas-2026-09-16-001 + 003。"
     }
   ],
   "sync_files": [
-    "docs/functions/function-tree.md"
+    "tsp/routes/sessions.tsp"
   ]
 }

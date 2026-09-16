@@ -23,8 +23,6 @@
 | token 交换 | `POST /oauth/token` | **M04.F03.I02** |
 | token 刷新 | `POST /oauth/token` (refresh_token grant) | **M04.F03.I03** |
 | 业务后端验 JWT → 业务 API | — | (业务仓)|
-| OIDC Code 换取 | `POST /auth/oidc/callback` | **M01.F04.I04** |
-| refresh token | `POST /auth/refresh` | **M01.F04.I05** |
 | 登出（本地清理）| `POST /auth/logout` | **M01.F04.I06** |
 
 详见 [oauth-architecture.md](oauth-architecture.md) + [REQ-2026-020](../requirements/REQ-2026-020-oauth-session-real-auth.md)。
