@@ -4,7 +4,7 @@ using TypeSpec.Http;
 @route("/clients")
 @tag("clients")
 namespace Saas.Identity.Shared.Clients {
-  // M04.F01 public client metadata
+  // M04.F01.I06 public client metadata
   @get
   @route("/{clientId}")
   op getClient(@path clientId: string): OAuthClientPublicInfo | ErrorResponse;

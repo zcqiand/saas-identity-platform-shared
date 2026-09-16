@@ -52,8 +52,7 @@ model OidcCallbackRequest {
 @route("/auth")
 @tag("auth")
 namespace Saas.Identity.Shared.Sessions {
-  // M01.F04.I01 — global account password authentication
-  // M01.F04.I02 — 失败锁定响应走 LockedAccountResponse（HTTP 423）
+  // M01.F04.I01 — global account password authentication (合并 I02 失败锁定 → HTTP 423 LockedAccountResponse)
   @post
   @route("/login")
   op login(@body body: LoginRequest): LoginResponse | LockedAccountResponse | ErrorResponse;
