@@ -10,7 +10,7 @@ namespace Saas.Identity.Shared.OAuth {
   @route("/authorize")
   op authorize(@body body: AuthorizeCodeRequest): { code: string; state: string } | ErrorResponse;
 
-  // M04.F03.I02 code exchange + M04.F03.I03 refresh rotation
+  // M04.F03.I02 OIDC token 端点（双 grant: authorization_code + refresh_token；合并 I03）
   @post
   @route("/token")
   op token(@body body: TokenRequest): TokenResponse | ErrorResponse;

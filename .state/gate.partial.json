@@ -4,17 +4,17 @@
   "passed": true,
   "partial": true,
   "ran": [
-    "L0"
+    "L5"
   ],
-  "checked_at": "2026-09-11T14:08:58+0800",
+  "checked_at": "2026-09-16T23:32:52+0800",
   "gates": [
     {
-      "level": "L0",
-      "name": "结构完整性",
+      "level": "L5",
+      "name": "引用完整性",
       "passed": true,
       "returncode": 0,
-      "duration_s": 0.094,
-      "output": ""
+      "duration_s": 0.109,
+      "output": "70 个功能条目，引用完整。软告警 81 条（见 .state/alignment.json）\r\n  [WARN] 已上线但无设计映射: M00.F01.I01, M00.F01.I03, M00.F02.I01, M00.F02.I03, M00.F02.I04, M00.F02.I05 …共 33 项\r\n  [WARN] 已上线但无测试引用: M00.F01.I03, M00.F01.I04, M00.F01.I05, M00.F02.I06, M00.F02.I08, M00.F04.I01 …共 15 项\r\n  [WARN] 已上线但不在任何流程且非孤儿白名单: M00.F01.I01, M00.F01.I02, M00.F01.I03, M00.F01.I04, M00.F01.I05, M00.F03.I01 …共 24 项\r\n  [WARN] 开发中但无需求文档引用: M00.F04.I02, M00.F05.I01, M00.F05.I02, M00.F05.I03, M00.F05.I04, M01.F01.I01 …共 7 项\r\n  [WARN] 开发中但代码里无 UI 入口(用户还点不到): M01.F01.I01, M01.F03.I01"
     }
   ]
 }

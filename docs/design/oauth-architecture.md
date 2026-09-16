@@ -11,7 +11,7 @@
 |---|---|---|---|
 | **M04.F03.I01** | `POST /oauth/authorize` | 签 authorization_code；必须 saas session（`cookie: saasSession=...`），未登录返 401 让前端跳 login UI | `tsp/routes/oauth.tsp:10 @route /authorize` |
 | **M04.F03.I02** | `POST /oauth/token`（grant_type=authorization_code）| code → access_token + refresh_token；session 内 user_id 注入 user_id 列，**禁止**接受请求体 user_id/tenantId | `tsp/routes/oauth.tsp:15 @route /token` |
-| **M04.F03.I03** | `POST /oauth/token`（grant_type=refresh_token） | refresh_token 旋转（同 session 校验） | 同上（同一端点按 grant_type 分支）|
+| **M04.F03.I02** | `POST /oauth/token`（grant_type=authorization_code + refresh_token 双 grant） | code → access_token + refresh_token；refresh_token 旋转（同 session 校验；合并 I03） | `tsp/routes/oauth.tsp:15 @route /token` |
 
 ## 2. 跨仓实现位置
 

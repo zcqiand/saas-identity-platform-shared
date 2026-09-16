@@ -19,8 +19,7 @@
 | 用户输密码 | `POST /auth/login` | **M01.F04.I01** |
 | 业务后端 authorize 跳 saas | 302 → saas 登录页带 client_id | (业务仓；saas 仓只列下游)|
 | saas authorize 检查 session | `POST /oauth/authorize` | **M04.F03.I01** |
-| token 交换 | `POST /oauth/token` | **M04.F03.I02** |
-| token 刷新 | `POST /oauth/token` (refresh_token grant) | **M04.F03.I03** |
+| token 交换 + 刷新 | `POST /oauth/token`（双 grant）| **M04.F03.I02** |
 | 业务后端验 JWT → 业务 API | — | (业务仓)|
 | 登出（本地清理）| `POST /auth/logout` | **M01.F04.I06** |
 

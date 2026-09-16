@@ -139,7 +139,7 @@
 
 - `POST /oauth/authorize`（**M04.F03.I01**）
 - `POST /oauth/token`（`grant_type=authorization_code`）（**M04.F03.I02**）
-- `POST /oauth/token`（`grant_type=refresh_token`）（**M04.F03.I03**）
+- `POST /oauth/token`（`grant_type=refresh_token`）（**M04.F03.I02** 双 grant，合并 I03）
 
 **安全约束**：
 
