@@ -17,7 +17,6 @@
 | 步骤 | 端点 | 涉及 ID |
 |---|---|---|
 | 用户输密码 | `POST /auth/login` | **M01.F04.I01** |
-| 失败锁定 | 5 次密码错 → 423 | **M01.F04.I02** |
 | 业务后端 authorize 跳 saas | 302 → saas 登录页带 client_id | (业务仓；saas 仓只列下游)|
 | saas authorize 检查 session | `POST /oauth/authorize` | **M04.F03.I01** |
 | token 交换 | `POST /oauth/token` | **M04.F03.I02** |
