@@ -11,8 +11,10 @@ namespace Saas.Identity.Shared.OAuth {
   op authorize(@body body: AuthorizeCodeRequest): { code: string; state: string } | ErrorResponse;
 
   // M04.F03.I02 OIDC token 端点（双 grant: authorization_code + refresh_token；合并 I03）
+  // ADR-0036 fuzz:skip：状态机 + 跨 grant_type 联动，Schemathesis 跳过；语义由 vitest 测
   @post
   @route("/token")
+  // fuzz:skip
   op token(@body body: TokenRequest): TokenResponse | ErrorResponse;
 }
 

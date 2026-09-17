@@ -769,6 +769,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AuthorizeCodeRequest'
   /api/v1/oauth/token:
+    x-fuzz: skip
     post:
       operationId: OAuth_token
       parameters: []
