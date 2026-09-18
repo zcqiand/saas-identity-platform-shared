@@ -83,6 +83,19 @@
 
 详见 [REQ-2026-025](../requirements/REQ-2026-025-menu-structure-move-reorder.md)。
 
+### 1.8 租户应用订阅（tenant-admin 配置面）
+
+触发：tenant admin 在租户应用页管理本租户订阅了哪些应用。
+
+| 操作 | 端点 | 涉及 ID |
+|---|---|---|
+| 列出订阅 | `GET /tenants/{t}/applications` | **M00.F05.I01** |
+| 订阅应用 | `POST /tenants/{t}/applications` | **M00.F05.I02** |
+| 改订阅状态/到期时间 | `PATCH /tenants/{t}/applications/{clientId}` | **M00.F05.I03** |
+| 取消订阅 | `DELETE /tenants/{t}/applications/{clientId}` | **M00.F05.I04** |
+
+详见 [tenant-applications.md](tenant-applications.md)。
+
 ---
 
 ## 2. 孤儿功能

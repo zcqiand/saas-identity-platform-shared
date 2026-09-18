@@ -28,4 +28,4 @@
 - 旧表名和旧 API Key/审计表不再出现在目标 schema 或 OpenAPI。
 - 跨 tenant、跨 client 和跨 member 的越权请求返回 401/403。
 - OAuth code 一次性消费，access/refresh token 支持过期与撤销。
-- `M04.F04` 的租户应用订阅端点与 contract-test 同步。
+- `M00.F05`（旧编号 M04.F04，2026-09-07 模块重组迁入租户配置视角）的租户应用订阅端点与 contract-test 同步。
