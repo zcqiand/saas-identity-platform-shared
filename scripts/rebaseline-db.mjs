@@ -46,6 +46,10 @@ try {
 }
 
 console.log("[rebaseline] step 3/4 — drizzle-kit push（应用目标 schema）");
+// Windows：spawnSync 裸起 `npx`（.cmd shim）在 Node ≥18.20 会 EINVAL / 退 null
+// —— DDL 实际已生效但脚本按失败处理。win32 走 shell:true 让 cmd.exe 解析
+// npx（同 migrate-db.mjs 的修法）；args 全是固定字面量，无注入面。
+const isWin = process.platform === "win32";
 const r = spawnSync(
   "npx",
   ["--no", "drizzle-kit", "push", "--config", "drizzle.config.ts", "--force"],
@@ -53,6 +57,7 @@ const r = spawnSync(
     cwd: SHARED_ROOT,
     env: { ...process.env },
     stdio: "inherit",
+    shell: isWin,
   },
 );
 
