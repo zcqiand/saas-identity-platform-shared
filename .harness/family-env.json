@@ -17,16 +17,12 @@
     ],
     "aspnetcore": [
       "backend"
-    ],
-    "msw": [
-      "backend"
     ]
   },
   "synced_keys": {
     "PG_HOST": {
       "scope": [
         "shared",
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -35,7 +31,6 @@
     "PG_PORT": {
       "scope": [
         "shared",
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -44,7 +39,6 @@
     "PG_USER": {
       "scope": [
         "shared",
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -54,7 +48,6 @@
       "secret": true,
       "scope": [
         "shared",
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -63,7 +56,6 @@
     "PG_DATABASE": {
       "scope": [
         "shared",
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -72,7 +64,6 @@
     "JWT_SIGNING_KEY": {
       "secret": true,
       "scope": [
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -80,7 +71,6 @@
     },
     "JWT_ISSUER": {
       "scope": [
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -88,7 +78,6 @@
     },
     "JWT_AUDIENCE": {
       "scope": [
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -96,7 +85,6 @@
     },
     "JWT_TTL_SECONDS": {
       "scope": [
-        "msw",
         "aspnetcore",
         "springboot",
         "nextjs"
@@ -104,7 +92,6 @@
     },
     "SAAS_CORS_ALLOWED_ORIGINS": {
       "scope": [
-        "msw",
         "aspnetcore",
         "springboot"
       ]
