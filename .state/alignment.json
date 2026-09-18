@@ -6,42 +6,8 @@
     "features": 13,
     "items": 54
   },
-  "warnings_total": 73,
+  "warnings_total": 41,
   "warnings": {
-    "已上线但无设计映射": [
-      "M00.F01.I01",
-      "M00.F01.I03",
-      "M00.F02.I01",
-      "M00.F02.I03",
-      "M00.F02.I04",
-      "M00.F02.I05",
-      "M00.F02.I08",
-      "M00.F03.I01",
-      "M00.F03.I02",
-      "M00.F03.I03",
-      "M00.F03.I04",
-      "M00.F03.I05",
-      "M00.F04.I03",
-      "M00.F04.I04",
-      "M01.F02.I01",
-      "M04.F01.I01",
-      "M04.F01.I02",
-      "M04.F01.I03",
-      "M04.F01.I04",
-      "M04.F01.I05",
-      "M04.F01.I06",
-      "M04.F02.I01",
-      "M04.F03.I01",
-      "M04.F03.I02",
-      "M04.F04.I01",
-      "M04.F04.I02",
-      "M04.F04.I03",
-      "M04.F04.I04",
-      "M04.F04.I05",
-      "M04.F04.I06",
-      "M04.F04.I07",
-      "M04.F04.I08"
-    ],
     "已上线但无测试引用": [
       "M00.F01.I03",
       "M00.F01.I04",
@@ -100,7 +66,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\target-ddl-permission-isolation.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\admin-tenants.test.ts:1024 (path)"
       ],
@@ -126,7 +94,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\target-ddl-permission-isolation.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -162,7 +132,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-members-read.test.ts:2501 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-members-read.test.ts:963 (path)",
@@ -198,7 +170,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-members-read.test.ts:3675 (path)"
       ],
@@ -212,7 +186,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-members-read.test.ts:3675 (path)"
       ],
@@ -226,7 +202,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-members-read.test.ts:3675 (path)"
       ],
@@ -268,7 +246,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -278,7 +258,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:1307 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1089 (path)"
@@ -291,7 +273,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:1307 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-write.test.ts:1089 (path)"
@@ -304,7 +288,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:2514 (path)"
       ],
@@ -316,7 +302,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:2514 (path)"
       ],
@@ -328,7 +316,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:2514 (path)"
       ],
@@ -364,7 +354,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3831 (path)",
@@ -378,7 +370,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\tenant-role-menus-write.test.ts:1223 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-roles-read.test.ts:3831 (path)",
@@ -481,7 +475,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -493,7 +489,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\me-tenants.test.ts:19 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\me-tenants.test.ts:525 (path)"
@@ -509,6 +507,7 @@
         "docs\\design\\flow-function-map.md"
       ],
       "designs": [
+        "docs\\design\\architecture-panorama.md",
         "docs\\design\\ui-interaction-spec.md"
       ],
       "tests": [
@@ -526,6 +525,7 @@
         "docs\\design\\flow-function-map.md"
       ],
       "designs": [
+        "docs\\design\\architecture-panorama.md",
         "docs\\design\\ui-interaction-spec.md"
       ],
       "tests": [
@@ -607,7 +607,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\admin-clients-write.test.ts:891 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-applications.test.ts:3624 (path)",
@@ -622,7 +624,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\admin-clients-write.test.ts:891 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\tenant-applications.test.ts:3624 (path)",
@@ -637,7 +641,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -647,7 +653,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -657,7 +665,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -667,7 +677,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\apps-public.test.ts:22 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\apps-public.test.ts:569 (path)"
@@ -680,7 +692,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -692,7 +706,10 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md",
+        "docs\\design\\oauth-architecture.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:1799 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:2700 (path)",
@@ -712,7 +729,10 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md",
+        "docs\\design\\oauth-architecture.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:11105 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\oauth.test.ts:12055 (path)",
@@ -731,7 +751,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
         "M04.F04 租户应用订阅 > M04.F04.I01 lists tenant applications",
         "output\\saas-identity-platform-contract-test\\tests\\client-menus-write.test.ts:1047 (path)"
@@ -744,7 +766,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
         "M04.F04 租户应用订阅 > M04.F04.I02 subscribes an application",
         "output\\saas-identity-platform-contract-test\\tests\\client-menus-write.test.ts:1047 (path)"
@@ -757,7 +781,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
         "M04.F04 租户应用订阅 > M04.F04.I03 updates an application subscription"
       ],
@@ -769,7 +795,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
         "M04.F04 租户应用订阅 > M04.F04.I04 removes an application subscription"
       ],
@@ -781,7 +809,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -793,7 +823,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -805,7 +837,9 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [],
       "entry": []
     },
@@ -817,7 +851,10 @@
       "flows": [
         "docs\\design\\flow-function-map.md"
       ],
-      "designs": [],
+      "designs": [
+        "docs\\design\\architecture-panorama.md",
+        "docs\\design\\me-menus.md"
+      ],
       "tests": [
         "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:2247 (path)",
         "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:2476 (path)"

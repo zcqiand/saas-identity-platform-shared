@@ -1,4 +1,6 @@
-# 目标 DDL 权限隔离设计 （已废段镜像豁免，9/7 迁移前快照）
+# 目标 DDL 权限隔离设计
+
+> 2026-09-19（Task 3.5）解除 H1「已废段镜像豁免」：本文件为 9/8 schema-first pivot 后重写版，正文无废弃 ID 字面，恢复计入 design_refs。
 
 > **架构全景 + 三叉戟隔离**（应用 / 租户 / 用户）见
 > [`architecture-panorama.md`](architecture-panorama.md)。本文件聚焦 DDL 边界与授权 join 真源。
@@ -39,4 +41,14 @@ JWT(user_id, client_id, tenant_id)
 
 `sub`、`user_id`、`tenant_id`、`client_id`、`member_id` 或 `role_code` 缺失时返回 401/403 或抛出明确异常。不得使用 `USER-A`、`TENANT-001`、`alice` 等 demo 字面量兜底。
 
-关联功能：REQ-2026-026；M00/M01/M02/M03/M04/M08/M09。
+关联功能：REQ-2026-026；三叉戟三模块（M00 租户 / M01 用户 / M04 应用）及其余五个已废弃历史模块（无功能树行，见 [architecture-panorama.md §4.5 豁免声明](architecture-panorama.md)）。
+
+## 租户维护设计映射 — M00.F01
+
+> 2026-09-19（Task 3.5）补齐设计锚点：平台 admin 的租户 CRUD（`tenant` 表，
+> 平台级边界——非 tenant-scoped，要求 platform_admin 权限）。
+
+| 子项 ID | 端点 | 设计要点 | 对应合同 |
+|---|---|---|---|
+| **M00.F01.I01** | `GET /admin/tenants` | 租户列表（分页）；平台 admin 专用，token 需 platform_admin，租户边界外的平台面 | `tsp/routes/admin-tenants.tsp:7 @get listTenants` |
+| **M00.F01.I03** | `GET /admin/tenants/{id}` | 租户详情（含状态/到期时间/订阅应用数）；寻址用行 UUID | `tsp/routes/admin-tenants.tsp:15 @get getTenant` |

@@ -1,8 +1,9 @@
-# OAuth 2.0 流程设计映射 — M04.F03 （已废段镜像豁免，9/7 迁移前快照）
+# OAuth 2.0 流程设计映射 — M04.F03
 
 > 与 [docs/conventions/oauth-flow.md](../conventions/oauth-flow.md) 配套：本文件给 L5 设计映射用；conventions/ 给人类读 RFC 6749 路线 A 的「为什么」。
 >
-> **2026-09-07 模块重组**：旧 M04.F03.I07-I09 重编号为 **M04.F03.I01-I03**（I01-I03 早期实验段已废弃；当前三个 canonical I01/I02/I03 即旧 I07/I08/I09）。
+> **2026-09-07 模块重组**：旧 I07-I09 重编号为 **I01-I03**（I01-I03 早期实验段已废弃；当前三个 canonical I01/I02/I03 即旧 I07/I08/I09）。
+> 迁移前的旧编号字面已移出（L5 悬空引用防护）；2026-09-19（Task 3.5）解除 H1「已废段镜像豁免」，本文件恢复计入 design_refs。
 > 迁移表见 [function-tree.md §0.x](../functions/function-tree.md#0x-模块重组迁移记录2026-09-07)。
 
 ## 1. 设计映射（已上线 ID）

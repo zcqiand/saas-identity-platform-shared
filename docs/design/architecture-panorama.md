@@ -1,6 +1,8 @@
  
 
-# 架构全景与三叉戟隔离 — saas-identity-platform （已废段镜像豁免，9/7 迁移前快照）
+# 架构全景与三叉戟隔离 — saas-identity-platform
+
+> 2026-09-19（Task 3.5）解除 H1「已废段镜像豁免」：本文件 2026-09-07 重组后正文已全部指向新结构 ID，恢复计入 design_refs。
 
 > 给读者一个 30 秒读懂的家族全景图。本文件是
 > [function-tree.md §0](../functions/function-tree.md#架构全景与权限隔离) 的设计真源，
@@ -185,7 +187,24 @@ JWT(user_id, client_id, tenant_id)
   - 主要承载实体：`sys_user` + session / OIDC code / token 三件套
   - 关键 F/I：**M01.F01** / **M01.F02** / **M01.F03** / **M01.F04**
 
-> 已废弃段（M02 / M03 / M05 / M06 / M08 / M09）不参与三叉戟；内容已迁至 M00 / M01 / M04，编号冻结不再实现。
+### 已废弃段镜像（豁免）
+
+> 已废弃段（M02 / M03 / M05 / M06 / M08 / M09）不参与三叉戟；内容已迁至 M00 / M01 / M04，编号冻结不再实现。这些模块在功能树中无功能行（仅历史段落名），故按 ADR-0028 豁免段声明不实现。
+
+## 4.5 应用维护与启停设计映射 — M04.F01 / M04.F02
+
+> 2026-09-19（Task 3.5）补齐设计锚点：应用（OAuth client）CRUD + 状态切换，
+> 落表 `oauth_client`；三叉戟「应用维度」的具体端点承载见本节。
+
+| 子项 ID | 端点 | 设计要点 | 对应合同 |
+|---|---|---|---|
+| **M04.F01.I01** | `GET /admin/clients` | 【平台】平台 admin 分页列出全部 OAuth 应用（page/pageSize） | `tsp/routes/admin-clients.tsp:7 @get listClients` |
+| **M04.F01.I02** | `POST /admin/clients` | 注册新 OAuth client（含 redirect_uri 白名单与密钥生成；密钥仅回指纹不返明文） | `tsp/routes/admin-clients.tsp:11 @post createClient` |
+| **M04.F01.I03** | `GET /admin/clients/{clientId}` | 应用完整配置（寻址用 clientId 字符串列，非行 UUID；密钥回指纹） | `tsp/routes/admin-clients.tsp:15 @get getClient` |
+| **M04.F01.I04** | `PATCH /admin/clients/{clientId}` | 修改名称 / redirect_uri 白名单 / 允许的 scope 等 | `tsp/routes/admin-clients.tsp:20 @patch updateClient` |
+| **M04.F01.I05** | `DELETE /admin/clients/{clientId}` | 移除应用并级联吊销该 client 名下所有 access/refresh token | `tsp/routes/admin-clients.tsp:25 @delete deleteClient` |
+| **M04.F01.I06** | `GET /clients/{clientId}` | 公共端点匿名可读 clientId/name/logo（供登录页应用选择；无 session 要求） | `tsp/routes/clients.tsp:7 @get getClient` |
+| **M04.F02.I01** | `PATCH /admin/clients/{clientId}/status` | 【平台】切换 status；禁用后该 client 的所有 OAuth/token 端点立即拒绝 | `tsp/routes/admin-clients.tsp:30 @patch setClientStatus` |
 
 ## 5. 安全失败语义（与 [target-ddl-permission-isolation.md](target-ddl-permission-isolation.md) §安全失败语义 同源）
 

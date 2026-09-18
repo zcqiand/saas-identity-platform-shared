@@ -1,9 +1,31 @@
-# me/menus 装配设计映射 — M04.F04.I08 （已废段镜像豁免，9/7 迁移前快照）
+# me/menus 与菜单管理 设计映射 — M04.F04 / M00.F04
 
-> **2026-09-07 模块重组**：旧 M09.F03.I01-I04 合并到 **M04.F04.I08** 单 I（端到端渲染逻辑）。
+> **2026-09-07 模块重组**：旧审计菜单段（I01-I04）合并到 **M04.F04.I08** 单 I（端到端渲染逻辑）。
 > 迁移表见 [function-tree.md §0.x](../functions/function-tree.md#0x-模块重组迁移记录2026-09-07)。
+> 2026-09-19（Task 3.5）解除 H1「已废段镜像豁免」，本文件恢复计入 design_refs，并补齐 M04.F04.I01-I07 菜单 CRUD 与 M00.F04 角色菜单授权锚点。
 
 ## 1. 设计映射（已上线 ID）
+
+### 1.1 菜单 CRUD 与结构（client-menus.tsp）
+
+| 子项 ID | 端点 | 设计要点 | 对应合同 |
+|---|---|---|---|
+| **M04.F04.I01** | `GET /clients/{clientId}/menus` | 扁平菜单节点列表；tenant-scoped（menu 行挂 client + tenant 边界） | `tsp/routes/client-menus.tsp:7 @get listSysMenus` |
+| **M04.F04.I02** | `POST /clients/{clientId}/menus` | 创建菜单节点；CreateSysMenuRequest 携带 client 边界，父指针可空（根节点用固定零 UUID 约定） | `tsp/routes/client-menus.tsp:11 @post createSysMenu` |
+| **M04.F04.I03** | `GET /clients/{clientId}/menus/{menuId}` | 菜单详情（单节点） | `tsp/routes/client-menus.tsp:15 @get getSysMenu` |
+| **M04.F04.I04** | `PATCH /clients/{clientId}/menus/{menuId}` | 更新菜单元数据（名称/路径/图标/排序权重） | `tsp/routes/client-menus.tsp:20 @patch updateSysMenu` |
+| **M04.F04.I05** | `DELETE /clients/{clientId}/menus/{menuId}` | 删除菜单节点；子节点语义由实现层约束（先删子或拒绝） | `tsp/routes/client-menus.tsp:29 @delete deleteSysMenu` |
+| **M04.F04.I06** | `PUT /clients/{clientId}/menus/{menuId}/reorder` | 兄弟节点重排序 | `tsp/routes/client-menus.tsp:34 @put reorderSysMenus` |
+| **M04.F04.I07** | `PATCH /clients/{clientId}/menus/{menuId}/parent` | 父节点移动（层级迁移）；移动后父链补全仍按 client_id 限界 | `tsp/routes/client-menus.tsp:43 @patch moveSysMenu` |
+
+### 1.2 角色菜单授权（tenant-role-menus.tsp，admin 入口在 M00.F04）
+
+| 子项 ID | 端点 | 设计要点 | 对应合同 |
+|---|---|---|---|
+| **M00.F04.I03** | `PUT /tenants/{tenantId}/roles/{roleId}/menus` | 整批设置角色菜单（关系行幂等全量替换；非 upsert 累积） | `tsp/routes/tenant-role-menus.tsp:16 @put setSysRoleMenus` |
+| **M00.F04.I04** | `DELETE /tenants/{tenantId}/roles/{roleId}/menus` | 清空角色全部菜单授权（角色登录后 me/menus 不再渲染该角色菜单） | `tsp/routes/tenant-role-menus.tsp:25 @delete clearSysRoleMenus` |
+
+### 1.3 端到端渲染（me/menus）
 
 新结构下 me/menus 端到端渲染逻辑收敛到一个 I：**M04.F04.I08**。
 
