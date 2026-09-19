@@ -50,5 +50,5 @@ JWT(user_id, client_id, tenant_id)
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M00.F01.I01** | `GET /admin/tenants` | 租户列表（分页）；平台 admin 专用，token 需 platform_admin，租户边界外的平台面 | `tsp/routes/admin-tenants.tsp:7 @get listTenants` |
-| **M00.F01.I03** | `GET /admin/tenants/{id}` | 租户详情（含状态/到期时间/订阅应用数）；寻址用行 UUID | `tsp/routes/admin-tenants.tsp:15 @get getTenant` |
+| **M00.F01.I01** | `GET /admin/tenants` | 租户列表（分页）；平台 admin 专用，token 需 platform_admin，租户边界外的平台面 | `tsp/routes/admin-tenants.tsp:8 @get listTenants` |
+| **M00.F01.I03** | `GET /admin/tenants/{id}` | 租户详情（含状态/到期时间/订阅应用数）；寻址用行 UUID | `tsp/routes/admin-tenants.tsp:16 @get getTenant` |

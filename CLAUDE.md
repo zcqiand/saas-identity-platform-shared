@@ -23,6 +23,7 @@ SaaS 多租户多应用身份平台全家族的契约源头（纯契约仓）。
 - **被 FK 引用的列必须用 `unique()`，禁止用 `uniqueIndex()`**（2026-09-08 PG 42830 教训）。`uniqueIndex()` 产 `CREATE UNIQUE INDEX`（非约束），PG 拒 FK 引用；只有 `unique()` 产 `ALTER TABLE ADD CONSTRAINT UNIQUE` 才可被 FK target。修法见 9/8 commit `796a551`。
 - **drizzle-kit check 不验证 DDL 可执行性**（2026-09-08 教训）。check 只 diff `schema.ts` ↔ `meta/snapshot.json`，不跑 SQL；PG 42830 / 42P01 / 列类型不匹配等会漏过。改 schema 后必走 `drizzle-kit push --force` 到空库做 executable-DDL 验证；`scripts/check_drizzle_idempotent.py` 是 gate 标配但仍需 push 兜底。
 - gen-shared 静默覆盖同名迁移是 FATAL —— 触发时先收敛分叉再跑（8/26 撞表雷教训）
+- **ARCHITECTURE.md 是 deepwiki 生成产物，禁止手改**：漂移只能通过 deepwiki 重新生成收口（2026-09-19 人裁）。当前已知 §3（models/routes 清单与计数）停留在 9/7 schema pivot 前，待 deepwiki regen。
 
 ## 3. 技术栈与版本（钉死于 version-lock.json）
 

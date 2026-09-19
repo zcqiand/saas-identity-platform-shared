@@ -40,7 +40,7 @@ saas-aspnetcore 后端实现 M04.F04.I08 (T-1, T-3)
 ### 任务 1-2: 4 后端仓 M04.F04.I08（当前用户有效菜单）端点实施
 
 - **fn-ID**：M04.F04.I08（GET /api/v1/me/menus）
-- **现有契约**：`shared/tsp/routes/me.tsp:23`（me/menus client-scoped）
+- **现有契约**：`shared/tsp/routes/me.tsp:26`（me/menus client-scoped）
 - **目标**：4 后端仓（nextjs / aspnetcore / springboot / msw）返回 `Map<appCode, List<EffectiveMenuNode>>`：
 
 ```

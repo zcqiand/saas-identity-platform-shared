@@ -198,13 +198,13 @@ JWT(user_id, client_id, tenant_id)
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M04.F01.I01** | `GET /admin/clients` | 【平台】平台 admin 分页列出全部 OAuth 应用（page/pageSize） | `tsp/routes/admin-clients.tsp:7 @get listClients` |
-| **M04.F01.I02** | `POST /admin/clients` | 注册新 OAuth client（含 redirect_uri 白名单与密钥生成；密钥仅回指纹不返明文） | `tsp/routes/admin-clients.tsp:11 @post createClient` |
-| **M04.F01.I03** | `GET /admin/clients/{clientId}` | 应用完整配置（寻址用 clientId 字符串列，非行 UUID；密钥回指纹） | `tsp/routes/admin-clients.tsp:15 @get getClient` |
-| **M04.F01.I04** | `PATCH /admin/clients/{clientId}` | 修改名称 / redirect_uri 白名单 / 允许的 scope 等 | `tsp/routes/admin-clients.tsp:20 @patch updateClient` |
-| **M04.F01.I05** | `DELETE /admin/clients/{clientId}` | 移除应用并级联吊销该 client 名下所有 access/refresh token | `tsp/routes/admin-clients.tsp:25 @delete deleteClient` |
-| **M04.F01.I06** | `GET /clients/{clientId}` | 公共端点匿名可读 clientId/name/logo（供登录页应用选择；无 session 要求） | `tsp/routes/clients.tsp:7 @get getClient` |
-| **M04.F02.I01** | `PATCH /admin/clients/{clientId}/status` | 【平台】切换 status；禁用后该 client 的所有 OAuth/token 端点立即拒绝 | `tsp/routes/admin-clients.tsp:30 @patch setClientStatus` |
+| **M04.F01.I01** | `GET /admin/clients` | 【平台】平台 admin 分页列出全部 OAuth 应用（page/pageSize） | `tsp/routes/admin-clients.tsp:8 @get listClients` |
+| **M04.F01.I02** | `POST /admin/clients` | 注册新 OAuth client（含 redirect_uri 白名单与密钥生成；密钥仅回指纹不返明文） | `tsp/routes/admin-clients.tsp:12 @post createClient` |
+| **M04.F01.I03** | `GET /admin/clients/{clientId}` | 应用完整配置（寻址用 clientId 字符串列，非行 UUID；密钥回指纹） | `tsp/routes/admin-clients.tsp:16 @get getClient` |
+| **M04.F01.I04** | `PATCH /admin/clients/{clientId}` | 修改名称 / redirect_uri 白名单 / 允许的 scope 等 | `tsp/routes/admin-clients.tsp:21 @patch updateClient` |
+| **M04.F01.I05** | `DELETE /admin/clients/{clientId}` | 移除应用并级联吊销该 client 名下所有 access/refresh token | `tsp/routes/admin-clients.tsp:26 @delete deleteClient` |
+| **M04.F01.I06** | `GET /clients/{clientId}` | 公共端点匿名可读 clientId/name/logo（供登录页应用选择；无 session 要求） | `tsp/routes/clients.tsp:8 @get getClient` |
+| **M04.F02.I01** | `PATCH /admin/clients/{clientId}/status` | 【平台】切换 status；禁用后该 client 的所有 OAuth/token 端点立即拒绝 | `tsp/routes/admin-clients.tsp:31 @patch setClientStatus` |
 
 #### 数据模型（oauth_client）
 

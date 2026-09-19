@@ -14,28 +14,28 @@
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M00.F02.I01** | `GET /tenants/{tenantId}/members` | 成员列表（分页 + 角色/状态过滤）；DTO roleIds 必须 LEFT JOIN `tenant_member_role` 取真值（users.role_ids 冗余列不可信） | `tsp/routes/tenant-members.tsp:10 @get listTenantUsers` |
-| **M00.F02.I03** | `GET /tenants/{tenantId}/members/{userId}` | 成员详情（嵌套 member + user 视图）；跨租户寻址由 tenant guard 拒绝（403/404） | `tsp/routes/tenant-members.tsp:23 @get getTenantUser` |
-| **M00.F02.I04** | `PATCH /tenants/{tenantId}/members/{userId}` | 更新成员基础字段（email/mobile 等，不动角色关系） | `tsp/routes/tenant-members.tsp:28 @patch updateTenantUser` |
-| **M00.F02.I05** | `DELETE /tenants/{tenantId}/members/{userId}` | 只断 membership，不删全局 `sys_user` 行 | `tsp/routes/tenant-members.tsp:37 @delete deleteTenantUser` |
-| **M00.F02.I02** | `POST /tenants/{tenantId}/members` | 创建成员；CreateSysUserRequest{username,email,password,displayName?,roleIds?} → TenantMemberUserView；区别于 **M00.F02.I06** 邀请（邀请是发邮件，本 op 直接落地） | `tsp/routes/tenant-members.tsp:19 @post createTenantUser` |
-| **M00.F02.I08** | `PATCH /tenants/{tenantId}/members/{userId}/status` | 启用/停用成员（写 `tenant_member.status`；DB 值非 enum 序号，见 aspnetcore Status 测试） | `tsp/routes/tenant-members.tsp:60 @patch changeTenantUserStatus` |
+| **M00.F02.I01** | `GET /tenants/{tenantId}/members` | 成员列表（分页 + 角色/状态过滤）；DTO roleIds 必须 LEFT JOIN `tenant_member_role` 取真值（users.role_ids 冗余列不可信） | `tsp/routes/tenant-members.tsp:11 @get listTenantUsers` |
+| **M00.F02.I03** | `GET /tenants/{tenantId}/members/{userId}` | 成员详情（嵌套 member + user 视图）；跨租户寻址由 tenant guard 拒绝（403/404） | `tsp/routes/tenant-members.tsp:24 @get getTenantUser` |
+| **M00.F02.I04** | `PATCH /tenants/{tenantId}/members/{userId}` | 更新成员基础字段（email/mobile 等，不动角色关系） | `tsp/routes/tenant-members.tsp:29 @patch updateTenantUser` |
+| **M00.F02.I05** | `DELETE /tenants/{tenantId}/members/{userId}` | 只断 membership，不删全局 `sys_user` 行 | `tsp/routes/tenant-members.tsp:38 @delete deleteTenantUser` |
+| **M00.F02.I02** | `POST /tenants/{tenantId}/members` | 创建成员；CreateSysUserRequest{username,email,password,displayName?,roleIds?} → TenantMemberUserView；区别于 **M00.F02.I06** 邀请（邀请是发邮件，本 op 直接落地） | `tsp/routes/tenant-members.tsp:20 @post createTenantUser` |
+| **M00.F02.I08** | `PATCH /tenants/{tenantId}/members/{userId}/status` | 启用/停用成员（写 `tenant_member.status`；DB 值非 enum 序号，见 aspnetcore Status 测试） | `tsp/routes/tenant-members.tsp:61 @patch changeTenantUserStatus` |
 
 ### 1.2 角色成员（分配角色）
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M01.F02.I01** | `PUT /tenants/{tenantId}/members/{userId}/roles` | 用角色 ID 集合全量覆盖该成员的当前角色绑定（写 `tenant_member_role` 关系行） | `tsp/routes/tenant-members.tsp:42 @put assignTenantMemberRoles` |
+| **M01.F02.I01** | `PUT /tenants/{tenantId}/members/{userId}/roles` | 用角色 ID 集合全量覆盖该成员的当前角色绑定（写 `tenant_member_role` 关系行） | `tsp/routes/tenant-members.tsp:43 @put assignTenantMemberRoles` |
 
 ### 1.3 租户角色 CRUD（tenant-roles.tsp）
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M00.F03.I01** | `GET /tenants/{tenantId}/roles` | 角色（tenant × client 作用域）列表（分页 + 过滤） | `tsp/routes/tenant-roles.tsp:7 @get listSysRoles` |
-| **M00.F03.I02** | `POST /tenants/{tenantId}/roles` | 创建角色：CreateSysRoleRequest{code,name,clientId,...}；作用域 = tenant_id × client_id，code 在作用域内唯一 | `tsp/routes/tenant-roles.tsp:16 @post createSysRole` |
-| **M00.F03.I03** | `GET /tenants/{tenantId}/roles/{roleId}` | 角色详情（元信息 + 作用域） | `tsp/routes/tenant-roles.tsp:20 @get getSysRole` |
-| **M00.F03.I04** | `PATCH /tenants/{tenantId}/roles/{roleId}` | 更新角色名称/描述（不动权限与菜单绑定） | `tsp/routes/tenant-roles.tsp:25 @patch updateSysRole` |
-| **M00.F03.I05** | `DELETE /tenants/{tenantId}/roles/{roleId}` | 删除角色并清理成员角色绑定与权限/菜单关联 | `tsp/routes/tenant-roles.tsp:34 @delete deleteSysRole` |
+| **M00.F03.I01** | `GET /tenants/{tenantId}/roles` | 角色（tenant × client 作用域）列表（分页 + 过滤） | `tsp/routes/tenant-roles.tsp:8 @get listSysRoles` |
+| **M00.F03.I02** | `POST /tenants/{tenantId}/roles` | 创建角色：CreateSysRoleRequest{code,name,clientId,...}；作用域 = tenant_id × client_id，code 在作用域内唯一 | `tsp/routes/tenant-roles.tsp:17 @post createSysRole` |
+| **M00.F03.I03** | `GET /tenants/{tenantId}/roles/{roleId}` | 角色详情（元信息 + 作用域） | `tsp/routes/tenant-roles.tsp:21 @get getSysRole` |
+| **M00.F03.I04** | `PATCH /tenants/{tenantId}/roles/{roleId}` | 更新角色名称/描述（不动权限与菜单绑定） | `tsp/routes/tenant-roles.tsp:26 @patch updateSysRole` |
+| **M00.F03.I05** | `DELETE /tenants/{tenantId}/roles/{roleId}` | 删除角色并清理成员角色绑定与权限/菜单关联 | `tsp/routes/tenant-roles.tsp:35 @delete deleteSysRole` |
 
 ## 2. 数据模型
 

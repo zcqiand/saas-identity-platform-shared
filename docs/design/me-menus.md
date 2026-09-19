@@ -10,13 +10,13 @@
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M04.F04.I01** | `GET /clients/{clientId}/menus` | 扁平菜单节点列表；tenant-scoped（menu 行挂 client + tenant 边界） | `tsp/routes/client-menus.tsp:7 @get listSysMenus` |
-| **M04.F04.I02** | `POST /clients/{clientId}/menus` | 创建菜单节点；CreateSysMenuRequest 携带 client 边界，父指针可空（根节点用固定零 UUID 约定） | `tsp/routes/client-menus.tsp:11 @post createSysMenu` |
-| **M04.F04.I03** | `GET /clients/{clientId}/menus/{menuId}` | 菜单详情（单节点） | `tsp/routes/client-menus.tsp:15 @get getSysMenu` |
-| **M04.F04.I04** | `PATCH /clients/{clientId}/menus/{menuId}` | 更新菜单元数据（名称/路径/图标/排序权重） | `tsp/routes/client-menus.tsp:20 @patch updateSysMenu` |
-| **M04.F04.I05** | `DELETE /clients/{clientId}/menus/{menuId}` | 删除菜单节点；子节点语义由实现层约束（先删子或拒绝） | `tsp/routes/client-menus.tsp:29 @delete deleteSysMenu` |
-| **M04.F04.I06** | `PUT /clients/{clientId}/menus/{menuId}/reorder` | 兄弟节点重排序 | `tsp/routes/client-menus.tsp:34 @put reorderSysMenus` |
-| **M04.F04.I07** | `PATCH /clients/{clientId}/menus/{menuId}/parent` | 父节点移动（层级迁移）；移动后父链补全仍按 client_id 限界 | `tsp/routes/client-menus.tsp:43 @patch moveSysMenu` |
+| **M04.F04.I01** | `GET /clients/{clientId}/menus` | 扁平菜单节点列表；tenant-scoped（menu 行挂 client + tenant 边界） | `tsp/routes/client-menus.tsp:8 @get listSysMenus` |
+| **M04.F04.I02** | `POST /clients/{clientId}/menus` | 创建菜单节点；CreateSysMenuRequest 携带 client 边界，父指针可空（根节点用固定零 UUID 约定） | `tsp/routes/client-menus.tsp:12 @post createSysMenu` |
+| **M04.F04.I03** | `GET /clients/{clientId}/menus/{menuId}` | 菜单详情（单节点） | `tsp/routes/client-menus.tsp:16 @get getSysMenu` |
+| **M04.F04.I04** | `PATCH /clients/{clientId}/menus/{menuId}` | 更新菜单元数据（名称/路径/图标/排序权重） | `tsp/routes/client-menus.tsp:21 @patch updateSysMenu` |
+| **M04.F04.I05** | `DELETE /clients/{clientId}/menus/{menuId}` | 删除菜单节点；子节点语义由实现层约束（先删子或拒绝） | `tsp/routes/client-menus.tsp:30 @delete deleteSysMenu` |
+| **M04.F04.I06** | `PUT /clients/{clientId}/menus/{menuId}/reorder` | 兄弟节点重排序 | `tsp/routes/client-menus.tsp:35 @put reorderSysMenus` |
+| **M04.F04.I07** | `PATCH /clients/{clientId}/menus/{menuId}/parent` | 父节点移动（层级迁移）；移动后父链补全仍按 client_id 限界 | `tsp/routes/client-menus.tsp:44 @patch moveSysMenu` |
 
 #### 数据模型（sys_menu）
 
@@ -42,8 +42,8 @@
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M00.F04.I03** | `PUT /tenants/{tenantId}/roles/{roleId}/menus` | 整批设置角色菜单（关系行幂等全量替换；非 upsert 累积） | `tsp/routes/tenant-role-menus.tsp:16 @put setSysRoleMenus` |
-| **M00.F04.I04** | `DELETE /tenants/{tenantId}/roles/{roleId}/menus` | 清空角色全部菜单授权（角色登录后 me/menus 不再渲染该角色菜单） | `tsp/routes/tenant-role-menus.tsp:25 @delete clearSysRoleMenus` |
+| **M00.F04.I03** | `PUT /tenants/{tenantId}/roles/{roleId}/menus` | 整批设置角色菜单（关系行幂等全量替换；非 upsert 累积） | `tsp/routes/tenant-role-menus.tsp:17 @put setSysRoleMenus` |
+| **M00.F04.I04** | `DELETE /tenants/{tenantId}/roles/{roleId}/menus` | 清空角色全部菜单授权（角色登录后 me/menus 不再渲染该角色菜单） | `tsp/routes/tenant-role-menus.tsp:26 @delete clearSysRoleMenus` |
 
 #### 数据模型（sys_role_menu）
 
@@ -63,7 +63,7 @@
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M04.F04.I08** | `GET /me/menus?clientId=...` | 必须 saas session cookie；未登录返 401（与 **M04.F03** 同款 session 强约束）；roleIds → menuIds JOIN → 菜单树装配 → 按 app.code 分组 → 父链补全 | `tsp/routes/me.tsp:23 @route /menus @get myMenus` |
+| **M04.F04.I08** | `GET /me/menus?clientId=...` | 必须 saas session cookie；未登录返 401（与 **M04.F03** 同款 session 强约束）；roleIds → menuIds JOIN → 菜单树装配 → 按 app.code 分组 → 父链补全 | `tsp/routes/me.tsp:26 @route /menus @get myMenus` |
 
 ## 2. 数据流（端到端）
 

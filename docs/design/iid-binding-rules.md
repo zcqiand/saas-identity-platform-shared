@@ -113,7 +113,7 @@ tsp/routes/<file>.tsp:<line> [@<verb> <op_name>]
 |---|---|---|
 | 单段路径 | `tsp/routes/admin-tenants.tsp:8 @get list` | [oauth-architecture.md §1](../../../docs/adr/../design/oauth-architecture.md) `tsp/routes/oauth.tsp:10 @route /authorize` |
 | 多段路径 | `tsp/routes/admin-tenants.tsp:8 @get list`（ns `@route("/admin")` + ns `@route("/tenants")` + op `@get`） | function-tree.md §M00.F01 段头 |
-| 派生 / 聚合 | `tsp/routes/me.tsp:23 @get myMenus` | [architecture-panorama.md §3](../../../docs/adr/../design/architecture-panorama.md) |
+| 派生 / 聚合 | `tsp/routes/me.tsp:26 @get myMenus` | [architecture-panorama.md §3](../../../docs/adr/../design/architecture-panorama.md) |
 
 **段头模板**：
 

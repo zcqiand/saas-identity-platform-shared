@@ -8,10 +8,10 @@
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
-| **M00.F05.I01** | `GET /tenants/{tenantId}/applications` | 列出租户订阅（分页包装 `{items,page,pageSize,total}`；行含 id/clientId/tenantId/status/expireTime?/createdAt） | `tsp/routes/tenant-applications.tsp:7 @get listTenantApplications` |
-| **M00.F05.I02** | `POST /tenants/{tenantId}/applications` | 订阅应用：SubscribeTenantApplicationRequest{clientId, expireTime?}；clientId 必须已注册于 `oauth_client`（未知 → 404，springboot 2026-09-12 修 FK 盲插），重复订阅 → 400（aspnetcore 应用层查重 + `uk_tenant_client` 唯一索引） | `tsp/routes/tenant-applications.tsp:15 @post subscribeTenantApplication` |
-| **M00.F05.I03** | `PATCH /tenants/{tenantId}/applications/{clientId}` | 修改订阅 status（int32）或 expireTime；寻址用 clientId 字符串列（非行 UUID） | `tsp/routes/tenant-applications.tsp:22 @patch updateTenantApplication` |
-| **M00.F05.I04** | `DELETE /tenants/{tenantId}/applications/{clientId}` | 取消订阅；不删除 `oauth_client` 本体（cascade 由 FK 负责） | `tsp/routes/tenant-applications.tsp:31 @delete removeTenantApplication` |
+| **M00.F05.I01** | `GET /tenants/{tenantId}/applications` | 列出租户订阅（分页包装 `{items,page,pageSize,total}`；行含 id/clientId/tenantId/status/expireTime?/createdAt） | `tsp/routes/tenant-applications.tsp:8 @get listTenantApplications` |
+| **M00.F05.I02** | `POST /tenants/{tenantId}/applications` | 订阅应用：SubscribeTenantApplicationRequest{clientId, expireTime?}；clientId 必须已注册于 `oauth_client`（未知 → 404，springboot 2026-09-12 修 FK 盲插），重复订阅 → 400（aspnetcore 应用层查重 + `uk_tenant_client` 唯一索引） | `tsp/routes/tenant-applications.tsp:16 @post subscribeTenantApplication` |
+| **M00.F05.I03** | `PATCH /tenants/{tenantId}/applications/{clientId}` | 修改订阅 status（int32）或 expireTime；寻址用 clientId 字符串列（非行 UUID） | `tsp/routes/tenant-applications.tsp:23 @patch updateTenantApplication` |
+| **M00.F05.I04** | `DELETE /tenants/{tenantId}/applications/{clientId}` | 取消订阅；不删除 `oauth_client` 本体（cascade 由 FK 负责） | `tsp/routes/tenant-applications.tsp:32 @delete removeTenantApplication` |
 
 ## 2. 数据模型
 
