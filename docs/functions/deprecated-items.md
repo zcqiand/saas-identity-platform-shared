@@ -35,7 +35,7 @@
 | M00.F04.I01 | 权限矩阵绑定（v0.3.0 收尾废弃） | 接口 | 前端+后端 | v0.3.0 shadcn UI 迁移后 4 后端 + msw 全部废弃 `role_permissions` 表 + setPermissions 端点（springboot `83f85f5` refactor 删；nextjs `page.tsx:39` dialog 整体删；msw `handlers-extra.ts:1207` 注释删；saas-react `REQ-2026-005` 死按钮删）；权限绑定改为 sys_role_menu 整批覆盖（I03/I04）。**BASE 状态由 已上线 → 已废弃**（2026-09-17 强制对齐 v0.3.0 实际形态；ADR-0025 schema-first 要求状态必须挂得上 TSP 行号，本子项无 TSP 端点 = 状态必须废弃） | 已废弃 |
 | M03.F01.I01 | 密码登录 API | 接口 | 前端+后端 | 旧版：邮箱+密码换 session cookie → **M01.F04.I01** | 已废弃 |
 | M03.F01.I02 | 失败锁定 | 接口 | 前端+后端 | 旧版：连续失败锁定（5 次/15 min） → **M01.F04.I02** | 已废弃 |
-| M03.F01.I03 | 密码登录 UI | 页面 | 仅前端 | 旧版：LoginPage 页面 → **M01.F04.I03**（已再合并到 **M01.F04.I01**，2026-09-16 提案 saas-2026-09-16-002） | 已废弃 |
+| M03.F01.I03 | 密码登录 UI | 页面 | 仅前端 | 旧版：LoginPage 页面 → **M01.F04.I03**（去向稳定为 I03：2026-09-19 人裁撤销 I03 废弃、恢复正式项，saas-2026-09-16-002 的再合并撤销） | 已废弃 |
 | M03.F02.I03 | OIDC Code 换取 | 接口 | 前端+后端 | 旧版：authorization_code 换 token → **M01.F04.I04** | 已废弃 |
 | M03.F02.I04 | refresh token | 接口 | 前端+后端 | 旧版：refresh_token 换新 token → **M01.F04.I05** | 已废弃 |
 | M03.F03.I05 | 登出（本地清理） | 接口 | 前端+后端 | 旧版：清理本地 session cookie → **M01.F04.I06** | 已废弃 |

@@ -188,9 +188,9 @@
 
 | 子项 ID     | 名称             | 类型 | 交付      | 说明                                                                       | 状态   |
 | ----------- | ---------------- | ---- | --------- | -------------------------------------------------------------------------- | ------ |
-| M01.F04.I01 | 密码登录 | 接口 | 前端+后端 | `/auth/login` 邮箱+密码换取 saas session cookie；连续 5 次密码错返回 HTTP 423 Locked；前端 LoginPage（saas-vue / saas-react）走本端点（合并 I02 + I03；`sessions.tsp:55-59`）  | 已上线  |
+| M01.F04.I01 | 密码登录 | 接口 | 前端+后端 | `/auth/login` 邮箱+密码换取 saas session cookie；连续 5 次密码错返回 HTTP 423 Locked；前端 LoginPage（saas-vue / saas-react）走本端点（合并 I02；I03 于 2026-09-19 人裁恢复独立项；`sessions.tsp:55-59`）  | 已上线  |
 | M01.F04.I02 | ~~失败锁定~~                       | 接口 | 仅后端 | ~~连续 5 次密码错误锁定账户 15 分钟，窗口内拒绝登录~~（合并到 I01）        | 已废弃 |
-| M01.F04.I03 | ~~密码登录 UI~~                          | 页面 | 仅前端 | saas-vue / saas-react 的 LoginPage 登录页面（合并到 I01）                                | 已废弃   |
+| M01.F04.I03 | 密码登录 UI | 页面 | 仅前端 | saas-vue / saas-react / saas-nextjs 的 LoginPage 登录页面（2026-09-19 人裁撤销废弃恢复正式项——前端 3 仓 UI 实存在用，页面项以 UI 实存为准） | 已上线 |
 | M01.F04.I04 | ~~OIDC Code 换取~~                  | 接口 | 仅后端 | ~~用 authorization_code 换取 access_token + refresh_token~~（与 /oauth/token authorization_code grant 重复；废弃）  | 已废弃 |
 | M01.F04.I05 | ~~refresh token~~                   | 接口 | 仅后端 | ~~用 refresh_token 换取新的 access_token~~（与 /oauth/token refresh_token grant 重复；废弃）                | 已废弃 |
 | M01.F04.I06 | 登出（本地清理 + 全局 SSO）          | 接口 | 前端+后端 | `/auth/logout` 清理当前浏览器 session cookie + 全局 SSO logout（合并 I07；`sessions.tsp:63`）                | 已上线  |
