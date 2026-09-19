@@ -39,34 +39,48 @@
 
 ## 2. 数据模型
 
-`users` 表（`sql/migrations/V002__init_users_memberships.sql`）：
+> 2026-09-19（Task 5.22）按现 `src/db/schema.ts` 更正：pivot 后用户是全局实体（`sys_user`），租户归属拆到 `tenant_member`，角色关系行在 `tenant_member_role`；旧 `users` / `tenant_memberships` 表名与 `role_ids` 数组列已废弃删除。
+
+`sys_user`（全局用户实体）：
 
 | 列 | 类型 | 说明 |
 |---|---|---|
-| id | uuid | PK |
-| tenant_id | uuid | FK tenants（**重要**：tenant-scoped 强约束，L0.no_fallback 门禁） |
-| username | varchar | tenant 内唯一 |
-| email | varchar | tenant 内唯一 |
-| password_hash | varchar | bcrypt 12 rounds |
-| display_name | varchar? | 可选 |
-| status | varchar | active / invited / suspended |
-| created_at | timestamptz | 默认 now() |
+| id | uuid | PK，默认 uuid_generate_v4() |
+| username | varchar(64) | NOT NULL，全局唯一 `uk_sys_user_username` |
+| password | varchar(255) | NOT NULL（bcrypt） |
+| email | varchar(128)? | 可空，全局唯一 `uk_sys_user_email` |
+| mobile | varchar(32)? | 可空，全局唯一 `uk_sys_user_mobile` |
+| status | smallint | NOT NULL 默认 1；值域 1=active / 2=invited / 0=disabled（家族约定 2026-09-10） |
+| failed_attempts | integer | NOT NULL 默认 0（**M01.F04.I02** 连续失败锁定计数） |
+| locked_until | timestamptz? | 可空（锁定截止时间） |
+| created_at / updated_at | timestamptz | NOT NULL，默认 CURRENT_TIMESTAMP |
 
-`tenant_memberships` 表（同 migration）：
+`tenant_member`（租户归属；tenant-scoped 强约束）：
 
 | 列 | 类型 | 说明 |
 |---|---|---|
-| id | uuid | PK |
-| tenant_id | uuid | FK tenants |
-| user_id | uuid | FK users |
-| role_ids | uuid[] | FK roles（**冗余占位**，authoritative 在 role_permissions 解析；4 后端 User DTO 必须 LEFT JOIN tenant_memberships 取真值，否则 roleIds=[] 与真值不一致） |
-| joined_at | timestamptz | 默认 now() |
+| id | uuid | PK，默认 uuid_generate_v4() |
+| tenant_id | uuid | NOT NULL，FK tenants（cascade）；member 查询必须带 tenant 边界（L0.no_fallback） |
+| user_id | uuid | NOT NULL，FK sys_user（cascade） |
+| member_name | varchar(64)? | 可空 |
+| is_owner | boolean | NOT NULL 默认 false |
+| status | smallint | NOT NULL 默认 1（**M00.F02.I08** 启用/停用写此列） |
+| created_at / updated_at | timestamptz | NOT NULL，默认 CURRENT_TIMESTAMP |
+| — | — | 附加：`uk_tenant_user` unique(tenant_id, user_id) + idx user_id / tenant_id |
+
+`tenant_member_role`（角色关系行，roleIds authoritative）：
+
+| 列 | 类型 | 说明 |
+|---|---|---|
+| member_id | uuid | PK 组成，FK tenant_member.id（cascade） |
+| role_id | uuid | PK 组成，FK sys_role.id（cascade） |
+| — | — | 附加：primaryKey(member_id, role_id) + `idx_tenant_member_role_role_id`(role_id) |
 
 ## 3. 设计决策
 
-### 3.1 为什么 role_ids 在 memberships 而不是 users
+### 3.1 为什么 roleIds 走关系行而不是数组列
 
-`users.role_ids` 列在 4 后端 array 映射（hypersistence-utils / drizzle / JPA / EF）有差异，**不可靠**。authoritative 真值在 `tenant_memberships`，DTO 必须 JOIN 取真值。详见 memory: `users-role-ids-redundant-authoritative-memberships`。
+`role_ids` 数组列在 4 后端 array 映射（hypersistence-utils / drizzle / JPA / EF）有差异，**不可靠，已从 schema 删除**（`src/db/schema.ts` 头注释：role/menu grants are relational rows, never role_ids/menu_ids arrays）。authoritative 真值在 `tenant_member_role` 关系行，DTO 必须 JOIN 取真值。详见 memory: `users-role-ids-redundant-authoritative-memberships`。
 
 ### 3.2 tenant-scoped 强约束
 

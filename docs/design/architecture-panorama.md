@@ -206,6 +206,25 @@ JWT(user_id, client_id, tenant_id)
 | **M04.F01.I06** | `GET /clients/{clientId}` | 公共端点匿名可读 clientId/name/logo（供登录页应用选择；无 session 要求） | `tsp/routes/clients.tsp:7 @get getClient` |
 | **M04.F02.I01** | `PATCH /admin/clients/{clientId}/status` | 【平台】切换 status；禁用后该 client 的所有 OAuth/token 端点立即拒绝 | `tsp/routes/admin-clients.tsp:30 @patch setClientStatus` |
 
+#### 数据模型（oauth_client）
+
+`oauth_client`（ADR-0025 schema-first：`src/db/schema.ts` ↔ DB `public.oauth_client`）：
+
+| 列 | 类型 | 说明 |
+|---|---|---|
+| id | uuid | PK，默认 uuid_generate_v4() |
+| client_id | varchar(64) | NOT NULL，unique `uk_oauth_client_id`（应用寻址主键——clientId 字符串，非行 UUID） |
+| client_secret | varchar(255) | NOT NULL（API 只回指纹，不返明文） |
+| client_name | varchar(128) | NOT NULL |
+| grant_types | varchar(255) | NOT NULL |
+| redirect_uris | text | NOT NULL（redirect_uri 白名单） |
+| scopes | varchar(255)? | 可空 |
+| access_token_validity | integer | NOT NULL，默认 7200 |
+| refresh_token_validity | integer | NOT NULL，默认 2592000 |
+| auto_approve | boolean | NOT NULL，默认 false |
+| status | smallint | NOT NULL，默认 1（**M04.F02.I01** 切换目标；禁用后 OAuth/token 端点立即拒绝） |
+| created_at / updated_at | timestamptz | NOT NULL，默认 CURRENT_TIMESTAMP |
+
 ## 5. 安全失败语义（与 [target-ddl-permission-isolation.md](target-ddl-permission-isolation.md) §安全失败语义 同源）
 
 | 缺失字段              | 行为                | 严禁                                         |

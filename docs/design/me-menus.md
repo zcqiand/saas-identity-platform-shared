@@ -18,12 +18,44 @@
 | **M04.F04.I06** | `PUT /clients/{clientId}/menus/{menuId}/reorder` | 兄弟节点重排序 | `tsp/routes/client-menus.tsp:34 @put reorderSysMenus` |
 | **M04.F04.I07** | `PATCH /clients/{clientId}/menus/{menuId}/parent` | 父节点移动（层级迁移）；移动后父链补全仍按 client_id 限界 | `tsp/routes/client-menus.tsp:43 @patch moveSysMenu` |
 
+#### 数据模型（sys_menu）
+
+`sys_menu`（ADR-0025 schema-first：`src/db/schema.ts` ↔ DB `public.sys_menu`）：
+
+| 列 | 类型 | 说明 |
+|---|---|---|
+| id | uuid | PK，默认 uuid_generate_v4() |
+| client_id | varchar(64) | NOT NULL，FK oauth_client.client_id（cascade；字符串列，非行 UUID） |
+| parent_id | uuid | NOT NULL，默认零 UUID（`ROOT_MENU_ID` = `00000000-0000-0000-0000-000000000000`，根节点约定） |
+| title | varchar(64) | NOT NULL |
+| type | smallint | NOT NULL；0=directory / 1=menu / 2=button（契约 enum `SysMenuType`） |
+| path | varchar(255)? | 可空 |
+| component | varchar(255)? | 可空 |
+| perms | varchar(128)? | 可空 |
+| icon | varchar(128)? | 可空 |
+| sort_order | integer | NOT NULL，默认 0 |
+| status | smallint | NOT NULL，默认 1 |
+| created_at | timestamptz | NOT NULL，默认 CURRENT_TIMESTAMP |
+| — | — | 附加：idx_sys_menu_client_parent(client_id, parent_id) + idx_sys_menu_client_type(client_id, type) |
+
 ### 1.2 角色菜单授权（tenant-role-menus.tsp，admin 入口在 M00.F04）
 
 | 子项 ID | 端点 | 设计要点 | 对应合同 |
 |---|---|---|---|
 | **M00.F04.I03** | `PUT /tenants/{tenantId}/roles/{roleId}/menus` | 整批设置角色菜单（关系行幂等全量替换；非 upsert 累积） | `tsp/routes/tenant-role-menus.tsp:16 @put setSysRoleMenus` |
 | **M00.F04.I04** | `DELETE /tenants/{tenantId}/roles/{roleId}/menus` | 清空角色全部菜单授权（角色登录后 me/menus 不再渲染该角色菜单） | `tsp/routes/tenant-role-menus.tsp:25 @delete clearSysRoleMenus` |
+
+#### 数据模型（sys_role_menu）
+
+`sys_role_menu`（ADR-0025 schema-first：`src/db/schema.ts` ↔ DB `public.sys_role_menu`）：
+
+| 列 | 类型 | 说明 |
+|---|---|---|
+| role_id | uuid | PK 组成，FK sys_role.id（cascade） |
+| menu_id | uuid | PK 组成，FK sys_menu.id（cascade） |
+| — | — | 附加：primaryKey(role_id, menu_id) + idx_sys_role_menu_menu_id(menu_id) |
+
+> API 返回 shape 是聚合视图 `RoleMenuGrant{roleId, tenantId, menuIds, updatedAt}`（2026-09-10 I20 契约对齐方案 C）：tenantId 取 `sys_role.tenant_id`，updatedAt 取 `sys_role.updated_at`（写路径 touch）；行表只存 (role_id, menu_id) 关系行。
 
 ### 1.3 端到端渲染（me/menus）
 

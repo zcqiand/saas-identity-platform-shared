@@ -541,7 +541,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\user-model.md"
+      ],
       "tests": [],
       "entry": []
     },
