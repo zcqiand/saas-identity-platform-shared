@@ -52,10 +52,13 @@ model CreateSysUserRequest {
   mobile?: string;
 }
 
+// 5.13-①（2026-09-20 人裁）：UpdateSysUserRequest 删 status 字段 —— 用户/成员状态
+// 变更唯一通道 = 专职 /status 端点（TenantMembers changeTenantUserStatus，成员级 4 值）。
+// 删除前三方对同一字段三种落库语义（springboot→sys_user、nextjs→tenant_member 4 值、
+// aspnetcore→忽略），分叉是活的；收紧后 PATCH 通道不再承载状态，消费方 body 里的
+// status 按未知属性忽略。
 model UpdateSysUserRequest {
   @format("email") email?: string;
 
   mobile?: string;
-
-  status?: SysUserStatus;
 }

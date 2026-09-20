@@ -2348,8 +2348,6 @@ components:
           format: email
         mobile:
           type: string
-        status:
-          $ref: '#/components/schemas/SysUserStatus'
     UpdateTenantApplicationRequest:
       type: object
       required:
