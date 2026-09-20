@@ -40,6 +40,11 @@ model CreateSysUserRequest {
   @maxLength(64)
   username: string;
 
+  // 5.59 D-2 人裁 2026-09-20：双边收紧 —— min8 是真实业务约束（密码强度），
+  // max256 与同模型 username 装饰器风格成对（min+maxLength 成对出现），
+  // 且与消费仓 nextjs BFF 既有 zod min(8).max(256) 一致。
+  @minLength(8)
+  @maxLength(256)
   password: string;
 
   @format("email") email?: string;

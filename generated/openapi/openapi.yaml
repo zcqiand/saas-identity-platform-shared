@@ -1631,6 +1631,8 @@ components:
           maxLength: 64
         password:
           type: string
+          minLength: 8
+          maxLength: 256
         email:
           type: string
           format: email
