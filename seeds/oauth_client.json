@@ -86,7 +86,11 @@
     "status": 1,
     "clientId": "saas-console",
     "clientSecret": "console-secret",
-    "redirectUris": [],
+    "redirectUris": [
+      "https://lab-nextjs.xiangru.uk/login",
+      "https://lab-react.xiangru.uk/login",
+      "https://lab-vue.xiangru.uk/login"
+    ],
     "scopes": [],
     "grantTypes": [],
     "isFirstParty": true,
