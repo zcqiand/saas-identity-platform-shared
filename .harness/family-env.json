@@ -17,6 +17,9 @@
     ],
     "aspnetcore": [
       "backend"
+    ],
+    "rails": [
+      "backend"
     ]
   },
   "synced_keys": {
