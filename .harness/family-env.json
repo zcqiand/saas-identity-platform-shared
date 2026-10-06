@@ -20,6 +20,12 @@
     ],
     "rails": [
       "backend"
+    ],
+    "fastapi": [
+      "backend"
+    ],
+    "swift": [
+      "frontend"
     ]
   },
   "synced_keys": {
