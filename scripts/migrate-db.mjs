@@ -6,7 +6,7 @@
 // - Drizzle Kit 用内置 __drizzle_migrations 表 tracking，无需手维护。
 //
 // 用法：
-//   node scripts/migrate-db.mjs                  # 默认 saas_dev @ 100.79.128.25
+//   node scripts/migrate-db.mjs                  # 默认 saas_dev @ 127.0.0.1:54321
 //   PG_DATABASE=saas_test node scripts/migrate-db.mjs
 //   PG_HOST=... PG_PORT=... PG_USER=... PG_PASSWORD=... PG_DATABASE=... node scripts/migrate-db.mjs
 //
