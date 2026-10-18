@@ -32,7 +32,9 @@ model EffectiveMenuNode {
 
   clientId: string;
 
-  @format("uuid") parentId: string;
+  // 2026-10-18 人批（tracker 5.112①）：根 sentinel（DB parent_id 零值 UUID）wire 序列化
+  // null——四后端实测口径（fastapi me_impl.py:75 注释在案），字段恒在（required）值可空
+  @format("uuid") parentId: string | null;
 
   title: string;
 

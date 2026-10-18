@@ -1689,6 +1689,7 @@ components:
           type: string
         parentId:
           type: string
+          nullable: true
           format: uuid
         title:
           type: string
