@@ -26,6 +26,15 @@
     ],
     "swift": [
       "frontend"
+    ],
+    "kotlin": [
+      "backend"
+    ],
+    "laravel": [
+      "backend"
+    ],
+    "go": [
+      "backend"
     ]
   },
   "synced_keys": {
@@ -34,7 +43,8 @@
         "shared",
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "laravel"
       ]
     },
     "PG_PORT": {
@@ -42,7 +52,8 @@
         "shared",
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "laravel"
       ]
     },
     "PG_USER": {
@@ -50,7 +61,8 @@
         "shared",
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "laravel"
       ]
     },
     "PG_PASSWORD": {
@@ -59,7 +71,8 @@
         "shared",
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "laravel"
       ]
     },
     "PG_DATABASE": {
@@ -67,7 +80,8 @@
         "shared",
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "laravel"
       ]
     },
     "JWT_SIGNING_KEY": {
@@ -75,28 +89,36 @@
       "scope": [
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "kotlin",
+        "laravel"
       ]
     },
     "JWT_ISSUER": {
       "scope": [
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "kotlin",
+        "laravel"
       ]
     },
     "JWT_AUDIENCE": {
       "scope": [
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "kotlin",
+        "laravel"
       ]
     },
     "JWT_TTL_SECONDS": {
       "scope": [
         "aspnetcore",
         "springboot",
-        "nextjs"
+        "nextjs",
+        "kotlin",
+        "laravel"
       ]
     },
     "SAAS_CORS_ALLOWED_ORIGINS": {
