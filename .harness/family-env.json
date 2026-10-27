@@ -124,7 +124,8 @@
     "SAAS_CORS_ALLOWED_ORIGINS": {
       "scope": [
         "aspnetcore",
-        "springboot"
+        "springboot",
+        "go"
       ]
     }
   }
