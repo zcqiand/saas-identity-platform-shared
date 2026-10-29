@@ -64,8 +64,8 @@ model LockedAccountResponse {
 // ============================================================
 model Page<T> {
   items: T[];
-  @example(0) page: int32;
-  @example(20) pageSize: int32;
+  @doc("页码，0 基（Spring Data Pageable）：首页 page=0。") @example(0) page: int32;
+  @doc("每页条数。") @example(20) pageSize: int32;
   @example(0) total: int64;
 }
 

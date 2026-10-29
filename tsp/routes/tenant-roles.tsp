@@ -9,8 +9,8 @@ namespace Saas.Identity.Shared.TenantRoles {
   op listSysRoles(
     @path tenantId: string,
     @query clientId?: string,
-    @query page?: int32,
-    @query pageSize?: int32,
+    @doc("页码，0 基（Spring Data Pageable）：首页 page=0。") @query page?: int32,
+    @doc("每页条数。") @query pageSize?: int32,
   ): Page<SysRole> | ErrorResponse;
 
   // M00.F03.I02 create role
