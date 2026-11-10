@@ -1,6 +1,6 @@
 # SaaS 多租户多应用身份平台 · 契约仓
 
-SaaS 身份平台全家族的契约源头 —— TypeSpec 真源，产出 OpenAPI 3.1 与 SQL DDL（家族唯一真源）。
+SaaS 多租户多应用身份平台全家族的契约源头 —— TypeSpec 真源，产出 OpenAPI 3.1 与 SQL DDL（家族唯一真源）。
 
 本仓为《（书稿信息待补）》案例（待补）的可运行配套工程，是书稿代码块的 **source of truth**。
 

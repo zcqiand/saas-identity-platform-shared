@@ -15,7 +15,7 @@
 
 ## 1. 视角
 
-shared 仓是 SaaS 身份平台的契约 SSOT。每个 `Mxx.Fxx.Ixx` 在落地时通常对应两类载体：
+shared 仓是 SaaS 多租户多应用身份平台的契约 SSOT。每个 `Mxx.Fxx.Ixx` 在落地时通常对应两类载体：
 
 - **HTTP 端点** —— 跨仓消费方的接口契约，落地于 `tsp/routes/<file>.tsp` 中的 `@route` + `@<verb> op`。
 - **DB 表** —— 跨仓消费方的存储契约，落地于 `drizzle/schema.ts` 的 `pgTable(...)`，命名族 `sys_*` / `oauth_*` / `tenant_*`。

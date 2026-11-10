@@ -6,7 +6,7 @@
 
 ## 目标
 
-将 SaaS 身份平台从旧的 tenant-scoped `users`、合并 `apps`、数组角色授权模型切换为 PostgreSQL UUID 目标 DDL：全局 `sys_user`、租户 `tenant`、租户成员 `tenant_member`、独立 `oauth_client` 与 `tenant_application`，以及授权码、访问令牌、刷新令牌和关系型 RBAC 表。
+将 SaaS 多租户多应用身份平台从旧的 tenant-scoped `users`、合并 `apps`、数组角色授权模型切换为 PostgreSQL UUID 目标 DDL：全局 `sys_user`、租户 `tenant`、租户成员 `tenant_member`、独立 `oauth_client` 与 `tenant_application`，以及授权码、访问令牌、刷新令牌和关系型 RBAC 表。
 
 ## 核心约束
 
